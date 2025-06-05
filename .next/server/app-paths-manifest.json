@@ -1,0 +1,11 @@
+{
+  "/(protected)/audit-logs/page": "app/(protected)/audit-logs/page.js",
+  "/(protected)/cdr-settings/page": "app/(protected)/cdr-settings/page.js",
+  "/(protected)/regex-patterns/page": "app/(protected)/regex-patterns/page.js",
+  "/(protected)/an-patterns/page": "app/(protected)/an-patterns/page.js",
+  "/(protected)/category-mt/page": "app/(protected)/category-mt/page.js",
+  "/(protected)/alphanames/page": "app/(protected)/alphanames/page.js",
+  "/(protected)/ctns/page": "app/(protected)/ctns/page.js",
+  "/(protected)/dashboard/page": "app/(protected)/dashboard/page.js",
+  "/(protected)/custom-users/page": "app/(protected)/custom-users/page.js"
+}
