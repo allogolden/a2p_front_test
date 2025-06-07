@@ -36,125 +36,61 @@ const data = {
       isActive: true,
     },
     {
-      title: "Groups",
+      title: "Partner Settings",
       url: "#",
       icon: Users,
       items: [
-        {
-          title: "Main",
-          url: "/groups/main",
-        },
+        { title: "AN Patterns", url: "/an-patterns" },
+        { title: "Aplhanames", url: "/alphanames" },     // 2
+        { title: "CTNs", url: "/ctns" },                   // 6
+        { title: "Partners", url: "/partners" },           // 16
+        { title: "Partners Statistics", url: "/partners-statistics" }, // 17
+        { title: "Regex Patterns", url: "/regex-patterns" }, // 19
+        { title: "SHN Patterns", url: "/shn-patterns" },
+        { title: "Short numbers", url: "/short-numbers" },   // 20
       ],
     },
     {
-      title: "AN Patterns",
-      url: "/an-patterns",
-      icon: Hash,
+      title: "Logs",
+      url: "#",
+      icon: Database,
+      items: [
+        { title: "Audit Logs", url: "/audit-logs" },               // 4
+        { title: "MO Interceptor logs", url: "/mo-interceptor-logs" }, // 12
+        { title: "MT Interceptor Logs", url: "/mt-interceptor-logs" }, // 14
+        { title: "Spams", url: "/spams" },                         // 21
+      ],
     },
     {
-      title: "Alphanames",
-      url: "/alphanames",
-      icon: FileText,
+      title: "Categories",
+      url: "#",
+      icon: BarChart3,
+      items: [
+        { title: "Category MT", url: "/category-mt" },       // 7
+        { title: "Category Statistics", url: "/category-statistics" }, // 8
+      ],
     },
     {
-      title: "Audit Logs",
-      url: "/audit-logs",
-      icon: Shield,
+      title: "SM",
+      url: "#",
+      icon: MessageSquare,
+      items: [
+        { title: "Deliver SM (DLR)", url: "/deliver-sm-dlr" },    // 10
+        { title: "Deliver SM (P2A)", url: "/deliver-sm-p2a" },    // 11
+        { title: "Submit SM", url: "/submit-sm" },                // 22
+        { title: "Submit SM Response", url: "/submit-sm-response" }, // 23
+      ],
     },
     {
-      title: "CDR Settings",
-      url: "/cdr-settings",
+      title: "System Settings",
+      url: "#",
       icon: Settings,
-    },
-    {
-      title: "CTNs",
-      url: "/ctns",
-      icon: Phone,
-    },
-    {
-      title: "Category MT",
-      url: "/category-mt",
-      icon: BarChart3,
-    },
-    {
-      title: "Category Statistics",
-      url: "/category-statistics",
-      icon: BarChart3,
-    },
-    {
-      title: "Custom users",
-      url: "/custom-users",
-      icon: Users,
-    },
-    {
-      title: "Deliver SM (DLR)",
-      url: "/deliver-sm-dlr",
-      icon: MessageSquare,
-    },
-    {
-      title: "Deliver SM (P2A)",
-      url: "/deliver-sm-p2a",
-      icon: MessageSquare,
-    },
-    {
-      title: "MO Interceptor logs",
-      url: "/mo-interceptor-logs",
-      icon: Database,
-    },
-    {
-      title: "MO Messages",
-      url: "/mo-messages",
-      icon: MessageSquare,
-    },
-    {
-      title: "MT Interceptor Logs",
-      url: "/mt-interceptor-logs",
-      icon: Database,
-    },
-    {
-      title: "MT Messages",
-      url: "/mt-messages",
-      icon: MessageSquare,
-    },
-    {
-      title: "Partners",
-      url: "/partners",
-      icon: Users,
-    },
-    {
-      title: "Partners Statistics",
-      url: "/partners-statistics",
-      icon: BarChart3,
-    },
-    {
-      title: "Regex Patterns",
-      url: "/regex-patterns",
-      icon: Hash,
-    },
-    {
-      title: "SHN Patterns",
-      url: "/shn-patterns",
-      icon: Hash,
-    },
-    {
-      title: "Short numbers",
-      url: "/short-numbers",
-      icon: Phone,
-    },
-    {
-      title: "Spams",
-      url: "/spams",
-      icon: Shield,
-    },
-    {
-      title: "Submit SM",
-      url: "/submit-sm",
-      icon: MessageSquare,
-    },
-    {
-      title: "Submit SM Response",
-      url: "/submit-sm-response",
-      icon: MessageSquare,
+      items: [
+        { title: "Groups", url: "/groups" },                // 1 (уже выше, можно заменить на что-то уникальное или убрать дубликат)
+        { title: "CDR Settings", url: "/cdr-settings" },    // 5
+        { title: "Custom users", url: "/custom-users" },    // 9
+        { title: "Sites", url: "/sites" },                  // 25
+      ],
     },
     {
       title: "Periodic Tasks",
@@ -184,18 +120,18 @@ const data = {
       ],
     },
     {
-      title: "Sites",
+      title: "Messages",
       url: "#",
-      icon: Globe,
+      icon: MessageSquare,
       items: [
-        {
-          title: "Sites",
-          url: "/sites/sites",
-        },
+        { title: "MO Messages", url: "/mo-messages" },     // 13
+        { title: "MT Messages", url: "/mt-messages" },     // 15
       ],
     },
-  ],
-}
+  ]
+  
+};
+
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (

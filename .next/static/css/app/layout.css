@@ -2140,10 +2140,6 @@ video {
   background-color: hsl(var(--secondary) / 0.8);
 }
 
-.hover\:bg-sidebar-accent:hover {
-  background-color: hsl(var(--sidebar-accent));
-}
-
 .hover\:bg-yellow-200:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(254 240 138 / var(--tw-bg-opacity, 1));
@@ -2168,10 +2164,6 @@ video {
 
 .hover\:text-primary-foreground:hover {
   color: hsl(var(--primary-foreground));
-}
-
-.hover\:text-sidebar-accent-foreground:hover {
-  color: hsl(var(--sidebar-accent-foreground));
 }
 
 .hover\:text-white:hover {
@@ -2877,14 +2869,6 @@ video {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
-.data-\[state\=open\]\:hover\:bg-sidebar-accent:hover[data-state="open"] {
-  background-color: hsl(var(--sidebar-accent));
-}
-
-.data-\[state\=open\]\:hover\:text-sidebar-accent-foreground:hover[data-state="open"] {
-  color: hsl(var(--sidebar-accent-foreground));
-}
-
 .group[data-collapsible="offcanvas"] .group-data-\[collapsible\=offcanvas\]\:left-\[calc\(var\(--sidebar-width\)\*-1\)\] {
   left: calc(var(--sidebar-width) * -1);
 }
@@ -2995,15 +2979,6 @@ video {
 .group[data-collapsible="offcanvas"] .group-data-\[collapsible\=offcanvas\]\:after\:left-full::after {
   content: var(--tw-content);
   left: 100%;
-}
-
-.group[data-collapsible="offcanvas"] .group-data-\[collapsible\=offcanvas\]\:hover\:bg-gray-100:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1));
-}
-
-.group[data-collapsible="offcanvas"] .group-data-\[collapsible\=offcanvas\]\:hover\:bg-sidebar:hover {
-  background-color: hsl(var(--sidebar-background));
 }
 
 .peer\/menu-button[data-size="default"] ~ .peer-data-\[size\=default\]\/menu-button\:top-1\.5 {
@@ -3135,9 +3110,20 @@ video {
   background-color: rgb(31 41 55 / var(--tw-bg-opacity, 1));
 }
 
-.dark\:hover\:text-gray-100:hover:is(.dark *) {
-  --tw-text-opacity: 1;
-  color: rgb(243 244 246 / var(--tw-text-opacity, 1));
+.dark\:hover\:bg-sidebar-accent:hover:is(.dark *) {
+  background-color: hsl(var(--sidebar-accent));
+}
+
+.dark\:hover\:text-sidebar-accent-foreground:hover:is(.dark *) {
+  color: hsl(var(--sidebar-accent-foreground));
+}
+
+.data-\[state\=open\]\:dark\:hover\:bg-sidebar-accent:hover:is(.dark *)[data-state="open"] {
+  background-color: hsl(var(--sidebar-accent));
+}
+
+.data-\[state\=open\]\:dark\:hover\:text-sidebar-accent-foreground:hover:is(.dark *)[data-state="open"] {
+  color: hsl(var(--sidebar-accent-foreground));
 }
 
 @media (min-width: 640px) {
