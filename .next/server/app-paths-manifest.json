@@ -1,6 +1,8 @@
 {
-  "/(protected)/ctns/page": "app/(protected)/ctns/page.js",
-  "/(protected)/an-patterns/page": "app/(protected)/an-patterns/page.js",
+  "/page": "app/page.js",
+  "/login/page": "app/login/page.js",
   "/(protected)/dashboard/page": "app/(protected)/dashboard/page.js",
-  "/(protected)/audit-logs/page": "app/(protected)/audit-logs/page.js"
+  "/(protected)/alphanames/page": "app/(protected)/alphanames/page.js",
+  "/(protected)/an-patterns/page": "app/(protected)/an-patterns/page.js",
+  "/(protected)/partners/page": "app/(protected)/partners/page.js"
 }

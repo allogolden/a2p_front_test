@@ -6,65 +6,40 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
+    "/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/page.js"
+    ],
     "/(protected)/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(protected)/layout.js"
-    ],
-    "/(protected)/ctns/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(protected)/ctns/page.js"
     ],
     "/(protected)/dashboard/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(protected)/dashboard/page.js"
     ],
-    "/(protected)/mo-interceptor-logs/page": [
+    "/login/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(protected)/mo-interceptor-logs/page.js"
-    ],
-    "/(protected)/deliver-sm-p2a/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(protected)/deliver-sm-p2a/page.js"
-    ],
-    "/(protected)/shn-patterns/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(protected)/shn-patterns/page.js"
-    ],
-    "/(protected)/submit-sm/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(protected)/submit-sm/page.js"
-    ],
-    "/(protected)/mt-messages/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(protected)/mt-messages/page.js"
-    ],
-    "/(protected)/deliver-sm-dlr/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(protected)/deliver-sm-dlr/page.js"
+      "static/chunks/app/login/page.js"
     ],
     "/(protected)/an-patterns/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(protected)/an-patterns/page.js"
     ],
-    "/(protected)/audit-logs/page": [
+    "/(protected)/alphanames/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(protected)/audit-logs/page.js"
+      "static/chunks/app/(protected)/alphanames/page.js"
     ],
-    "/_not-found/page": [
+    "/(protected)/partners/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
+      "static/chunks/app/(protected)/partners/page.js"
     ]
   }
 }
