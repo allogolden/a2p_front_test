@@ -1,3 +1,7 @@
 {
-  "/(protected)/periodic-tasks/crontabs/page": "app/(protected)/periodic-tasks/crontabs/page.js"
+  "/login/page": "app/login/page.js",
+  "/(protected)/cdr-settings/page": "app/(protected)/cdr-settings/page.js",
+  "/(protected)/alphanames/page": "app/(protected)/alphanames/page.js",
+  "/(protected)/dashboard/page": "app/(protected)/dashboard/page.js",
+  "/(protected)/mt-interceptor-logs/page": "app/(protected)/mt-interceptor-logs/page.js"
 }

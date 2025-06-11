@@ -147,7 +147,9 @@ export default function ANPatternDetailPage() {
           {params.id !== "new" && (
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <ActionButton variant="destructive" icon={Trash2}>
+                <ActionButton variant="destructive" icon={Trash2} onClick={function (): void {
+                  throw new Error("Function not implemented.")
+                } } >
                   Delete
                 </ActionButton>
               </AlertDialogTrigger>

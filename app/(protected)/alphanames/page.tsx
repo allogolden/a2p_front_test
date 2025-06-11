@@ -4,79 +4,85 @@ import { useRouter } from "next/navigation"
 import { Plus } from "lucide-react"
 import { DataTable } from "@/components/common/data-table"
 import { PageHeader } from "@/components/common/page-header"
+import { useEffect, useState } from "react"
+import { fetchProtected } from "@/lib/utils"
+import { alphanamesAPI } from "@/lib/api/alphanames"
 
-const alphaData = [
-  {
-    alpha_name: "Coursetop",
-    ctn: "998903494546",
-    system_id: "206200",
-    active: "True",
-    bind_mode: "Allow A2P only",
-    alias: "-",
-    ip_address: "-",
-    description: "Imported alpha name",
-    created: "08.04.2025 16:41:44",
-    modified: "08.04.2025 16:41:44",
-    created_by: "-",
-    updated_by: "-",
-  },
-  {
-    alpha_name: "MyUzcard",
-    ctn: "998917934800, 998909652030, 998917934800",
-    system_id: "20100",
-    active: "True",
-    bind_mode: "Allow A2P only",
-    alias: "-",
-    ip_address: "-",
-    description: "Imported alpha name",
-    created: "08.04.2025 16:41:52",
-    modified: "08.04.2025 16:41:52",
-    created_by: "-",
-    updated_by: "-",
-  },
-  {
-    alpha_name: "GoMusic",
-    ctn: "998909316888",
-    system_id: "208200",
-    active: "True",
-    bind_mode: "Allow A2P only",
-    alias: "-",
-    ip_address: "-",
-    description: "Imported alpha name",
-    created: "08.04.2025 16:42:11",
-    modified: "08.04.2025 16:42:11",
-    created_by: "-",
-    updated_by: "-",
-  },
-  {
-    alpha_name: "Roodell",
-    ctn: "998917913700",
-    system_id: "20100",
-    active: "True",
-    bind_mode: "Allow A2P only",
-    alias: "-",
-    ip_address: "-",
-    description: "Imported alpha name",
-    created: "08.04.2025 16:41:50",
-    modified: "08.04.2025 16:41:50",
-    created_by: "-",
-    updated_by: "-",
-  },
-  {
-    alpha_name: "Pm.Gov.UZ",
-    ctn: "998917792400, 998917792400",
-    system_id: "20100",
-    active: "True",
-    bind_mode: "Allow A2P only",
-    alias: "-",
-    ip_address: "-",
-    description: "Imported alpha name",
-    created: "08.04.2025 16:41:49",
-    modified: "08.04.2025 16:41:49",
-    created_by: "-",
-    updated_by: "-",
-  },
-]
+
+// const alphaData = [
+//   {
+//     alpha_name: "Coursetop",
+//     ctn: "998903494546",
+//     system_id: "206200",
+//     active: "True",
+//     bind_mode: "Allow A2P only",
+//     alias: "-",
+//     ip_address: "-",
+//     description: "Imported alpha name",
+//     created: "08.04.2025 16:41:44",
+//     modified: "08.04.2025 16:41:44",
+//     created_by: "-",
+//     updated_by: "-",
+//   },
+//   {
+//     alpha_name: "MyUzcard",
+//     ctn: "998917934800, 998909652030, 998917934800",
+//     system_id: "20100",
+//     active: "True",
+//     bind_mode: "Allow A2P only",
+//     alias: "-",
+//     ip_address: "-",
+//     description: "Imported alpha name",
+//     created: "08.04.2025 16:41:52",
+//     modified: "08.04.2025 16:41:52",
+//     created_by: "-",
+//     updated_by: "-",
+//   },
+//   {
+//     alpha_name: "GoMusic",
+//     ctn: "998909316888",
+//     system_id: "208200",
+//     active: "True",
+//     bind_mode: "Allow A2P only",
+//     alias: "-",
+//     ip_address: "-",
+//     description: "Imported alpha name",
+//     created: "08.04.2025 16:42:11",
+//     modified: "08.04.2025 16:42:11",
+//     created_by: "-",
+//     updated_by: "-",
+//   },
+//   {
+//     alpha_name: "Roodell",
+//     ctn: "998917913700",
+//     system_id: "20100",
+//     active: "True",
+//     bind_mode: "Allow A2P only",
+//     alias: "-",
+//     ip_address: "-",
+//     description: "Imported alpha name",
+//     created: "08.04.2025 16:41:50",
+//     modified: "08.04.2025 16:41:50",
+//     created_by: "-",
+//     updated_by: "-",
+//   },
+//   {
+//     alpha_name: "Pm.Gov.UZ",
+//     ctn: "998917792400, 998917792400",
+//     system_id: "20100",
+//     active: "True",
+//     bind_mode: "Allow A2P only",
+//     alias: "-",
+//     ip_address: "-",
+//     description: "Imported alpha name",
+//     created: "08.04.2025 16:41:49",
+//     modified: "08.04.2025 16:41:49",
+//     created_by: "-",
+//     updated_by: "-",
+//   },
+// ]
+
+
 
 const columns = [
   { key: "alpha_name", label: "Alpha Name" },
@@ -107,9 +113,21 @@ const filters = {
 
 export default function AlphaNamesPage() {
   const router = useRouter()
+  const [alphaData, setAlphaData] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    setLoading(true)
+    setError(null)
+    alphanamesAPI.list()
+      .then(data => setAlphaData(data))
+      .catch(e => setError(e.message))
+      .finally(() => setLoading(false))
+  }, [])
 
   const handleRowClick = (item: any) => {
-    router.push(`/alphanames/${item.alpha_name}`)
+    router.push(`/alphanames/${item.id}`)
   }
 
   const handleAdd = () => {
