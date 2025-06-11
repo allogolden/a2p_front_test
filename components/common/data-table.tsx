@@ -110,7 +110,7 @@ export function DataTable({
                 onClick={() => onRowClick?.(item)}
               >
                 <TableCell>
-                  <Checkbox />
+                  <Checkbox onClick={e => e.stopPropagation()} />
                 </TableCell>
                 {columns.map((column) => (
                   <TableCell key={column.key} className="font-medium">

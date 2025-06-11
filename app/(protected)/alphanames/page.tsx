@@ -5,33 +5,111 @@ import { Plus } from "lucide-react"
 import { DataTable } from "@/components/common/data-table"
 import { PageHeader } from "@/components/common/page-header"
 
-const sampleData = [
-  { id: "1", name: "BANK_ALERT", pattern: "^BANK.*", status: "active", created_at: "2024-01-15T00:00:00Z" },
-  { id: "2", name: "PROMO_MSG", pattern: "^PROMO.*", status: "active", created_at: "2024-01-16T00:00:00Z" },
-  { id: "3", name: "OTP_CODE", pattern: "^OTP.*", status: "inactive", created_at: "2024-01-17T00:00:00Z" },
-]
-
-const columns = [
-  { key: "id", label: "ID" },
-  { key: "name", label: "NAME" },
-  { key: "pattern", label: "PATTERN" },
-  { key: "status", label: "STATUS" },
+const alphaData = [
   {
-    key: "created_at",
-    label: "CREATED AT",
-    render: (value: string) => new Date(value).toLocaleDateString(),
+    alpha_name: "Coursetop",
+    ctn: "998903494546",
+    system_id: "206200",
+    active: "True",
+    bind_mode: "Allow A2P only",
+    alias: "-",
+    ip_address: "-",
+    description: "Imported alpha name",
+    created: "08.04.2025 16:41:44",
+    modified: "08.04.2025 16:41:44",
+    created_by: "-",
+    updated_by: "-",
+  },
+  {
+    alpha_name: "MyUzcard",
+    ctn: "998917934800, 998909652030, 998917934800",
+    system_id: "20100",
+    active: "True",
+    bind_mode: "Allow A2P only",
+    alias: "-",
+    ip_address: "-",
+    description: "Imported alpha name",
+    created: "08.04.2025 16:41:52",
+    modified: "08.04.2025 16:41:52",
+    created_by: "-",
+    updated_by: "-",
+  },
+  {
+    alpha_name: "GoMusic",
+    ctn: "998909316888",
+    system_id: "208200",
+    active: "True",
+    bind_mode: "Allow A2P only",
+    alias: "-",
+    ip_address: "-",
+    description: "Imported alpha name",
+    created: "08.04.2025 16:42:11",
+    modified: "08.04.2025 16:42:11",
+    created_by: "-",
+    updated_by: "-",
+  },
+  {
+    alpha_name: "Roodell",
+    ctn: "998917913700",
+    system_id: "20100",
+    active: "True",
+    bind_mode: "Allow A2P only",
+    alias: "-",
+    ip_address: "-",
+    description: "Imported alpha name",
+    created: "08.04.2025 16:41:50",
+    modified: "08.04.2025 16:41:50",
+    created_by: "-",
+    updated_by: "-",
+  },
+  {
+    alpha_name: "Pm.Gov.UZ",
+    ctn: "998917792400, 998917792400",
+    system_id: "20100",
+    active: "True",
+    bind_mode: "Allow A2P only",
+    alias: "-",
+    ip_address: "-",
+    description: "Imported alpha name",
+    created: "08.04.2025 16:41:49",
+    modified: "08.04.2025 16:41:49",
+    created_by: "-",
+    updated_by: "-",
   },
 ]
 
+const columns = [
+  { key: "alpha_name", label: "Alpha Name" },
+  { key: "ctn", label: "CTN" },
+  { key: "system_id", label: "System ID" },
+  { key: "active", label: "Active" },
+  { key: "bind_mode", label: "Bind mode" },
+  { key: "alias", label: "Alias" },
+  { key: "ip_address", label: "IP Address" },
+  { key: "description", label: "Description" },
+  {
+    key: "created",
+    label: "Created",
+    render: (value: string) => new Date(value).toLocaleString(),
+  },
+  {
+    key: "modified",
+    label: "Modified",
+    render: (value: string) => new Date(value).toLocaleString(),
+  },
+  { key: "created_by", label: "Created By" },
+  { key: "updated_by", label: "Updated by" },
+]
+
 const filters = {
-  status: ["active", "inactive"],
+  active: ["True", "False"],
 }
 
-export default function AlphanamesPage() {
+export default function AlphaNamesPage() {
   const router = useRouter()
 
   const handleRowClick = (item: any) => {
-    router.push(`/alphanames/${item.id}`)
+    router.push(`/alphanames/${item.alpha_name}`)
   }
 
   const handleAdd = () => {
@@ -52,7 +130,7 @@ export default function AlphanamesPage() {
 
       <DataTable
         columns={columns}
-        data={sampleData}
+        data={alphaData}
         onRowClick={handleRowClick}
         searchPlaceholder="Search alphanames..."
         filters={filters}

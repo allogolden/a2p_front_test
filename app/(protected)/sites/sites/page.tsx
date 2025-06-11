@@ -5,34 +5,28 @@ import { Plus } from "lucide-react"
 import { DataTable } from "@/components/common/data-table"
 import { PageHeader } from "@/components/common/page-header"
 
-const sampleData = [
-  { id: "1", name: "Main Site", domain: "a2p.example.com", status: "active", ssl: "valid" },
-  { id: "2", name: "API Site", domain: "api.a2p.example.com", status: "active", ssl: "valid" },
-  { id: "3", name: "Admin Panel", domain: "admin.a2p.example.com", status: "maintenance", ssl: "expired" },
-]
-
+// Только два столбца: display_name и domain
 const columns = [
-  { key: "id", label: "ID" },
-  { key: "name", label: "NAME" },
+  { key: "display_name", label: "DISPLAY NAME" },
   { key: "domain", label: "DOMAIN" },
-  { key: "status", label: "STATUS" },
-  { key: "ssl", label: "SSL" },
 ]
 
-const filters = {
-  status: ["active", "inactive", "maintenance"],
-  ssl: ["valid", "expired", "none"],
-}
+// Пример данных с двумя полями
+const sampleData = [
+  { id: "1", display_name: "example.com", domain: "example.com" },
+  { id: "2", display_name: "api.example.com", domain: "api.example.com" },
+  { id: "3", display_name: "Admin Panel", domain: "admin.a2p.example.com" },
+]
 
 export default function SitesPage() {
   const router = useRouter()
 
-  const handleRowClick = (item: any) => {
-    router.push(`/sites/sites/${item.id}`)
+  const handleRowClick = (item : any) => {
+    router.push(`/sites/sites/${item.id}`) // переход на детальную страницу
   }
 
   const handleAdd = () => {
-    router.push("/sites/sites/new")
+    router.push("/sites/sites/new") // переход на создание нового сайта
   }
 
   return (
@@ -52,7 +46,7 @@ export default function SitesPage() {
         data={sampleData}
         onRowClick={handleRowClick}
         searchPlaceholder="Search sites..."
-        filters={filters}
+        // фильтров нет, т.к. всего два столбца и фильтровать нечего
       />
     </div>
   )

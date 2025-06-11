@@ -9,20 +9,36 @@ import { anPatternsAPI } from "@/lib/api"
 import type { ANPattern } from "@/types"
 
 const columns = [
-  { key: "system_id", label: "SYSTEM ID" },
-  { key: "alpha_name", label: "ALPHA NAME" },
-  { key: "category", label: "CATEGORY" },
-  { key: "status", label: "STATUS" },
+  { key: "system_id", label: "System ID" },
+  { key: "ctn", label: "CTN" },
+  { key: "alpha_name", label: "Alpha Name" },
+  { key: "category", label: "Category" },
+  { key: "name", label: "Name" },
+  { key: "pattern", label: "Pattern" },
+  { key: "active", label: "Active" },
+  { key: "ip_address", label: "IP Address" },
+  { key: "description", label: "Description" },
   {
-    key: "created_at",
-    label: "CREATED AT",
-    render: (value: string) => new Date(value).toLocaleDateString(),
+    key: "created",
+    label: "Created",
+    render: (value: string) => value ? value.replace(/,\d+$/, "") : ""
   },
+  {
+    key: "modified",
+    label: "Modified",
+    render: (value: string) => value ? value.replace(/,\d+$/, "") : ""
+  },
+  { key: "created_by", label: "Created By" },
+  { key: "updated_by", label: "Updated By" }
 ]
 
 const filters = {
-  category: ["Payment", "Education", "Transaction", "Banking", "Marketing"],
-  status: ["active", "inactive"],
+  active: ["True", "False"],
+  category: [
+    "Payment", "Education", "Transaction", "Banking", "Marketing", "Service", "Reklama", "-"
+  ],
+  // Можно добавить фильтр по System ID:
+  // system_id: ["20100", "208200", ...]
 }
 
 export default function ANPatternsPage() {

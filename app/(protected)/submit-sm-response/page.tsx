@@ -4,38 +4,80 @@ import { useRouter } from "next/navigation"
 import { DataTable } from "@/components/common/data-table"
 import { PageHeader } from "@/components/common/page-header"
 
+// Колонки — только из данных
+const columns = [
+  { key: "queue_message_id", label: "QUEUE MESSAGE ID" },
+  { key: "smpp_message_id", label: "SMPP MESSAGE ID" },
+  { key: "command_status", label: "COMMAND STATUS" },
+  { key: "sequence_number", label: "SEQUENCE NUMBER" },
+  { key: "created_at", label: "CREATED AT" },
+]
+
+// Данные — ключи соответствуют колонкам из данных
 const sampleData = [
-  { id: "1", message_id: "SMR001", response_code: "0", description: "Success", timestamp: "2024-01-15T10:30:00Z" },
-  { id: "2", message_id: "SMR002", response_code: "8", description: "System error", timestamp: "2024-01-15T10:31:00Z" },
+  {
+    id: "1",
+    queue_message_id: "ECC36CD7",
+    smpp_message_id: "D6AE74D1",
+    command_status: "CommandStatus.ESME_ROK",
+    sequence_number: "223",
+    created_at: "June 9, 2025, 12:37 p.m.",
+  },
+  {
+    id: "2",
+    queue_message_id: "698A4BE4",
+    smpp_message_id: "D6A72BD3",
+    command_status: "CommandStatus.ESME_ROK",
+    sequence_number: "222",
+    created_at: "June 9, 2025, 12:37 p.m.",
+  },
   {
     id: "3",
-    message_id: "SMR003",
-    response_code: "1",
-    description: "Invalid destination",
-    timestamp: "2024-01-15T10:32:00Z",
+    queue_message_id: "2D6FE4F8",
+    smpp_message_id: "D6AE5661",
+    command_status: "CommandStatus.ESME_ROK",
+    sequence_number: "221",
+    created_at: "June 9, 2025, 12:37 p.m.",
   },
-]
-
-const columns = [
-  { key: "id", label: "ID" },
-  { key: "message_id", label: "MESSAGE ID" },
-  { key: "response_code", label: "RESPONSE CODE" },
-  { key: "description", label: "DESCRIPTION" },
   {
-    key: "timestamp",
-    label: "TIMESTAMP",
-    render: (value: string) => new Date(value).toLocaleString(),
+    id: "4",
+    queue_message_id: "8F2CBAE1",
+    smpp_message_id: "D6AD4351",
+    command_status: "CommandStatus.ESME_ROK",
+    sequence_number: "220",
+    created_at: "June 9, 2025, 12:36 p.m.",
   },
+  {
+    id: "5",
+    queue_message_id: "2764CEC7",
+    smpp_message_id: "D6A5F9F3",
+    command_status: "CommandStatus.ESME_ROK",
+    sequence_number: "219",
+    created_at: "June 9, 2025, 12:36 p.m.",
+  },
+  {
+    id: "6",
+    queue_message_id: "742B08B7",
+    smpp_message_id: "D6A5E6F3",
+    command_status: "CommandStatus.ESME_ROK",
+    sequence_number: "218",
+    created_at: "June 9, 2025, 12:36 p.m.",
+  },
+  {
+    id: "7",
+    queue_message_id: "207369E1",
+    smpp_message_id: "D6919771",
+    command_status: "CommandStatus.ESME_ROK",
+    sequence_number: "204",
+    created_at: "June 9, 2025, 12:29 p.m.",
+  },
+  // ... добавь остальные строки при необходимости
 ]
-
-const filters = {
-  response_code: ["0", "1", "8", "9"],
-}
 
 export default function SubmitSMResponsePage() {
   const router = useRouter()
 
-  const handleRowClick = (item: any) => {
+  const handleRowClick = (item : any) => {
     router.push(`/submit-sm-response/${item.id}`)
   }
 
@@ -48,7 +90,6 @@ export default function SubmitSMResponsePage() {
         data={sampleData}
         onRowClick={handleRowClick}
         searchPlaceholder="Search responses..."
-        filters={filters}
       />
     </div>
   )

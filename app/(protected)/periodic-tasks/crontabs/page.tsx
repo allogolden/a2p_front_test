@@ -6,15 +6,16 @@ import { DataTable } from "@/components/common/data-table"
 import { PageHeader } from "@/components/common/page-header"
 
 const sampleData = [
-  { id: "1", name: "Daily Report", schedule: "0 9 * * *", task: "generate_daily_report", status: "active" },
-  { id: "2", name: "Cleanup Logs", schedule: "0 2 * * 0", task: "cleanup_old_logs", status: "active" },
-  { id: "3", name: "Backup Database", schedule: "0 3 * * *", task: "backup_database", status: "inactive" },
+  { id: "1", name: "Daily Report", schedule: "0 9 * * *", human_readable: "At 09:00 AM every day", task: "generate_daily_report", status: "active" },
+  { id: "2", name: "Cleanup Logs", schedule: "0 2 * * 0", human_readable: "At 02:00 AM on Sunday", task: "cleanup_old_logs", status: "active" },
+  { id: "3", name: "Backup Database", schedule: "0 3 * * *", human_readable: "At 03:00 AM every day", task: "backup_database", status: "inactive" },
 ]
 
 const columns = [
   { key: "id", label: "ID" },
   { key: "name", label: "NAME" },
   { key: "schedule", label: "SCHEDULE" },
+  { key: "human_readable", label: "HUMAN READABLE" },
   { key: "task", label: "TASK" },
   { key: "status", label: "STATUS" },
 ]

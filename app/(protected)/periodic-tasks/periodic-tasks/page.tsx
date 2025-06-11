@@ -8,46 +8,40 @@ import { PageHeader } from "@/components/common/page-header"
 const sampleData = [
   {
     id: "1",
-    name: "Daily Cleanup",
-    type: "Cron",
-    schedule: "0 2 * * *",
-    status: "active",
-    last_run: "2024-01-15T02:00:00Z",
+    name: "celery.backend_cleanup",
+    enabled: true,
+    scheduler: "0 4 * * * (m/h/dM/MY/d) Asia/Tashkent",
+    interval_schedule: "-",
+    start_datetime: null,
+    last_run: "2025-06-10T04:00:00+05:00",
+    one_off: false,
   },
   {
     id: "2",
-    name: "Report Generation",
-    type: "Interval",
-    schedule: "Every 6 hours",
-    status: "active",
-    last_run: "2024-01-15T06:00:00Z",
-  },
-  {
-    id: "3",
-    name: "Backup Task",
-    type: "Clocked",
-    schedule: "2024-01-16T03:00:00Z",
-    status: "inactive",
-    last_run: "2024-01-14T03:00:00Z",
+    name: "process-cdr-periodic-task",
+    enabled: true,
+    scheduler: "every 4 seconds",
+    interval_schedule: "every 4 seconds",
+    start_datetime: null,
+    last_run: "2025-06-10T15:37:00+05:00",
+    one_off: false,
   },
 ]
 
 const columns = [
   { key: "id", label: "ID" },
   { key: "name", label: "NAME" },
-  { key: "type", label: "TYPE" },
-  { key: "schedule", label: "SCHEDULE" },
-  { key: "status", label: "STATUS" },
-  {
-    key: "last_run",
-    label: "LAST RUN",
-    render: (value: string) => new Date(value).toLocaleString(),
-  },
+  { key: "enabled", label: "ENABLED", render: (v: boolean) => v ? "Yes" : "No" },
+  { key: "scheduler", label: "SCHEDULER" },
+  { key: "interval_schedule", label: "INTERVAL SCHEDULE" },
+  { key: "start_datetime", label: "START DATETIME", render: (v: string) => v ? new Date(v).toLocaleString() : "-" },
+  { key: "last_run", label: "LAST RUN DATETIME", render: (v: string) => v ? new Date(v).toLocaleString() : "-" },
+  { key: "one_off", label: "ONE-OFF TASK", render: (v: boolean) => v ? "Yes" : "No" },
 ]
 
 const filters = {
-  type: ["Cron", "Interval", "Clocked"],
-  status: ["active", "inactive"],
+  enabled: ["Yes", "No"],
+  scheduler: ["Cron", "Interval", "Clocked"], // если хочешь фильтровать по типу расписания
 }
 
 export default function PeriodicTasksPage() {

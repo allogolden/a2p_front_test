@@ -5,30 +5,33 @@ import { Plus } from "lucide-react"
 import { DataTable } from "@/components/common/data-table"
 import { PageHeader } from "@/components/common/page-header"
 
+// Данные соответствуют структуре старой таблицы
 const sampleData = [
-  { id: "1", name: "Default CDR", format: "CSV", retention_days: "90", status: "active" },
-  { id: "2", name: "Partner CDR", format: "JSON", retention_days: "30", status: "active" },
-  { id: "3", name: "Archive CDR", format: "XML", retention_days: "365", status: "inactive" },
+  {
+    cdr_setting: "CDR Settings Configuration",
+    sms_process_batch: "4",
+    generation_time_value: "4",
+    event_type: "On SMS Delivery to Abonent",
+  },
 ]
 
+// Колонки под старую таблицу
 const columns = [
-  { key: "id", label: "ID" },
-  { key: "name", label: "NAME" },
-  { key: "format", label: "FORMAT" },
-  { key: "retention_days", label: "RETENTION DAYS" },
-  { key: "status", label: "STATUS" },
+  { key: "cdr_setting", label: "CDR Setting" },
+  { key: "sms_process_batch", label: "How many sms(MT+MO) to process by CDR worker at once" },
+  { key: "generation_time_value", label: "Generation time value" },
+  { key: "event_type", label: "Event type" },
 ]
 
 const filters = {
-  format: ["CSV", "JSON", "XML"],
-  status: ["active", "inactive"],
+  event_type: ["On SMS Delivery to Abonent"],
 }
 
 export default function CDRSettingsPage() {
   const router = useRouter()
 
   const handleRowClick = (item: any) => {
-    router.push(`/cdr-settings/${item.id}`)
+    router.push(`/cdr-settings/${item.cdr_setting}`)
   }
 
   const handleAdd = () => {

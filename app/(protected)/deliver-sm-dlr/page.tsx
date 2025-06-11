@@ -4,44 +4,62 @@ import { useRouter } from "next/navigation"
 import { DataTable } from "@/components/common/data-table"
 import { PageHeader } from "@/components/common/page-header"
 
+// Пример данных из старой таблицы
 const sampleData = [
   {
-    id: "1",
-    message_id: "DLR001",
-    destination: "+998901234567",
-    status: "delivered",
-    timestamp: "2024-01-15T10:30:00Z",
+    smpp_message_id: "D6AE74D1",
+    delivery_status: "Delivered",
+    message_content_snippet: "DELIVRD",
+    created_at: "June 9, 2025, 12:37 p.m.",
   },
-  { id: "2", message_id: "DLR002", destination: "+998901234568", status: "failed", timestamp: "2024-01-15T10:31:00Z" },
-  { id: "3", message_id: "DLR003", destination: "+998901234569", status: "pending", timestamp: "2024-01-15T10:32:00Z" },
-]
-
-const columns = [
-  { key: "id", label: "ID" },
-  { key: "message_id", label: "MESSAGE ID" },
-  { key: "destination", label: "DESTINATION" },
-  { key: "status", label: "STATUS" },
   {
-    key: "timestamp",
-    label: "TIMESTAMP",
-    render: (value: string) => new Date(value).toLocaleString(),
+    smpp_message_id: "D6A72BD3",
+    delivery_status: "Delivered",
+    message_content_snippet: "DELIVRD",
+    created_at: "June 9, 2025, 12:37 p.m.",
   },
+  {
+    smpp_message_id: "D6AE5661",
+    delivery_status: "Delivered",
+    message_content_snippet: "DELIVRD",
+    created_at: "June 9, 2025, 12:37 p.m.",
+  },
+  // ... (добавь остальные по необходимости)
 ]
 
+// Колонки по старой таблице
+const columns = [
+  { key: "smpp_message_id", label: "SMPP Message ID" },
+  { key: "delivery_status", label: "Delivery status" },
+  { key: "message_content_snippet", label: "Message Content Snippet" },
+  { key: "created_at", label: "Created at" },
+]
+
+// Фильтры, аналогичные тем, что в интерфейсе
 const filters = {
-  status: ["delivered", "failed", "pending", "rejected"],
+  delivery_status: [
+    "Delivered",
+    "Undelivered",
+    "Rejected",
+    "Accepted",
+    "Unknown",
+    "P2A",
+  ],
 }
 
 export default function DeliverSMDLRPage() {
   const router = useRouter()
 
   const handleRowClick = (item: any) => {
-    router.push(`/deliver-sm-dlr/${item.id}`)
+    router.push(`/deliver-sm-dlr/${item.smpp_message_id}`)
   }
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Deliver SM (DLR)" description="Delivery receipt messages log" />
+      <PageHeader
+        title="Deliver SM (DLR)"
+        description="Delivery receipt messages log"
+      />
 
       <DataTable
         columns={columns}

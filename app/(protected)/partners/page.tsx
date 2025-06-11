@@ -9,22 +9,22 @@ import { partnersAPI } from "@/lib/api"
 import type { Partner } from "@/types"
 
 const columns = [
-  { key: "id", label: "ID" },
-  { key: "name", label: "NAME" },
-  { key: "type", label: "TYPE" },
-  { key: "status", label: "STATUS" },
-  { key: "country", label: "COUNTRY" },
-  {
-    key: "created_at",
-    label: "CREATED AT",
-    render: (value: string) => new Date(value).toLocaleDateString(),
-  },
+  { key: "system_id", label: "System ID" },
+  { key: "username", label: "Username" },
+  { key: "active", label: "Active", render: (v: boolean) => v ? "Yes" : "No" },
+  { key: "ip_address", label: "IP Address" },
+  { key: "description", label: "Description" },
+  { key: "created", label: "Created", render: (v: string) => v ? new Date(v).toLocaleDateString() : "-" },
+  { key: "modified", label: "Modified", render: (v: string) => v ? new Date(v).toLocaleString() : "-" },
+  { key: "created_by", label: "Created By" },
+  { key: "updated_by", label: "Updated By" },
 ]
 
 const filters = {
-  type: ["Mobile Operator", "Aggregator", "Enterprise"],
-  status: ["active", "inactive"],
-  country: ["Uzbekistan", "Kazakhstan", "Kyrgyzstan"],
+  active: ["Yes", "No"],
+  // Можно добавить фильтры по allowed если нужно:
+  // shn_allowed: ["Yes", "No"],
+  // an_allowed: ["Yes", "No"],
 }
 
 export default function PartnersPage() {

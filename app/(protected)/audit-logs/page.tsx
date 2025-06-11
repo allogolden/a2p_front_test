@@ -4,62 +4,62 @@ import { useRouter } from "next/navigation"
 import { DataTable } from "@/components/common/data-table"
 import { PageHeader } from "@/components/common/page-header"
 
+// Пример данных, соответствующих старой таблице
 const sampleData = [
   {
-    id: "1",
-    action: "CREATE",
-    resource: "AN_PATTERN",
-    user: "admin",
-    timestamp: "2024-01-15T10:30:00Z",
-    status: "success",
+    user: "System",
+    timestamp: "09.06.2025 12:37:07,768",
+    action: "Create",
+    table: "Momessagelog",
+    object: "Ihmanafaqa",
+    changes: "-",
   },
   {
-    id: "2",
-    action: "UPDATE",
-    resource: "PARTNER",
-    user: "admin",
-    timestamp: "2024-01-15T11:45:00Z",
-    status: "success",
+    user: "System",
+    timestamp: "09.06.2025 12:37:06,941",
+    action: "Create",
+    table: "Momessagelog",
+    object: "Ihmanafaqa",
+    changes: "-",
   },
-  {
-    id: "3",
-    action: "DELETE",
-    resource: "ALPHANAME",
-    user: "admin",
-    timestamp: "2024-01-15T12:15:00Z",
-    status: "failed",
-  },
+  // ... (остальные записи)
 ]
 
+// Описание колонок
 const columns = [
-  { key: "id", label: "ID" },
-  { key: "action", label: "ACTION" },
-  { key: "resource", label: "RESOURCE" },
-  { key: "user", label: "USER" },
-  {
-    key: "timestamp",
-    label: "TIMESTAMP",
-    render: (value: string) => new Date(value).toLocaleString(),
-  },
-  { key: "status", label: "STATUS" },
+  { key: "user", label: "User" },
+  { key: "timestamp", label: "Timestamp"},
+  { key: "action", label: "Action" },
+  { key: "table", label: "Table" },
+  { key: "object", label: "Object" },
+  { key: "changes", label: "Changes" },
 ]
 
+// Пример фильтров (можно добавить по необходимости)
 const filters = {
-  action: ["CREATE", "UPDATE", "DELETE"],
-  resource: ["AN_PATTERN", "PARTNER", "ALPHANAME"],
-  status: ["success", "failed"],
+  action: ["Create", "Update", "Delete"],
+  table: [
+    "Momessagelog",
+    "Mtmessagelog",
+    // ...все используемые таблицы
+  ],
+  user: ["System", "admin", "AAbdusamadov", "akhadimetov", "-"],
 }
 
 export default function AuditLogsPage() {
   const router = useRouter()
 
+  // Здесь rowClick можно заменить на переход к подробной информации по логу, если потребуется
   const handleRowClick = (item: any) => {
-    router.push(`/audit-logs/${item.id}`)
+    // router.push(`/audit-logs/${item.id}`) // если есть id
   }
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Audit Logs" description="System audit trail and activity logs" />
+      <PageHeader
+        title="Audit Logs"
+        description="System audit trail and activity logs"
+      />
 
       <DataTable
         columns={columns}
