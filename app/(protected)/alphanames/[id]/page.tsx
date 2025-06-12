@@ -13,6 +13,7 @@ import { ActionButton } from "@/components/common/action-button"
 import { LoadingSpinner } from "@/components/common/loading-spinner"
 import { alphanamesAPI } from "@/lib/api/alphanames"
 import type { Alphaname } from "@/lib/api/alphanames"
+import { ctnAPI } from "@/lib/api/ctns"
 
 export default function AlphanameDetailPage() {
   const router = useRouter()
@@ -25,7 +26,6 @@ export default function AlphanameDetailPage() {
   const [error, setError] = useState<string | null>(null)
 
   // Списки для селектов
-  const [alphaNameOptions, setAlphaNameOptions] = useState<string[]>([])
   const [ctnOptions, setCtnOptions] = useState<string[]>([])
 
   // Получение данных для селектов и детали объекта (если не new)
@@ -37,12 +37,8 @@ export default function AlphanameDetailPage() {
     const fetchOptions = async () => {
         // TODO: make API and types for all entities
       try {
-        const [alphaNamesRes, ctnsRes] = await Promise.all([
-          alphanamesAPI.getAlphaNamesList(), // Возвращает массив строк
-          alphanamesAPI.getCtnList(),        // Возвращает массив строк
-        ])
-        setAlphaNameOptions(alphaNamesRes.data || [])
-        setCtnOptions(ctnsRes.data || [])
+        const ctnsRes = (await Promise.all([ctnAPI.list()])).map((item: any) => item.ctn)
+        setCtnOptions(ctnsRes || [])
       } catch (e) {
         setError("Ошибка при получении опций Alpha Name/CTN")
       }
@@ -192,19 +188,11 @@ export default function AlphanameDetailPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="alpha_name">Alpha Name</Label>
-              <Select
+              <Input
+                id="system_id"
                 value={item.alpha_name}
-                onValueChange={value => setItem({ ...item, alpha_name: value })}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Выберите Alpha Name" />
-                </SelectTrigger>
-                <SelectContent>
-                  {alphaNameOptions.map(opt => (
-                    <SelectItem value={opt} key={opt}>{opt}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                onChange={e => setItem({ ...item, alpha_name: e.target.value })}
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="ctn">CTN</Label>
