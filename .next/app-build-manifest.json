@@ -11,30 +11,15 @@
       "static/chunks/main-app.js",
       "static/chunks/app/(protected)/layout.js"
     ],
-    "/(protected)/cdr-settings/page": [
+    "/(protected)/category-statistics/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(protected)/cdr-settings/page.js"
+      "static/chunks/app/(protected)/category-statistics/page.js"
     ],
-    "/(protected)/cdr-settings/[id]/page": [
+    "/(protected)/category-mt/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(protected)/cdr-settings/[id]/page.js"
-    ],
-    "/(protected)/dashboard/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(protected)/dashboard/page.js"
-    ],
-    "/(protected)/ctns/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(protected)/ctns/page.js"
-    ],
-    "/(protected)/ctns/[id]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(protected)/ctns/[id]/page.js"
+      "static/chunks/app/(protected)/category-mt/page.js"
     ]
   }
 }

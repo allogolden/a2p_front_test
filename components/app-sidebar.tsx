@@ -45,7 +45,6 @@ const data = {
         { title: "CTNs", url: "/ctns" },                   // 6
         { title: "Partners", url: "/partners" },           // 16
         { title: "Partners Statistics", url: "/partners-statistics" }, // 17
-        { title: "Regex Patterns", url: "/regex-patterns" }, // 19
         { title: "SHN Patterns", url: "/shn-patterns" },
         { title: "Short numbers", url: "/short-numbers" },   // 20
       ],
@@ -89,7 +88,8 @@ const data = {
         { title: "Groups", url: "/groups" },                // 1 (уже выше, можно заменить на что-то уникальное или убрать дубликат)
         { title: "CDR Settings", url: "/cdr-settings" },    // 5
         { title: "Custom users", url: "/custom-users" },    // 9
-        { title: "Sites", url: "/sites" },                  // 25
+        { title: "Sites", url: "/sites" },
+        { title: "Regex Patterns", url: "/regex-patterns" }, // 19                  // 25
       ],
     },
     {
