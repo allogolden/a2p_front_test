@@ -18,12 +18,23 @@ const mockPartnerStats: PartnerStatistics[] = [
   },
 ]
 
+import type { ApiResponse, PaginatedResponse } from "@/types"
+
 export const partnersStatisticsAPI = {
-  list: async () => Promise.resolve(mockPartnerStats),
-  getById: async (id: string) =>
-    Promise.resolve(
-      mockPartnerStats.find((p) => p.id === id) || ({} as PartnerStatistics)
-    ),
+  list: async (): Promise<PaginatedResponse<PartnerStatistics>> =>
+    Promise.resolve({
+      data: mockPartnerStats,
+      total: mockPartnerStats.length,
+      page: 1,
+      limit: mockPartnerStats.length,
+      totalPages: 1,
+    }),
+  getById: async (id: string): Promise<ApiResponse<PartnerStatistics>> => {
+    const item = mockPartnerStats.find((p) => p.id === id)
+    return item
+      ? { data: item, success: true }
+      : { data: null as any, success: false, message: "Item not found" }
+  },
   create: async (_data: Partial<PartnerStatistics>) =>
     Promise.resolve({ status: 200 }),
   update: async (_id: string, _data: Partial<PartnerStatistics>) =>

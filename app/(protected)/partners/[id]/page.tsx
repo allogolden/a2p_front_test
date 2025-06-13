@@ -45,7 +45,7 @@ export default function PartnerDetailPage() {
     }
     partnersAPI
       .getById(params.id as string)
-      .then((data) => setItem(data))
+      .then((res) => setItem(res.data))
       .catch(() => setError("Failed to load partner"))
       .finally(() => setLoading(false))
   }, [params.id])

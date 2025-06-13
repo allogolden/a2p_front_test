@@ -4,6 +4,21 @@
 // const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://your.external.api/v1"
 
 // import { fetchProtected } from "@/lib/utils"
+import type { ApiResponse, PaginatedResponse } from "@/types"
+
+export type Alphaname = {
+  id: string
+  alpha_name: string
+  ctn: string
+  system_id: string
+  active: boolean
+  bind_mode: string
+  alias: string
+  ip_address: string
+  description: string
+  created_at?: string
+  updated_at?: string
+}
 
 const mockAlphanames: Alphaname[] = [
   {
@@ -22,24 +37,46 @@ const mockAlphanames: Alphaname[] = [
 ]
 
 export const alphanamesAPI = {
-  getById: async (id: string) =>
-    Promise.resolve(
-      mockAlphanames.find((a) => a.id === id) || ({} as Alphaname)
-    ),
-  // create: (data: any) =>
-  //   fetchProtected(`/admin/main/alphanamemodel/`, {
-  //     method: "POST",
-  //     body: JSON.stringify(data),
-  //   }),
-  create: async (_data: any) => Promise.resolve({ status: 200 }),
-  // update: (id: string, data: any) =>
-  //   fetchProtected(`/admin/main/alphanamemodel/${id}/`, {
-  //     method: "PUT",
-  //     body: JSON.stringify(data),
-  //   }),
-  update: async (_id: string, _data: any) => Promise.resolve({ status: 200 }),
-  list: async () => Promise.resolve(mockAlphanames),
-  // ... другие методы
+  async getById(id: string): Promise<ApiResponse<Alphaname>> {
+    const item = mockAlphanames.find((a) => a.id === id)
+    if (!item) {
+      return { data: null as any, success: false, message: "Item not found" }
+    }
+    return { data: item, success: true }
+  },
+  create: async (data: Alphaname): Promise<ApiResponse<Alphaname>> => {
+    const newItem: Alphaname = {
+      ...data,
+      id: Math.random().toString(36).slice(2),
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    }
+    mockAlphanames.push(newItem)
+    return { data: newItem, success: true }
+  },
+  update: async (id: string, updates: Partial<Alphaname>): Promise<ApiResponse<Alphaname>> => {
+    const index = mockAlphanames.findIndex((a) => a.id === id)
+    if (index === -1) {
+      return { data: null as any, success: false, message: "Item not found" }
+    }
+    mockAlphanames[index] = { ...mockAlphanames[index], ...updates, updated_at: new Date().toISOString() }
+    return { data: mockAlphanames[index], success: true }
+  },
+  list: async (): Promise<PaginatedResponse<Alphaname>> => {
+    return {
+      data: mockAlphanames,
+      total: mockAlphanames.length,
+      page: 1,
+      limit: mockAlphanames.length,
+      totalPages: 1,
+    }
+  },
+  getAlphaNamesList: async (): Promise<ApiResponse<string[]>> => {
+    return { data: mockAlphanames.map((a) => a.alpha_name), success: true }
+  },
+  getCtnList: async (): Promise<ApiResponse<string[]>> => {
+    return { data: mockAlphanames.map((a) => a.ctn), success: true }
+  },
 }
 
 /*
@@ -58,21 +95,6 @@ export const alphanamesAPI = {
   list: () => fetchProtected(`/admin/main/alphanamemodel/`),
 }
 */
-
-// Типизация (можно вынести отдельно)
-export type Alphaname = {
-  id: string
-  alpha_name: string
-  ctn: string
-  system_id: string
-  active: boolean
-  bind_mode: string
-  alias: string
-  ip_address: string
-  description: string
-  created_at?: string
-  updated_at?: string
-}
 
 // Базовый хелпер (опционально, можно добавить обработку токенов)
 async function request<T>(url: string, options?: RequestInit): Promise<T> {

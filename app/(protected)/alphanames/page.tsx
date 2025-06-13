@@ -7,6 +7,7 @@ import { PageHeader } from "@/components/common/page-header"
 import { useEffect, useState } from "react"
 import { fetchProtected } from "@/lib/utils"
 import { alphanamesAPI } from "@/lib/api/alphanames"
+import type { Alphaname } from "@/lib/api/alphanames"
 
 
 // const alphaData = [
@@ -113,20 +114,21 @@ const filters = {
 
 export default function AlphaNamesPage() {
   const router = useRouter()
-  const [alphaData, setAlphaData] = useState([])
+  const [alphaData, setAlphaData] = useState<Alphaname[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     setLoading(true)
     setError(null)
-    alphanamesAPI.list()
-      .then(data => setAlphaData(data))
+    alphanamesAPI
+      .list()
+      .then((res) => setAlphaData(res.data))
       .catch(e => setError(e.message))
       .finally(() => setLoading(false))
   }, [])
 
-  const handleRowClick = (item: any) => {
+  const handleRowClick = (item: Alphaname) => {
     router.push(`/alphanames/${item.id}`)
   }
 

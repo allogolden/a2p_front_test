@@ -62,7 +62,7 @@ class MockAPI<T extends { id: string }> {
       id: Math.random().toString(36).substr(2, 9),
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
-    } as T
+    } as unknown as T
 
     this.data.push(newItem)
 

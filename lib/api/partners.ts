@@ -1,4 +1,5 @@
 // import { fetchProtected } from "@/lib/utils"
+import type { ApiResponse, PaginatedResponse } from "@/types"
 
 export type Partner = {
   id: string
@@ -29,9 +30,20 @@ const mockPartners: Partner[] = [
 ]
 
 export const partnersAPI = {
-  list: async () => Promise.resolve(mockPartners),
-  getById: async (id: string) =>
-    Promise.resolve(mockPartners.find((p) => p.id === id) || ({} as Partner)),
+  list: async (): Promise<PaginatedResponse<Partner>> =>
+    Promise.resolve({
+      data: mockPartners,
+      total: mockPartners.length,
+      page: 1,
+      limit: mockPartners.length,
+      totalPages: 1,
+    }),
+  getById: async (id: string): Promise<ApiResponse<Partner>> => {
+    const item = mockPartners.find((p) => p.id === id)
+    return item
+      ? { data: item, success: true }
+      : { data: null as any, success: false, message: "Item not found" }
+  },
   create: async (_data: Partial<Partner>) => Promise.resolve({ status: 200 }),
   update: async (_id: string, _data: Partial<Partner>) =>
     Promise.resolve({ status: 200 }),

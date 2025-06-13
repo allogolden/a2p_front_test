@@ -34,7 +34,7 @@ export default function PartnerStatisticsDetailPage() {
     }
     partnersStatisticsAPI
       .getById(params.id as string)
-      .then((data) => setItem(data))
+      .then((res) => setItem(res.data))
       .catch(() => setError("Failed to load statistics"))
       .finally(() => setLoading(false))
   }, [params.id])
