@@ -1,15 +1,18 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation"
-import { Plus } from "lucide-react"
-import { DataTable } from "@/components/common/data-table"
-import { PageHeader } from "@/components/common/page-header"
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Plus } from "lucide-react";
+import { DataTable } from "@/components/common/data-table";
+import { PageHeader } from "@/components/common/page-header";
+import type { ShortNumber } from "@/lib/api/short-numbers";
+import { shortNumbersAPI } from "@/lib/api/short-numbers";
 
 const columns = [
   { key: "system_id", label: "SYSTEM ID" },
   { key: "ctn", label: "CTN" },
   { key: "short_number", label: "SHORT NUMBER" },
-  { key: "active", label: "ACTIVE", render: (v: boolean) => v ? "Yes" : "No" },
+  { key: "active", label: "ACTIVE", render: (v: boolean) => (v ? "Yes" : "No") },
   { key: "bind_mode", label: "BIND MODE" },
   { key: "alias", label: "ALIAS" },
   { key: "ip_address", label: "IP ADDRESS" },
@@ -18,79 +21,55 @@ const columns = [
   { key: "modified", label: "MODIFIED", render: (v: string) => new Date(v).toLocaleString() },
   { key: "created_by", label: "CREATED BY" },
   { key: "updated_by", label: "UPDATED BY" },
-]
-
-const sampleData = [
-  {
-    id: "1",
-    system_id: "20100",
-    ctn: "998909652030, 998911341631, 998911365300",
-    short_number: "5300",
-    active: true,
-    bind_mode: "Allow both A2P/P2A",
-    alias: "-",
-    ip_address: "-",
-    description: "Imported SHN name",
-    created: "2025-04-11T11:23:57+05:00",
-    modified: "2025-04-11T11:23:57+05:00",
-    created_by: "-",
-    updated_by: "-",
-  },
-  {
-    id: "2",
-    system_id: "20100",
-    ctn: "998909652030, 998911341631, 998917921500",
-    short_number: "1500",
-    active: true,
-    bind_mode: "Allow both A2P/P2A",
-    alias: "-",
-    ip_address: "-",
-    description: "Imported SHN name",
-    created: "2025-04-11T11:12:27+05:00",
-    modified: "2025-04-11T11:12:27+05:00",
-    created_by: "-",
-    updated_by: "-",
-  },
-  // ... остальные записи
-]
-
+];
 
 const filters = {
   active: ["Yes", "No"],
   bind_mode: ["Allow both A2P/P2A"],
-  short_number: ["5300", "1500", "1071"], // ...твоё
-}
+  short_number: ["5300", "1500", "1071"],
+};
 
 export default function ShortNumbersPage() {
-  const router = useRouter()
+  const router = useRouter();
+  const [data, setData] = useState<ShortNumber[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleRowClick = (item: any) => {
-    router.push(`/short-numbers/${item.id}`)
-  }
+  useEffect(() => {
+    setLoading(true);
+    shortNumbersAPI
+      .list()
+      .then((list) => setData(list))
+      .catch(() => setError("Failed to load short numbers"))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const handleRowClick = (item: ShortNumber) => {
+    router.push(`/short-numbers/${item.id}`);
+  };
 
   const handleAdd = () => {
-    router.push("/short-numbers/new")
-  }
+    router.push("/short-numbers/new");
+  };
 
   return (
     <div className="space-y-6">
       <PageHeader
         title="Short Numbers"
         description="Manage short code numbers"
-        action={{
-          label: "Add Short Number",
-          onClick: handleAdd,
-          icon: Plus,
-        }}
+        action={{ label: "Add Short Number", onClick: handleAdd, icon: Plus }}
       />
 
       <DataTable
         columns={columns}
-        data={sampleData}
+        data={data}
+        isLoading={loading}
         onRowClick={handleRowClick}
         searchPlaceholder="Search short numbers..."
         filters={filters}
       />
+      {error && <div className="text-red-600">{error}</div>}
     </div>
-  )
+  );
 }
+

@@ -5,8 +5,8 @@ import { Plus } from "lucide-react"
 import { DataTable } from "@/components/common/data-table"
 import { PageHeader } from "@/components/common/page-header"
 import { useAPI } from "@/hooks/use-api"
-import { partnersAPI } from "@/lib/api"
-import type { Partner } from "@/types"
+import type { Partner } from "@/lib/api/partners"
+import { partnersAPI } from "@/lib/api/partners"
 
 const columns = [
   { key: "system_id", label: "System ID" },
@@ -29,7 +29,7 @@ const filters = {
 
 export default function PartnersPage() {
   const router = useRouter()
-  const { data: partners, isLoading } = useAPI<Partner>(() => partnersAPI.getAll())
+  const { data: partners, isLoading } = useAPI<Partner>(() => partnersAPI.list())
 
   const handleRowClick = (item: Partner) => {
     router.push(`/partners/${item.id}`)

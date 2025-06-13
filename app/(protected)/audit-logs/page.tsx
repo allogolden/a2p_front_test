@@ -1,31 +1,19 @@
 "use client"
 
 import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 import { DataTable } from "@/components/common/data-table"
 import { PageHeader } from "@/components/common/page-header"
+import type { AuditLog } from "@/lib/api/audit-logs"
+import { auditLogsAPI } from "@/lib/api/audit-logs"
 
-// Пример данных, соответствующих старой таблице
-const sampleData = [
-  {
-    user: "System",
-    timestamp: "09.06.2025 12:37:07,768",
-    action: "Create",
-    table: "Momessagelog",
-    object: "Ihmanafaqa",
-    changes: "-",
-  },
-  {
-    user: "System",
-    timestamp: "09.06.2025 12:37:06,941",
-    action: "Create",
-    table: "Momessagelog",
-    object: "Ihmanafaqa",
-    changes: "-",
-  },
-  // ... (остальные записи)
-]
+// Данные журнала загружаются через API
+const filters = {
+  action: ["Create", "Update", "Delete"],
+  table: ["Momessagelog", "Mtmessagelog"],
+  user: ["System", "admin", "AAbdusamadov", "akhadimetov", "-"],
+}
 
-// Описание колонок
 const columns = [
   { key: "user", label: "User" },
   { key: "timestamp", label: "Timestamp"},
@@ -35,23 +23,24 @@ const columns = [
   { key: "changes", label: "Changes" },
 ]
 
-// Пример фильтров (можно добавить по необходимости)
-const filters = {
-  action: ["Create", "Update", "Delete"],
-  table: [
-    "Momessagelog",
-    "Mtmessagelog",
-    // ...все используемые таблицы
-  ],
-  user: ["System", "admin", "AAbdusamadov", "akhadimetov", "-"],
-}
-
 export default function AuditLogsPage() {
   const router = useRouter()
+  const [logs, setLogs] = useState<AuditLog[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  // Здесь rowClick можно заменить на переход к подробной информации по логу, если потребуется
-  const handleRowClick = (item: any) => {
-    // router.push(`/audit-logs/${item.id}`) // если есть id
+  useEffect(() => {
+    setLoading(true)
+    setError(null)
+    auditLogsAPI
+      .list()
+      .then((data) => setLogs(data))
+      .catch((e) => setError(e.message))
+      .finally(() => setLoading(false))
+  }, [])
+
+  const handleRowClick = (item: AuditLog) => {
+    router.push(`/audit-logs/${item.id}`)
   }
 
   return (
@@ -63,11 +52,13 @@ export default function AuditLogsPage() {
 
       <DataTable
         columns={columns}
-        data={sampleData}
+        data={logs}
         onRowClick={handleRowClick}
         searchPlaceholder="Search audit logs..."
         filters={filters}
+        isLoading={loading}
       />
+      {error && <div className="text-red-600">{error}</div>}
     </div>
   )
 }

@@ -1,49 +1,11 @@
 "use client"
 
 import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 import { DataTable } from "@/components/common/data-table"
 import { PageHeader } from "@/components/common/page-header"
-
-// Данные в формате старой таблицы
-const sampleData = [
-  {
-    smpp_message_id: "D6AE74D1",
-    delivery_status: "Delivered",
-    message_content_snippet: "DELIVRD",
-    created_at: "June 9, 2025, 12:37 p.m.",
-  },
-  {
-    smpp_message_id: "D6A72BD3",
-    delivery_status: "Delivered",
-    message_content_snippet: "DELIVRD",
-    created_at: "June 9, 2025, 12:37 p.m.",
-  },
-  {
-    smpp_message_id: "D6AE5661",
-    delivery_status: "Delivered",
-    message_content_snippet: "DELIVRD",
-    created_at: "June 9, 2025, 12:37 p.m.",
-  },
-  {
-    smpp_message_id: "D6A5F9F3",
-    delivery_status: "Delivered",
-    message_content_snippet: "DELIVRD",
-    created_at: "June 9, 2025, 12:36 p.m.",
-  },
-  {
-    smpp_message_id: "D6AD4351",
-    delivery_status: "Delivered",
-    message_content_snippet: "DELIVRD",
-    created_at: "June 9, 2025, 12:36 p.m.",
-  },
-  {
-    smpp_message_id: "D6A5E6F3",
-    delivery_status: "Delivered",
-    message_content_snippet: "DELIVRD",
-    created_at: "June 9, 2025, 12:36 p.m.",
-  },
-  // ...добавляй остальные строки по необходимости
-]
+import type { DeliverSmP2A } from "@/lib/api/deliver-sm-p2a"
+import { deliverSmP2AAPI } from "@/lib/api/deliver-sm-p2a"
 
 // Колонки для таблицы
 const columns = [
@@ -67,9 +29,21 @@ const filters = {
 
 export default function DeliverSMP2APage() {
   const router = useRouter()
+  const [data, setData] = useState<DeliverSmP2A[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  const handleRowClick = (item: any) => {
-    router.push(`/deliver-sm-p2a/${item.smpp_message_id}`)
+  useEffect(() => {
+    setLoading(true)
+    deliverSmP2AAPI
+      .list()
+      .then((list) => setData(list))
+      .catch(() => setError("Failed to load messages"))
+      .finally(() => setLoading(false))
+  }, [])
+
+  const handleRowClick = (item: DeliverSmP2A) => {
+    router.push(`/deliver-sm-p2a/${item.id}`)
   }
 
   return (
@@ -81,11 +55,13 @@ export default function DeliverSMP2APage() {
 
       <DataTable
         columns={columns}
-        data={sampleData}
+        data={data}
+        isLoading={loading}
         onRowClick={handleRowClick}
         searchPlaceholder="Search P2A messages..."
         filters={filters}
       />
+      {error && <div className="text-red-600">{error}</div>}
     </div>
   )
 }

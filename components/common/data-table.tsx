@@ -91,7 +91,7 @@ export function DataTable({
       <div className="rounded-lg border bg-card">
         <Table>
           <TableHeader>
-            <TableRow className="hover:bg-muted/50">
+            <TableRow className="hover:bg-muted">
               <TableHead className="w-12">
                 <Checkbox />
               </TableHead>
@@ -106,7 +106,7 @@ export function DataTable({
             {filteredData.map((item, index) => (
               <TableRow
                 key={item.id || index}
-                className="cursor-pointer hover:bg-muted/50 transition-colors"
+                className="cursor-pointer hover:bg-muted transition-colors"
                 onClick={() => onRowClick?.(item)}
               >
                 <TableCell>

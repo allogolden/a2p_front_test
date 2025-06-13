@@ -1,73 +1,14 @@
 "use client"
 
 import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 import { Plus } from "lucide-react"
 import { DataTable } from "@/components/common/data-table"
 import { PageHeader } from "@/components/common/page-header"
+import type { CategoryMT } from "@/lib/api/category-mt"
+import { categoryMTAPI } from "@/lib/api/category-mt"
 
-// Данные под старую таблицу
-const sampleData = [
-  {
-    name: "Transaction",
-    ip_address: "172.30.39.129",
-    cdr: "True",
-    sms_type_number: "33",
-    created: "10.04.2025 17:07:17,329",
-    modified: "05.05.2025 10:15:52,254",
-    created_by: "-",
-    updated_by: "admin",
-  },
-  {
-    name: "Service",
-    ip_address: "172.30.142.176",
-    cdr: "True",
-    sms_type_number: "2",
-    created: "08.04.2025 16:36:43,062",
-    modified: "08.04.2025 16:36:43,062",
-    created_by: "-",
-    updated_by: "-",
-  },
-  {
-    name: "eGov",
-    ip_address: "172.30.140.21",
-    cdr: "True",
-    sms_type_number: "6",
-    created: "14.05.2025 09:32:14,201",
-    modified: "14.05.2025 09:32:14,201",
-    created_by: "-",
-    updated_by: "-",
-  },
-  {
-    name: "Default_category",
-    ip_address: "172.30.142.176",
-    cdr: "True",
-    sms_type_number: "4",
-    created: "08.04.2025 16:37:38,413",
-    modified: "08.04.2025 16:37:38,413",
-    created_by: "-",
-    updated_by: "-",
-  },
-  {
-    name: "Transactions",
-    ip_address: "172.30.39.129",
-    cdr: "True",
-    sms_type_number: "3",
-    created: "08.04.2025 16:37:23,546",
-    modified: "05.05.2025 10:16:00,602",
-    created_by: "-",
-    updated_by: "admin",
-  },
-  {
-    name: "Reklama",
-    ip_address: "172.30.142.176",
-    cdr: "True",
-    sms_type_number: "1",
-    created: "08.04.2025 16:36:10,710",
-    modified: "08.04.2025 16:36:10,710",
-    created_by: "-",
-    updated_by: "-",
-  },
-]
+// Данные теперь загружаются через API
 
 // Колонки по старой таблице
 const columns = [
@@ -103,9 +44,21 @@ const filters = {
 
 export default function CategoryMTPage() {
   const router = useRouter()
+  const [data, setData] = useState<CategoryMT[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  const handleRowClick = (item: any) => {
-    router.push(`/category-mt/${item.name}`)
+  useEffect(() => {
+    setLoading(true)
+    categoryMTAPI
+      .list()
+      .then((list) => setData(list))
+      .catch(() => setError("Failed to load categories"))
+      .finally(() => setLoading(false))
+  }, [])
+
+  const handleRowClick = (item: CategoryMT) => {
+    router.push(`/category-mt/${item.id}`)
   }
 
   const handleAdd = () => {
@@ -126,11 +79,13 @@ export default function CategoryMTPage() {
 
       <DataTable
         columns={columns}
-        data={sampleData}
+        data={data}
+        isLoading={loading}
         onRowClick={handleRowClick}
         searchPlaceholder="Search categories..."
         filters={filters}
       />
+      {error && <div className="text-red-600">{error}</div>}
     </div>
   )
 }

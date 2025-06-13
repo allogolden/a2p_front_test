@@ -24,6 +24,10 @@ export const partnersStatisticsAPI = {
     Promise.resolve(
       mockPartnerStats.find((p) => p.id === id) || ({} as PartnerStatistics)
     ),
+  create: async (_data: Partial<PartnerStatistics>) =>
+    Promise.resolve({ status: 200 }),
+  update: async (_id: string, _data: Partial<PartnerStatistics>) =>
+    Promise.resolve({ status: 200 }),
 }
 
 /*

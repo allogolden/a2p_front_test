@@ -1,19 +1,13 @@
 "use client"
 
 import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 import { Plus } from "lucide-react"
 import { DataTable } from "@/components/common/data-table"
 import { PageHeader } from "@/components/common/page-header"
+import type { CDRSetting } from "@/lib/api/cdr-settings"
+import { cdrSettingsAPI } from "@/lib/api/cdr-settings"
 
-// Данные соответствуют структуре старой таблицы
-const sampleData = [
-  {
-    cdr_setting: "CDR Settings Configuration",
-    sms_process_batch: "4",
-    generation_time_value: "4",
-    event_type: "On SMS Delivery to Abonent",
-  },
-]
 
 // Колонки под старую таблицу
 const columns = [
@@ -29,6 +23,18 @@ const filters = {
 
 export default function CDRSettingsPage() {
   const router = useRouter()
+  const [data, setData] = useState<CDRSetting[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    setLoading(true)
+    cdrSettingsAPI
+      .list()
+      .then((list) => setData(list))
+      .catch(() => setError("Failed to load settings"))
+      .finally(() => setLoading(false))
+  }, [])
 
   const handleRowClick = (item: any) => {
     router.push(`/cdr-settings/${item.cdr_setting}`)
@@ -52,11 +58,13 @@ export default function CDRSettingsPage() {
 
       <DataTable
         columns={columns}
-        data={sampleData}
+        data={data}
+        isLoading={loading}
         onRowClick={handleRowClick}
         searchPlaceholder="Search CDR settings..."
         filters={filters}
       />
+      {error && <div className="text-red-600">{error}</div>}
     </div>
   )
 }

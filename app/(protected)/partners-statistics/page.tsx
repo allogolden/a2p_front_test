@@ -3,12 +3,10 @@
 import { useRouter } from "next/navigation"
 import { DataTable } from "@/components/common/data-table"
 import { PageHeader } from "@/components/common/page-header"
+import { useAPI } from "@/hooks/use-api"
+import type { PartnerStatistics } from "@/lib/api/partners-statistics"
+import { partnersStatisticsAPI } from "@/lib/api/partners-statistics"
 
-const sampleData = [
-  { id: "1", partner: "TelecomUZ", messages_sent: "123,456", success_rate: "98.7%", revenue: "$12,345" },
-  { id: "2", partner: "BeeLine", messages_sent: "98,765", success_rate: "97.2%", revenue: "$9,876" },
-  { id: "3", partner: "Ucell", messages_sent: "76,543", success_rate: "96.8%", revenue: "$7,654" },
-]
 
 const columns = [
   { key: "id", label: "ID" },
@@ -24,8 +22,9 @@ const filters = {
 
 export default function PartnersStatisticsPage() {
   const router = useRouter()
+  const { data: stats, isLoading } = useAPI<PartnerStatistics>(() => partnersStatisticsAPI.list())
 
-  const handleRowClick = (item: any) => {
+  const handleRowClick = (item: PartnerStatistics) => {
     router.push(`/partners-statistics/${item.id}`)
   }
 
@@ -35,10 +34,11 @@ export default function PartnersStatisticsPage() {
 
       <DataTable
         columns={columns}
-        data={sampleData}
+        data={(stats as PartnerStatistics[]) || []}
         onRowClick={handleRowClick}
         searchPlaceholder="Search partner statistics..."
         filters={filters}
+        isLoading={isLoading}
       />
     </div>
   )

@@ -2,96 +2,12 @@
 
 import { useRouter } from "next/navigation"
 import { Plus } from "lucide-react"
+import { useEffect, useState } from "react"
 import { DataTable } from "@/components/common/data-table"
 import { PageHeader } from "@/components/common/page-header"
+import type { CTN } from "@/lib/api/ctns"
+import { ctnAPI } from "@/lib/api/ctns"
 
-// Данные из старой таблицы
-const sampleData = [
-  {
-    system_id: "20100",
-    category: "Default_category",
-    ctn: "998901203900",
-    ip_address: "-",
-    active: "True",
-    description: "Imported number",
-    created: "08.04.2025 16:41:48,673",
-    modified: "08.04.2025 16:41:48,673",
-    created_by: "-",
-    updated_by: "-",
-  },
-  {
-    system_id: "20100",
-    category: "Default_category",
-    ctn: "998917913400",
-    ip_address: "-",
-    active: "True",
-    description: "Imported number",
-    created: "08.04.2025 16:41:52,131",
-    modified: "08.04.2025 16:41:52,131",
-    created_by: "-",
-    updated_by: "-",
-  },
-  {
-    system_id: "20100",
-    category: "Service",
-    ctn: "998917932700",
-    ip_address: "-",
-    active: "True",
-    description: "Imported number",
-    created: "11.04.2025 11:13:30,041",
-    modified: "11.04.2025 11:13:30,041",
-    created_by: "-",
-    updated_by: "-",
-  },
-  {
-    system_id: "20100",
-    category: "Service",
-    ctn: "998909027001",
-    ip_address: "-",
-    active: "True",
-    description: "Imported number",
-    created: "11.04.2025 11:24:22,012",
-    modified: "11.04.2025 11:24:22,012",
-    created_by: "-",
-    updated_by: "-",
-  },
-  {
-    system_id: "20100",
-    category: "Service",
-    ctn: "998917927900",
-    ip_address: "-",
-    active: "True",
-    description: "Imported number",
-    created: "11.04.2025 11:24:39,086",
-    modified: "11.04.2025 11:24:39,086",
-    created_by: "-",
-    updated_by: "-",
-  },
-  {
-    system_id: "224200",
-    category: "Default_category",
-    ctn: "998900214800",
-    ip_address: "-",
-    active: "True",
-    description: "Imported number",
-    created: "08.04.2025 16:42:02,768",
-    modified: "08.04.2025 16:42:02,768",
-    created_by: "-",
-    updated_by: "-",
-  },
-  {
-    system_id: "20100",
-    category: "Service",
-    ctn: "998900017705",
-    ip_address: "-",
-    active: "True",
-    description: "Imported number",
-    created: "11.04.2025 11:28:05,220",
-    modified: "11.04.2025 11:28:05,220",
-    created_by: "-",
-    updated_by: "-",
-  },
-]
 
 // Колонки по старой таблице
 const columns = [
@@ -124,9 +40,21 @@ const filters = {
 
 export default function CTNsPage() {
   const router = useRouter()
+  const [data, setData] = useState<CTN[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  const handleRowClick = (item: any) => {
-    router.push(`/ctns/${item.ctn}`)
+  useEffect(() => {
+    setLoading(true)
+    ctnAPI
+      .list()
+      .then((list) => setData(list))
+      .catch(() => setError("Failed to load CTNs"))
+      .finally(() => setLoading(false))
+  }, [])
+
+  const handleRowClick = (item: CTN) => {
+    router.push(`/ctns/${item.id}`)
   }
 
   const handleAdd = () => {
@@ -147,11 +75,13 @@ export default function CTNsPage() {
 
       <DataTable
         columns={columns}
-        data={sampleData}
+        data={data}
+        isLoading={loading}
         onRowClick={handleRowClick}
         searchPlaceholder="Search CTNs..."
         filters={filters}
       />
+      {error && <div className="text-red-600">{error}</div>}
     </div>
   )
 }

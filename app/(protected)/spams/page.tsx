@@ -1,32 +1,12 @@
 "use client"
 
 import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
+import { Plus } from "lucide-react"
 import { DataTable } from "@/components/common/data-table"
 import { PageHeader } from "@/components/common/page-header"
-
-const sampleData = [
-  {
-    id: "1",
-    content: "Free money! Click here!",
-    source: "+998901234567",
-    detected_at: "2024-01-15T10:30:00Z",
-    status: "blocked",
-  },
-  {
-    id: "2",
-    content: "Win a prize now!",
-    source: "+998901234568",
-    detected_at: "2024-01-15T10:31:00Z",
-    status: "blocked",
-  },
-  {
-    id: "3",
-    content: "Urgent: Update your info",
-    source: "+998901234569",
-    detected_at: "2024-01-15T10:32:00Z",
-    status: "quarantined",
-  },
-]
+import type { Spam } from "@/lib/api/spams"
+import { spamsAPI } from "@/lib/api/spams"
 
 const columns = [
   { key: "id", label: "ID" },
@@ -46,22 +26,43 @@ const filters = {
 
 export default function SpamsPage() {
   const router = useRouter()
+  const [data, setData] = useState<Spam[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    spamsAPI
+      .list()
+      .then((d) => setData(d))
+      .catch(() => setError("Failed to load spams"))
+      .finally(() => setLoading(false))
+  }, [])
 
   const handleRowClick = (item: any) => {
     router.push(`/spams/${item.id}`)
   }
 
+  const handleAdd = () => {
+    router.push("/spams/new")
+  }
+
   return (
     <div className="space-y-6">
-      <PageHeader title="Spams" description="Detected spam messages and content" />
+      <PageHeader
+        title="Spams"
+        description="Detected spam messages and content"
+        action={{ label: "Add Spam", onClick: handleAdd, icon: Plus }}
+      />
 
       <DataTable
         columns={columns}
-        data={sampleData}
+        data={data}
+        isLoading={loading}
         onRowClick={handleRowClick}
         searchPlaceholder="Search spam content..."
         filters={filters}
       />
+      {error && <div className="text-red-600">{error}</div>}
     </div>
   )
 }

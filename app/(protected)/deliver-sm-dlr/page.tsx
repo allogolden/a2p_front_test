@@ -1,31 +1,11 @@
 "use client"
 
 import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 import { DataTable } from "@/components/common/data-table"
 import { PageHeader } from "@/components/common/page-header"
-
-// Пример данных из старой таблицы
-const sampleData = [
-  {
-    smpp_message_id: "D6AE74D1",
-    delivery_status: "Delivered",
-    message_content_snippet: "DELIVRD",
-    created_at: "June 9, 2025, 12:37 p.m.",
-  },
-  {
-    smpp_message_id: "D6A72BD3",
-    delivery_status: "Delivered",
-    message_content_snippet: "DELIVRD",
-    created_at: "June 9, 2025, 12:37 p.m.",
-  },
-  {
-    smpp_message_id: "D6AE5661",
-    delivery_status: "Delivered",
-    message_content_snippet: "DELIVRD",
-    created_at: "June 9, 2025, 12:37 p.m.",
-  },
-  // ... (добавь остальные по необходимости)
-]
+import type { DeliverSmDLR } from "@/lib/api/deliver-sm-dlr"
+import { deliverSmDLRAPI } from "@/lib/api/deliver-sm-dlr"
 
 // Колонки по старой таблице
 const columns = [
@@ -49,9 +29,21 @@ const filters = {
 
 export default function DeliverSMDLRPage() {
   const router = useRouter()
+  const [data, setData] = useState<DeliverSmDLR[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  const handleRowClick = (item: any) => {
-    router.push(`/deliver-sm-dlr/${item.smpp_message_id}`)
+  useEffect(() => {
+    setLoading(true)
+    deliverSmDLRAPI
+      .list()
+      .then((list) => setData(list))
+      .catch(() => setError("Failed to load DLRs"))
+      .finally(() => setLoading(false))
+  }, [])
+
+  const handleRowClick = (item: DeliverSmDLR) => {
+    router.push(`/deliver-sm-dlr/${item.id}`)
   }
 
   return (
@@ -63,11 +55,13 @@ export default function DeliverSMDLRPage() {
 
       <DataTable
         columns={columns}
-        data={sampleData}
+        data={data}
+        isLoading={loading}
         onRowClick={handleRowClick}
         searchPlaceholder="Search delivery receipts..."
         filters={filters}
       />
+      {error && <div className="text-red-600">{error}</div>}
     </div>
   )
 }

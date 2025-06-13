@@ -36,6 +36,8 @@ export const mtInterceptorLogsAPI = {
     Promise.resolve(
       mockMTInterceptorLogs.find((l) => l.id === id) || ({} as MTInterceptorLog)
     ),
+  create: async (_data: Partial<MTInterceptorLog>) => Promise.resolve({ status: 200 }),
+  update: async (_id: string, _data: Partial<MTInterceptorLog>) => Promise.resolve({ status: 200 }),
 }
 
 /*

@@ -1,62 +1,63 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation"
-import { Plus } from "lucide-react"
-import { DataTable } from "@/components/common/data-table"
-import { PageHeader } from "@/components/common/page-header"
-
-const sampleData = [
-  {
-    variable: "%d",
-    pattern: "[0-9][0-9.,]*%?",
-    active: true,
-    description: "single number sequence",
-    ip_address: "172.30.142.190",
-    created: "2025-05-22T10:37:15+05:00",
-    modified: "2025-05-22T10:37:15+05:00",
-    created_by: "-",
-    updated_by: "-",
-  },
-  {
-    variable: "%d+",
-    pattern: "((?:\\d{1,4}[./-]?\\d{0,4}[./-]?\\d{0,4}|\\d+[0-9.,-]*%?)(?:\\s+(?:\\d{1,4}[./-]?\\d{0,4}[./-]?\\d{0,4}|\\d+[0-9.,-]*%?))*)",
-    active: true,
-    description: "unlimited number sequence",
-    ip_address: "172.30.142.113",
-    created: "2025-05-22T10:38:46+05:00",
-    modified: "2025-05-29T10:24:28+05:00",
-    created_by: "-",
-    updated_by: "admin",
-  },
-  // ... другие строки
-]
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Plus } from "lucide-react";
+import { DataTable } from "@/components/common/data-table";
+import { PageHeader } from "@/components/common/page-header";
+import type { RegexPattern } from "@/lib/api/regex-patterns";
+import { regexPatternsAPI } from "@/lib/api/regex-patterns";
 
 const columns = [
   { key: "variable", label: "VARIABLE" },
   { key: "pattern", label: "PATTERN" },
-  { key: "active", label: "ACTIVE", render: (v: boolean) => v ? "Yes" : "No" },
+  {
+    key: "active",
+    label: "ACTIVE",
+    render: (v: boolean) => (v ? "Yes" : "No"),
+  },
   { key: "description", label: "DESCRIPTION" },
   { key: "ip_address", label: "IP ADDRESS" },
-  { key: "created", label: "CREATED", render: (v: string) => new Date(v).toLocaleString() },
-  { key: "modified", label: "MODIFIED", render: (v: string) => new Date(v).toLocaleString() },
+  {
+    key: "created",
+    label: "CREATED",
+    render: (v: string) => new Date(v).toLocaleString(),
+  },
+  {
+    key: "modified",
+    label: "MODIFIED",
+    render: (v: string) => new Date(v).toLocaleString(),
+  },
   { key: "created_by", label: "CREATED BY" },
   { key: "updated_by", label: "UPDATED BY" },
-]
+];
 
 const filters = {
   active: ["Yes", "No"],
-}
+};
 
 export default function RegexPatternsPage() {
-  const router = useRouter()
+  const router = useRouter();
+  const [data, setData] = useState<RegexPattern[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setLoading(true);
+    regexPatternsAPI
+      .list()
+      .then((list) => setData(list))
+      .catch(() => setError("Failed to load patterns"))
+      .finally(() => setLoading(false));
+  }, []);
 
   const handleRowClick = (item: any) => {
-    router.push(`/regex-patterns/${item.variable}`)
-  }
+    router.push(`/regex-patterns/${item.id}`);
+  };
 
   const handleAdd = () => {
-    router.push("/regex-patterns/new")
-  }
+    router.push("/regex-patterns/new");
+  };
 
   return (
     <div className="space-y-6">
@@ -72,11 +73,13 @@ export default function RegexPatternsPage() {
 
       <DataTable
         columns={columns}
-        data={sampleData}
+        data={data}
+        isLoading={loading}
         onRowClick={handleRowClick}
         searchPlaceholder="Search regex patterns..."
         filters={filters}
       />
+      {error && <div className="text-red-600">{error}</div>}
     </div>
-  )
+  );
 }

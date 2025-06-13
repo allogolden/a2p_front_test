@@ -1,10 +1,13 @@
 "use client"
 
 import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
+import { Plus } from "lucide-react"
 import { DataTable } from "@/components/common/data-table"
 import { PageHeader } from "@/components/common/page-header"
+import type { SubmitSmResponse } from "@/lib/api/submit-sm-response"
+import { submitSmResponseAPI } from "@/lib/api/submit-sm-response"
 
-// Колонки — только из данных
 const columns = [
   { key: "queue_message_id", label: "QUEUE MESSAGE ID" },
   { key: "smpp_message_id", label: "SMPP MESSAGE ID" },
@@ -13,84 +16,44 @@ const columns = [
   { key: "created_at", label: "CREATED AT" },
 ]
 
-// Данные — ключи соответствуют колонкам из данных
-const sampleData = [
-  {
-    id: "1",
-    queue_message_id: "ECC36CD7",
-    smpp_message_id: "D6AE74D1",
-    command_status: "CommandStatus.ESME_ROK",
-    sequence_number: "223",
-    created_at: "June 9, 2025, 12:37 p.m.",
-  },
-  {
-    id: "2",
-    queue_message_id: "698A4BE4",
-    smpp_message_id: "D6A72BD3",
-    command_status: "CommandStatus.ESME_ROK",
-    sequence_number: "222",
-    created_at: "June 9, 2025, 12:37 p.m.",
-  },
-  {
-    id: "3",
-    queue_message_id: "2D6FE4F8",
-    smpp_message_id: "D6AE5661",
-    command_status: "CommandStatus.ESME_ROK",
-    sequence_number: "221",
-    created_at: "June 9, 2025, 12:37 p.m.",
-  },
-  {
-    id: "4",
-    queue_message_id: "8F2CBAE1",
-    smpp_message_id: "D6AD4351",
-    command_status: "CommandStatus.ESME_ROK",
-    sequence_number: "220",
-    created_at: "June 9, 2025, 12:36 p.m.",
-  },
-  {
-    id: "5",
-    queue_message_id: "2764CEC7",
-    smpp_message_id: "D6A5F9F3",
-    command_status: "CommandStatus.ESME_ROK",
-    sequence_number: "219",
-    created_at: "June 9, 2025, 12:36 p.m.",
-  },
-  {
-    id: "6",
-    queue_message_id: "742B08B7",
-    smpp_message_id: "D6A5E6F3",
-    command_status: "CommandStatus.ESME_ROK",
-    sequence_number: "218",
-    created_at: "June 9, 2025, 12:36 p.m.",
-  },
-  {
-    id: "7",
-    queue_message_id: "207369E1",
-    smpp_message_id: "D6919771",
-    command_status: "CommandStatus.ESME_ROK",
-    sequence_number: "204",
-    created_at: "June 9, 2025, 12:29 p.m.",
-  },
-  // ... добавь остальные строки при необходимости
-]
-
 export default function SubmitSMResponsePage() {
   const router = useRouter()
+  const [data, setData] = useState<SubmitSmResponse[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  const handleRowClick = (item : any) => {
+  useEffect(() => {
+    submitSmResponseAPI
+      .list()
+      .then((d) => setData(d))
+      .catch(() => setError("Failed to load responses"))
+      .finally(() => setLoading(false))
+  }, [])
+
+  const handleRowClick = (item: any) => {
     router.push(`/submit-sm-response/${item.id}`)
+  }
+
+  const handleAdd = () => {
+    router.push("/submit-sm-response/new")
   }
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Submit SM Response" description="Submit short message response codes" />
+      <PageHeader
+        title="Submit SM Response"
+        description="Submit short message response codes"
+        action={{ label: "Add", onClick: handleAdd, icon: Plus }}
+      />
 
       <DataTable
         columns={columns}
-        data={sampleData}
+        data={data}
+        isLoading={loading}
         onRowClick={handleRowClick}
         searchPlaceholder="Search responses..."
       />
+      {error && <div className="text-red-600">{error}</div>}
     </div>
   )
 }

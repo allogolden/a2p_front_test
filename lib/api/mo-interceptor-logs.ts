@@ -30,6 +30,8 @@ export const moInterceptorLogsAPI = {
     Promise.resolve(
       mockMOInterceptorLogs.find((l) => l.id === id) || ({} as MOInterceptorLog)
     ),
+  create: async (_data: Partial<MOInterceptorLog>) => Promise.resolve({ status: 200 }),
+  update: async (_id: string, _data: Partial<MOInterceptorLog>) => Promise.resolve({ status: 200 }),
 }
 
 /*

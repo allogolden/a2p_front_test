@@ -1,11 +1,11 @@
 "use client"
 
 import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 import { DataTable } from "@/components/common/data-table"
 import { PageHeader } from "@/components/common/page-header"
-import { useAPI } from "@/hooks/use-api"
-import { messagesAPI } from "@/lib/api"
-import type { Message } from "@/types"
+import type { MTMessages } from "@/lib/api/mt-messages"
+import { mtMessagesAPI } from "@/lib/api/mt-messages"
 
 const columns = [
   { key: "queue_message_id", label: "Queue Message ID" },
@@ -41,23 +41,39 @@ const filters = {
 
 export default function MTMessagesPage() {
   const router = useRouter()
-  const { data: messages, isLoading } = useAPI<Message>(() => messagesAPI.getAll())
+  const [data, setData] = useState<MTMessages[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  const handleRowClick = (item: Message) => {
+  useEffect(() => {
+    setLoading(true)
+    mtMessagesAPI
+      .list()
+      .then((list) => setData(list))
+      .catch(() => setError("Failed to load messages"))
+      .finally(() => setLoading(false))
+  }, [])
+
+  const handleRowClick = (item: MTMessages) => {
     router.push(`/mt-messages/${item.id}`)
   }
+
+  const handleAdd = () => router.push("/mt-messages/new")
 
   return (
     <div className="space-y-6">
       <PageHeader title="MT Messages" description="Mobile Terminated messages log" />
       <DataTable
         columns={columns}
-        data={(messages as Message[]) || []}
+        data={data}
+        isLoading={loading}
         onRowClick={handleRowClick}
+        onAdd={handleAdd}
         searchPlaceholder="Search messages..."
         filters={filters}
-        isLoading={isLoading}
+        addLabel="Add Message"
       />
+      {error && <div className="text-red-600">{error}</div>}
     </div>
   )
 }

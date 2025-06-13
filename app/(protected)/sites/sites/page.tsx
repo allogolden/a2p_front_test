@@ -1,9 +1,12 @@
 "use client"
 
 import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 import { Plus } from "lucide-react"
 import { DataTable } from "@/components/common/data-table"
 import { PageHeader } from "@/components/common/page-header"
+import type { Site } from "@/lib/api/sites"
+import { sitesAPI } from "@/lib/api/sites"
 
 // Только два столбца: display_name и domain
 const columns = [
@@ -11,15 +14,23 @@ const columns = [
   { key: "domain", label: "DOMAIN" },
 ]
 
-// Пример данных с двумя полями
-const sampleData = [
-  { id: "1", display_name: "example.com", domain: "example.com" },
-  { id: "2", display_name: "api.example.com", domain: "api.example.com" },
-  { id: "3", display_name: "Admin Panel", domain: "admin.a2p.example.com" },
-]
+// Список сайтов загружается по API
 
 export default function SitesPage() {
   const router = useRouter()
+  const [sites, setSites] = useState<Site[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    setLoading(true)
+    setError(null)
+    sitesAPI
+      .list()
+      .then((data) => setSites(data))
+      .catch((e) => setError(e.message))
+      .finally(() => setLoading(false))
+  }, [])
 
   const handleRowClick = (item : any) => {
     router.push(`/sites/sites/${item.id}`) // переход на детальную страницу
@@ -43,11 +54,12 @@ export default function SitesPage() {
 
       <DataTable
         columns={columns}
-        data={sampleData}
+        data={sites}
         onRowClick={handleRowClick}
         searchPlaceholder="Search sites..."
-        // фильтров нет, т.к. всего два столбца и фильтровать нечего
+        isLoading={loading}
       />
+      {error && <div className="text-red-600">{error}</div>}
     </div>
   )
 }
