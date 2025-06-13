@@ -1,6 +1,7 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/(protected)/alphanames/page": "app/(protected)/alphanames/page.js",
-  "/(protected)/periodic-tasks/crontabs/page": "app/(protected)/periodic-tasks/crontabs/page.js",
-  "/(protected)/alphanames/new/page": "app/(protected)/alphanames/new/page.js"
+  "/(protected)/cdr-settings/[id]/page": "app/(protected)/cdr-settings/[id]/page.js",
+  "/(protected)/cdr-settings/page": "app/(protected)/cdr-settings/page.js",
+  "/(protected)/ctns/page": "app/(protected)/ctns/page.js",
+  "/(protected)/dashboard/page": "app/(protected)/dashboard/page.js",
+  "/(protected)/ctns/[id]/page": "app/(protected)/ctns/[id]/page.js"
 }

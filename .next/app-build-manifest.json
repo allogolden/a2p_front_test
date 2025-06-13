@@ -11,25 +11,30 @@
       "static/chunks/main-app.js",
       "static/chunks/app/(protected)/layout.js"
     ],
-    "/(protected)/periodic-tasks/crontabs/page": [
+    "/(protected)/cdr-settings/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(protected)/periodic-tasks/crontabs/page.js"
+      "static/chunks/app/(protected)/cdr-settings/page.js"
     ],
-    "/(protected)/alphanames/page": [
+    "/(protected)/cdr-settings/[id]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(protected)/alphanames/page.js"
+      "static/chunks/app/(protected)/cdr-settings/[id]/page.js"
     ],
-    "/(protected)/alphanames/new/page": [
+    "/(protected)/dashboard/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(protected)/alphanames/new/page.js"
+      "static/chunks/app/(protected)/dashboard/page.js"
     ],
-    "/_not-found/page": [
+    "/(protected)/ctns/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
+      "static/chunks/app/(protected)/ctns/page.js"
+    ],
+    "/(protected)/ctns/[id]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(protected)/ctns/[id]/page.js"
     ]
   }
 }
