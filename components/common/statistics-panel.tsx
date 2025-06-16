@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { Calendar, TrendingUp, TrendingDown, Activity, Users, MessageSquare, BarChart3 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -19,9 +19,9 @@ import {
   YAxis,
   CartesianGrid,
   Line,
-  Area,
-  AreaChart,
+  LineChart,
 } from "recharts"
+import { trendsAPI, type TrendPoint } from "@/lib/api/category-charts"
 
 interface CategoryStatistic {
   id: string
@@ -61,39 +61,47 @@ const DATE_RANGES = [
   { label: "All time", value: "all" },
 ]
 
+function getRangeDates(range: string): { from: Date | null; to: Date | null } {
+  if (range === "all") return { from: null, to: null }
+
+  const to = new Date()
+  const from = new Date()
+
+  switch (range) {
+    case "7d":
+      from.setDate(to.getDate() - 7)
+      break
+    case "30d":
+      from.setDate(to.getDate() - 30)
+      break
+    case "3m":
+      from.setMonth(to.getMonth() - 3)
+      break
+    case "6m":
+      from.setMonth(to.getMonth() - 6)
+      break
+    case "1y":
+      from.setFullYear(to.getFullYear() - 1)
+      break
+    default:
+      return { from: null, to: null }
+  }
+
+  return { from, to }
+}
+
 export function StatisticsPanel({ data, isLoading = false, onCategoryClick }: StatisticsPanelProps) {
   const [dateRange, setDateRange] = useState("30d")
+  const [trendData, setTrendData] = useState<TrendPoint[]>([])
 
   // Filter data based on date range
   const filteredData = useMemo(() => {
-    if (dateRange === "all") return data
-
-    const now = new Date()
-    const cutoffDate = new Date()
-
-    switch (dateRange) {
-      case "7d":
-        cutoffDate.setDate(now.getDate() - 7)
-        break
-      case "30d":
-        cutoffDate.setDate(now.getDate() - 30)
-        break
-      case "3m":
-        cutoffDate.setMonth(now.getMonth() - 3)
-        break
-      case "6m":
-        cutoffDate.setMonth(now.getMonth() - 6)
-        break
-      case "1y":
-        cutoffDate.setFullYear(now.getFullYear() - 1)
-        break
-      default:
-        return data
-    }
+    const { from } = getRangeDates(dateRange)
+    if (!from) return data
 
     return data.filter((item) => {
       const itemDate = new Date(item.last_updated)
-      return itemDate >= cutoffDate
+      return itemDate >= from
     })
   }, [data, dateRange])
 
@@ -105,14 +113,14 @@ export function StatisticsPanel({ data, isLoading = false, onCategoryClick }: St
     }, 0)
 
     const totalPatterns = filteredData.reduce((sum, item) => {
-      const active = Number.parseInt(item.pattern_stats.match(/Active:\s*(\d+)/)?.[1] || "0")
-      const inactive = Number.parseInt(item.pattern_stats.match(/Inactive:\s*(\d+)/)?.[1] || "0")
-      return sum + active + inactive
+      const matched = Number.parseInt(item.pattern_stats.match(/Pattern Matched:\s*(\d+)/)?.[1] || "0")
+      const auto = Number.parseInt(item.pattern_stats.match(/Auto Categorized:\s*(\d+)/)?.[1] || "0")
+      return sum + matched + auto
     }, 0)
 
     const activePatterns = filteredData.reduce((sum, item) => {
-      const active = Number.parseInt(item.pattern_stats.match(/Active:\s*(\d+)/)?.[1] || "0")
-      return sum + active
+      const matched = Number.parseInt(item.pattern_stats.match(/Pattern Matched:\s*(\d+)/)?.[1] || "0")
+      return sum + matched
     }, 0)
 
     const totalSources = filteredData.reduce((sum, item) => {
@@ -139,6 +147,15 @@ export function StatisticsPanel({ data, isLoading = false, onCategoryClick }: St
     color: COLORS[index % COLORS.length],
   }))
 
+  const messageTypeData = filteredData.map((item) => ({
+    name: item.name,
+    id: item.id,
+    sar: Number.parseInt(item.message_types.match(/SAR:\s*(\d+)/)?.[1] || "0"),
+    udh: Number.parseInt(item.message_types.match(/UDH:\s*(\d+)/)?.[1] || "0"),
+    payload: Number.parseInt(item.message_types.match(/Payload:\s*(\d+)/)?.[1] || "0"),
+    simple: Number.parseInt(item.message_types.match(/Simple:\s*(\d+)/)?.[1] || "0"),
+  }))
+
   const sourceTypesData = filteredData.map((item, index) => ({
     name: item.name,
     id: item.id,
@@ -146,26 +163,20 @@ export function StatisticsPanel({ data, isLoading = false, onCategoryClick }: St
     shortNumber: Number.parseInt(item.source_types.match(/Short Number:\s*(\d+)/)?.[1] || "0"),
   }))
 
-  const patternStatusData = filteredData.map((item, index) => ({
+  const patternStatusData = filteredData.map((item) => ({
     name: item.name,
     id: item.id,
-    active: Number.parseInt(item.pattern_stats.match(/Active:\s*(\d+)/)?.[1] || "0"),
-    inactive: Number.parseInt(item.pattern_stats.match(/Inactive:\s*(\d+)/)?.[1] || "0"),
+    matched: Number.parseInt(item.pattern_stats.match(/Pattern Matched:\s*(\d+)/)?.[1] || "0"),
+    auto: Number.parseInt(item.pattern_stats.match(/Auto Categorized:\s*(\d+)/)?.[1] || "0"),
   }))
 
-  const trendData = filteredData.map((item, index) => {
-    const total = Number.parseInt(item.message_types.match(/Total:\s*(\d+)/)?.[1] || "0")
-    return {
-      name: item.name,
-      id: item.id,
-      messages: total,
-      efficiency:
-        (Number.parseInt(item.pattern_stats.match(/Active:\s*(\d+)/)?.[1] || "0") /
-          (Number.parseInt(item.pattern_stats.match(/Active:\s*(\d+)/)?.[1] || "0") +
-            Number.parseInt(item.pattern_stats.match(/Inactive:\s*(\d+)/)?.[1] || "1"))) *
-        100,
-    }
-  })
+  useEffect(() => {
+    const { from, to } = getRangeDates(dateRange)
+    trendsAPI
+      .list(from ? from.toISOString() : undefined, to ? to.toISOString() : undefined)
+      .then(setTrendData)
+  }, [dateRange])
+
 
   const handleChartClick = (data: any) => {
     if (data && data.id && onCategoryClick) {
@@ -296,8 +307,9 @@ export function StatisticsPanel({ data, isLoading = false, onCategoryClick }: St
       <Tabs defaultValue="overview" className="space-y-4">
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="sources">Sources</TabsTrigger>
-          <TabsTrigger value="patterns">Patterns</TabsTrigger>
+          <TabsTrigger value="message-types">Message Types</TabsTrigger>
+          <TabsTrigger value="pattern-stats">Pattern Stats</TabsTrigger>
+          <TabsTrigger value="source-types">Source Types</TabsTrigger>
           <TabsTrigger value="trends">Trends</TabsTrigger>
         </TabsList>
 
@@ -351,7 +363,51 @@ export function StatisticsPanel({ data, isLoading = false, onCategoryClick }: St
           </div>
         </TabsContent>
 
-        <TabsContent value="sources" className="space-y-4">
+        <TabsContent value="message-types" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Message Type Breakdown</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={400}>
+                <BarChart data={messageTypeData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="sar" stackId="a" fill="#8884d8" name="SAR" />
+                  <Bar dataKey="udh" stackId="a" fill="#82ca9d" name="UDH" />
+                  <Bar dataKey="payload" stackId="a" fill="#ffc658" name="Payload" />
+                  <Bar dataKey="simple" stackId="a" fill="#ff7300" name="Simple" />
+                </BarChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="pattern-stats" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Pattern Stats</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={400}>
+                <BarChart data={patternStatusData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="matched" fill="#22c55e" name="Pattern Matched" />
+                  <Bar dataKey="auto" fill="#8884d8" name="Auto Categorized" />
+                </BarChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="source-types" className="space-y-4">
           <Card>
             <CardHeader>
               <CardTitle className="text-lg">Source Types Distribution</CardTitle>
@@ -372,52 +428,23 @@ export function StatisticsPanel({ data, isLoading = false, onCategoryClick }: St
           </Card>
         </TabsContent>
 
-        <TabsContent value="patterns" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Pattern Status</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={400}>
-                <BarChart data={patternStatusData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="active" fill="#22c55e" name="Active" />
-                  <Bar dataKey="inactive" fill="#ef4444" name="Inactive" />
-                </BarChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
         <TabsContent value="trends" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Performance Trends</CardTitle>
+              <CardTitle className="text-lg">Trends</CardTitle>
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={400}>
-                <AreaChart data={trendData}>
+                <LineChart data={trendData}>
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis yAxisId="left" />
-                  <YAxis yAxisId="right" orientation="right" />
+                  <XAxis dataKey="date" />
+                  <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Area
-                    yAxisId="left"
-                    type="monotone"
-                    dataKey="messages"
-                    stackId="1"
-                    stroke="#8884d8"
-                    fill="#8884d8"
-                    name="Messages"
-                  />
-                  <Line yAxisId="right" type="monotone" dataKey="efficiency" stroke="#ff7300" name="Efficiency %" />
-                </AreaChart>
+                  <Line type="monotone" dataKey="messages" stroke="#8884d8" name="Messages" dot />
+                  <Line type="monotone" dataKey="patterns" stroke="#22c55e" name="Pattern Matched" dot />
+                  <Line type="monotone" dataKey="sources" stroke="#ff7300" name="Sources" dot />
+                </LineChart>
               </ResponsiveContainer>
             </CardContent>
           </Card>
