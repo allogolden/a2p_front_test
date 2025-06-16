@@ -1,0 +1,429 @@
+"use client"
+
+import { useState, useMemo } from "react"
+import { Calendar, TrendingUp, TrendingDown, Activity, Users, MessageSquare, BarChart3 } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Line,
+  Area,
+  AreaChart,
+} from "recharts"
+
+interface CategoryStatistic {
+  id: string
+  name: string
+  ctn: string
+  message_types: string
+  pattern_stats: string
+  source_types: string
+  last_updated: string
+}
+
+interface StatisticsPanelProps {
+  data: CategoryStatistic[]
+  isLoading?: boolean
+  onCategoryClick?: (categoryId: string) => void
+}
+
+const COLORS = [
+  "#8884d8",
+  "#82ca9d",
+  "#ffc658",
+  "#ff7300",
+  "#00ff00",
+  "#ff00ff",
+  "#00ffff",
+  "#ff0000",
+  "#0000ff",
+  "#ffff00",
+]
+
+const DATE_RANGES = [
+  { label: "Last 7 days", value: "7d" },
+  { label: "Last 30 days", value: "30d" },
+  { label: "Last 3 months", value: "3m" },
+  { label: "Last 6 months", value: "6m" },
+  { label: "Last year", value: "1y" },
+  { label: "All time", value: "all" },
+]
+
+export function StatisticsPanel({ data, isLoading = false, onCategoryClick }: StatisticsPanelProps) {
+  const [dateRange, setDateRange] = useState("30d")
+
+  // Filter data based on date range
+  const filteredData = useMemo(() => {
+    if (dateRange === "all") return data
+
+    const now = new Date()
+    const cutoffDate = new Date()
+
+    switch (dateRange) {
+      case "7d":
+        cutoffDate.setDate(now.getDate() - 7)
+        break
+      case "30d":
+        cutoffDate.setDate(now.getDate() - 30)
+        break
+      case "3m":
+        cutoffDate.setMonth(now.getMonth() - 3)
+        break
+      case "6m":
+        cutoffDate.setMonth(now.getMonth() - 6)
+        break
+      case "1y":
+        cutoffDate.setFullYear(now.getFullYear() - 1)
+        break
+      default:
+        return data
+    }
+
+    return data.filter((item) => {
+      const itemDate = new Date(item.last_updated)
+      return itemDate >= cutoffDate
+    })
+  }, [data, dateRange])
+
+  // Calculate statistics
+  const statistics = useMemo(() => {
+    const totalMessages = filteredData.reduce((sum, item) => {
+      const total = Number.parseInt(item.message_types.match(/Total:\s*(\d+)/)?.[1] || "0")
+      return sum + total
+    }, 0)
+
+    const totalPatterns = filteredData.reduce((sum, item) => {
+      const active = Number.parseInt(item.pattern_stats.match(/Active:\s*(\d+)/)?.[1] || "0")
+      const inactive = Number.parseInt(item.pattern_stats.match(/Inactive:\s*(\d+)/)?.[1] || "0")
+      return sum + active + inactive
+    }, 0)
+
+    const activePatterns = filteredData.reduce((sum, item) => {
+      const active = Number.parseInt(item.pattern_stats.match(/Active:\s*(\d+)/)?.[1] || "0")
+      return sum + active
+    }, 0)
+
+    const totalSources = filteredData.reduce((sum, item) => {
+      const alphaname = Number.parseInt(item.source_types.match(/Alphaname:\s*(\d+)/)?.[1] || "0")
+      const shortNumber = Number.parseInt(item.source_types.match(/Short Number:\s*(\d+)/)?.[1] || "0")
+      return sum + alphaname + shortNumber
+    }, 0)
+
+    return {
+      totalMessages,
+      totalPatterns,
+      activePatterns,
+      totalSources,
+      categories: filteredData.length,
+      patternEfficiency: totalPatterns > 0 ? Math.round((activePatterns / totalPatterns) * 100) : 0,
+    }
+  }, [filteredData])
+
+  // Chart data
+  const messagesByCategory = filteredData.map((item, index) => ({
+    name: item.name,
+    id: item.id,
+    value: Number.parseInt(item.message_types.match(/Total:\s*(\d+)/)?.[1] || "0"),
+    color: COLORS[index % COLORS.length],
+  }))
+
+  const sourceTypesData = filteredData.map((item, index) => ({
+    name: item.name,
+    id: item.id,
+    alphaname: Number.parseInt(item.source_types.match(/Alphaname:\s*(\d+)/)?.[1] || "0"),
+    shortNumber: Number.parseInt(item.source_types.match(/Short Number:\s*(\d+)/)?.[1] || "0"),
+  }))
+
+  const patternStatusData = filteredData.map((item, index) => ({
+    name: item.name,
+    id: item.id,
+    active: Number.parseInt(item.pattern_stats.match(/Active:\s*(\d+)/)?.[1] || "0"),
+    inactive: Number.parseInt(item.pattern_stats.match(/Inactive:\s*(\d+)/)?.[1] || "0"),
+  }))
+
+  const trendData = filteredData.map((item, index) => {
+    const total = Number.parseInt(item.message_types.match(/Total:\s*(\d+)/)?.[1] || "0")
+    return {
+      name: item.name,
+      id: item.id,
+      messages: total,
+      efficiency:
+        (Number.parseInt(item.pattern_stats.match(/Active:\s*(\d+)/)?.[1] || "0") /
+          (Number.parseInt(item.pattern_stats.match(/Active:\s*(\d+)/)?.[1] || "0") +
+            Number.parseInt(item.pattern_stats.match(/Inactive:\s*(\d+)/)?.[1] || "1"))) *
+        100,
+    }
+  })
+
+  const handleChartClick = (data: any) => {
+    if (data && data.id && onCategoryClick) {
+      onCategoryClick(data.id)
+    }
+  }
+
+  if (isLoading) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <BarChart3 className="h-5 w-5" />
+            Statistics Dashboard
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-center h-64">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Header with filters */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-2">
+              <BarChart3 className="h-5 w-5" />
+              Statistics Dashboard
+            </CardTitle>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <Calendar className="h-4 w-4 text-muted-foreground" />
+                <Select value={dateRange} onValueChange={setDateRange}>
+                  <SelectTrigger className="w-[140px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {DATE_RANGES.map((range) => (
+                      <SelectItem key={range.value} value={range.value}>
+                        {range.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <Badge variant="outline" className="text-xs">
+                {filteredData.length} categories
+              </Badge>
+            </div>
+          </div>
+        </CardHeader>
+      </Card>
+
+      {/* Key Metrics */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Total Messages</p>
+                <p className="text-2xl font-bold">{statistics.totalMessages.toLocaleString()}</p>
+              </div>
+              <MessageSquare className="h-8 w-8 text-blue-600" />
+            </div>
+            <div className="mt-2 flex items-center text-xs text-muted-foreground">
+              <TrendingUp className="h-3 w-3 mr-1 text-green-600" />
+              +12.5% from last period
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Active Patterns</p>
+                <p className="text-2xl font-bold">{statistics.activePatterns}</p>
+              </div>
+              <Activity className="h-8 w-8 text-green-600" />
+            </div>
+            <div className="mt-2 flex items-center text-xs text-muted-foreground">
+              <TrendingUp className="h-3 w-3 mr-1 text-green-600" />
+              {statistics.patternEfficiency}% efficiency
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Total Sources</p>
+                <p className="text-2xl font-bold">{statistics.totalSources.toLocaleString()}</p>
+              </div>
+              <Users className="h-8 w-8 text-purple-600" />
+            </div>
+            <div className="mt-2 flex items-center text-xs text-muted-foreground">
+              <TrendingDown className="h-3 w-3 mr-1 text-red-600" />
+              -2.1% from last period
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Categories</p>
+                <p className="text-2xl font-bold">{statistics.categories}</p>
+              </div>
+              <BarChart3 className="h-8 w-8 text-orange-600" />
+            </div>
+            <div className="mt-2 flex items-center text-xs text-muted-foreground">
+              <TrendingUp className="h-3 w-3 mr-1 text-green-600" />
+              +5.2% from last period
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Charts */}
+      <Tabs defaultValue="overview" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="sources">Sources</TabsTrigger>
+          <TabsTrigger value="patterns">Patterns</TabsTrigger>
+          <TabsTrigger value="trends">Trends</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="overview" className="space-y-4">
+          <div className="grid gap-4 md:grid-cols-2">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Messages by Category</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={messagesByCategory}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={100}
+                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                      onClick={handleChartClick}
+                      style={{ cursor: "pointer" }}
+                    >
+                      {messagesByCategory.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(value) => [value.toLocaleString(), "Messages"]} />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Message Volume</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={messagesByCategory}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip formatter={(value) => [value.toLocaleString(), "Messages"]} />
+                    <Bar dataKey="value" fill="#8884d8" onClick={handleChartClick} style={{ cursor: "pointer" }} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="sources" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Source Types Distribution</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={400}>
+                <BarChart data={sourceTypesData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="alphaname" stackId="a" fill="#8884d8" name="Alphaname" />
+                  <Bar dataKey="shortNumber" stackId="a" fill="#82ca9d" name="Short Number" />
+                </BarChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="patterns" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Pattern Status</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={400}>
+                <BarChart data={patternStatusData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="active" fill="#22c55e" name="Active" />
+                  <Bar dataKey="inactive" fill="#ef4444" name="Inactive" />
+                </BarChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="trends" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Performance Trends</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={400}>
+                <AreaChart data={trendData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis yAxisId="left" />
+                  <YAxis yAxisId="right" orientation="right" />
+                  <Tooltip />
+                  <Legend />
+                  <Area
+                    yAxisId="left"
+                    type="monotone"
+                    dataKey="messages"
+                    stackId="1"
+                    stroke="#8884d8"
+                    fill="#8884d8"
+                    name="Messages"
+                  />
+                  <Line yAxisId="right" type="monotone" dataKey="efficiency" stroke="#ff7300" name="Efficiency %" />
+                </AreaChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
+  )
+}
+

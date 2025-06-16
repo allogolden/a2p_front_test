@@ -1,105 +1,174 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { useEffect, useState, useMemo } from "react"
-import { useEffect, useState, useMemo } from "react"
+import { useEffect, useState } from "react"
 import { Plus } from "lucide-react"
 import { DataTable } from "@/components/common/data-table"
-import { LoadingSpinner } from "@/components/common/loading-spinner"
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
-import { Checkbox } from "@/components/ui/checkbox"
 import { PageHeader } from "@/components/common/page-header"
-import type { CategoryMT } from "@/lib/api/category-mt"
-import { categoryMTAPI } from "@/lib/api/category-mt"
-import type { CategoryStatistic } from "@/lib/api/category-statistics"
-import { categoryStatisticsAPI } from "@/lib/api/category-statistics"
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Button } from "@/components/ui/button"
+import { StatisticsPanel } from "@/components/common/statistics-panel"
 
-// Данные теперь загружаются через API
+interface CategoryMT {
+  id: string
+  name: string
+  ip_address: string
+  cdr: string
+  sms_type_number: string
+  created: string
+  modified: string
+  created_by: string
+  updated_by: string
+}
 
-// Колонки по старой таблице
+interface CategoryStatistic {
+  id: string
+  name: string
+  ctn: string
+  message_types: string
+  pattern_stats: string
+  source_types: string
+  last_updated: string
+}
+
+const categoryMTAPI = {
+  list: async (): Promise<CategoryMT[]> => {
+    await new Promise((resolve) => setTimeout(resolve, 500))
+    return [
+      {
+        id: "1",
+        name: "Default_category",
+        ip_address: "192.168.1.100",
+        cdr: "enabled",
+        sms_type_number: "1",
+        created: "2024-01-01 10:00:00",
+        modified: "2024-01-15 14:30:00",
+        created_by: "admin",
+        updated_by: "admin",
+      },
+      {
+        id: "2",
+        name: "eGov",
+        ip_address: "192.168.1.101",
+        cdr: "enabled",
+        sms_type_number: "2",
+        created: "2024-01-02 11:00:00",
+        modified: "2024-01-14 16:20:00",
+        created_by: "admin",
+        updated_by: "operator",
+      },
+      {
+        id: "3",
+        name: "Reklama",
+        ip_address: "192.168.1.102",
+        cdr: "disabled",
+        sms_type_number: "3",
+        created: "2024-01-03 09:30:00",
+        modified: "2024-01-13 12:45:00",
+        created_by: "operator",
+        updated_by: "admin",
+      },
+      {
+        id: "4",
+        name: "Service",
+        ip_address: "192.168.1.103",
+        cdr: "enabled",
+        sms_type_number: "4",
+        created: "2024-01-04 12:00:00",
+        modified: "2024-01-12 10:15:00",
+        created_by: "admin",
+        updated_by: "admin",
+      },
+      {
+        id: "5",
+        name: "Transaction",
+        ip_address: "192.168.1.104",
+        cdr: "enabled",
+        sms_type_number: "5",
+        created: "2024-01-05 14:30:00",
+        modified: "2024-01-11 16:45:00",
+        created_by: "operator",
+        updated_by: "operator",
+      },
+    ]
+  },
+}
+
+const categoryStatisticsAPI = {
+  list: async (): Promise<CategoryStatistic[]> => {
+    await new Promise((resolve) => setTimeout(resolve, 500))
+    return [
+      {
+        id: "1",
+        name: "Default_category",
+        ctn: "1234",
+        message_types: "SMS: 1500, MMS: 200, Total: 1700",
+        pattern_stats: "Active: 15, Inactive: 3",
+        source_types: "Alphaname: 1200, Short Number: 500",
+        last_updated: "2024-01-15 10:30:00",
+      },
+      {
+        id: "2",
+        name: "eGov",
+        ctn: "5678",
+        message_types: "SMS: 2300, MMS: 150, Total: 2450",
+        pattern_stats: "Active: 22, Inactive: 1",
+        source_types: "Alphaname: 2000, Short Number: 450",
+        last_updated: "2024-01-15 11:45:00",
+      },
+      {
+        id: "3",
+        name: "Reklama",
+        ctn: "9999",
+        message_types: "SMS: 800, MMS: 300, Total: 1100",
+        pattern_stats: "Active: 8, Inactive: 5",
+        source_types: "Alphaname: 600, Short Number: 500",
+        last_updated: "2024-01-15 09:20:00",
+      },
+      {
+        id: "4",
+        name: "Service",
+        ctn: "4567",
+        message_types: "SMS: 1800, MMS: 100, Total: 1900",
+        pattern_stats: "Active: 18, Inactive: 2",
+        source_types: "Alphaname: 1500, Short Number: 400",
+        last_updated: "2024-01-15 12:15:00",
+      },
+      {
+        id: "5",
+        name: "Transaction",
+        ctn: "7890",
+        message_types: "SMS: 3200, MMS: 50, Total: 3250",
+        pattern_stats: "Active: 25, Inactive: 0",
+        source_types: "Alphaname: 2800, Short Number: 450",
+        last_updated: "2024-01-15 08:30:00",
+      },
+    ]
+  },
+}
+
 const columns = [
   { key: "name", label: "Category Name" },
   { key: "ip_address", label: "IP Address" },
-  { key: "cdr", label: "Cdr" },
-  { key: "sms_type_number", label: "SMS type number" },
-  { 
-    key: "created", 
+  { key: "cdr", label: "CDR" },
+  { key: "sms_type_number", label: "SMS Type Number" },
+  {
+    key: "created",
     label: "Created",
-    render: (value: string) => value ? value.replace(/,\d+$/, "") : ""
+    render: (value: string) => new Date(value).toLocaleDateString(),
   },
-  { 
-    key: "modified", 
+  {
+    key: "modified",
     label: "Modified",
-    render: (value: string) => value ? value.replace(/,\d+$/, "") : ""
+    render: (value: string) => new Date(value).toLocaleDateString(),
   },
   { key: "created_by", label: "Created By" },
   { key: "updated_by", label: "Updated By" },
 ]
 
-// Фильтры (по имени категории)
 const filters = {
-  name: [
-    "Default_category",
-    "eGov",
-    "Reklama",
-    "Service",
-    "Transaction",
-    "Transactions",
-  ]
+  name: ["Default_category", "eGov", "Reklama", "Service", "Transaction"],
+  cdr: ["enabled", "disabled"],
+  created_by: ["admin", "operator"],
 }
-
-function StatsTable({
-  data,
-  isLoading,
-  onRowClick,
-}: {
-  data: CategoryStatistic[]
-  isLoading: boolean
-  onRowClick?: (item: CategoryStatistic) => void
-}) {
-  if (isLoading) {
-    return (
-      <div className="rounded-lg border bg-card p-8">
-        <LoadingSpinner size="lg" />
-      </div>
-    )
-  }
-
-  return (
-    <div className="rounded-lg border bg-card overflow-auto">
-      <Table>
-        <TableBody>
-          {data.map((item) => (
-            <TableRow
-              key={item.id}
-              className="cursor-pointer hover:bg-muted"
-              onClick={() => onRowClick?.(item)}
-            >
-              <TableCell className="font-medium">{item.name}</TableCell>
-              <TableCell>{item.ctn}</TableCell>
-              <TableCell>{item.message_types}</TableCell>
-              <TableCell>{item.pattern_stats}</TableCell>
-              <TableCell>{item.source_types}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
-  )
-}
-
 
 export default function CategoryMTPage() {
   const router = useRouter()
@@ -109,32 +178,6 @@ export default function CategoryMTPage() {
   const [stats, setStats] = useState<CategoryStatistic[]>([])
   const [statsLoading, setStatsLoading] = useState(true)
   const [statsError, setStatsError] = useState<string | null>(null)
-
-  const [chartOpts, setChartOpts] = useState({
-    messageTypes: true,
-    patternStats: true,
-    sourceTypes: true,
-  })
-
-  const chartData = useMemo(() => {
-    return stats.map((s) => {
-      const msg = s.message_types.match(/Total:\s*(\d+)\s*\(SAR:\s*(\d+),\s*UDH:\s*(\d+),\s*Payload:\s*(\d+),\s*Simple:\s*(\d+)\)/)
-      const pattern = s.pattern_stats.match(/Pattern Matched:\s*(\d+),\s*Auto Categorized:\s*(\d+)/)
-      const source = s.source_types.match(/Alphaname:\s*(\d+),\s*Short Number:\s*(\d+)/)
-      return {
-        name: s.name,
-        total: parseInt(msg?.[1] || "0"),
-        sar: parseInt(msg?.[2] || "0"),
-        udh: parseInt(msg?.[3] || "0"),
-        payload: parseInt(msg?.[4] || "0"),
-        simple: parseInt(msg?.[5] || "0"),
-        patternMatched: parseInt(pattern?.[1] || "0"),
-        autoCategorized: parseInt(pattern?.[2] || "0"),
-        alphaname: parseInt(source?.[1] || "0"),
-        shortNumber: parseInt(source?.[2] || "0"),
-      }
-    })
-  }, [stats])
 
   useEffect(() => {
     setLoading(true)
@@ -158,8 +201,8 @@ export default function CategoryMTPage() {
     router.push(`/category-mt/${item.id}`)
   }
 
-  const handleStatsRowClick = (item: CategoryStatistic) => {
-    router.push(`/category-statistics/${item.id}`)
+  const handleCategoryClick = (categoryId: string) => {
+    router.push(`/category-mt/${categoryId}`)
   }
 
   const handleAdd = () => {
@@ -167,10 +210,10 @@ export default function CategoryMTPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <PageHeader
         title="Category MT"
-        description="Mobile Terminated message categories"
+        description="Mobile Terminated message categories and analytics"
         action={{
           label: "Add Category",
           onClick: handleAdd,
@@ -178,105 +221,23 @@ export default function CategoryMTPage() {
         }}
       />
 
+      <StatisticsPanel data={stats} isLoading={statsLoading} onCategoryClick={handleCategoryClick} />
+
       <div className="space-y-4">
-        <StatsTable
-          data={stats}
-          isLoading={statsLoading}
-          onRowClick={handleStatsRowClick}
+        <h2 className="text-2xl font-bold">Category Management</h2>
+        <DataTable
+          columns={columns}
+          data={data}
+          isLoading={loading}
+          onRowClick={handleRowClick}
+          onAdd={handleAdd}
+          addLabel="Add Category"
+          searchPlaceholder="Search categories..."
+          filters={filters}
         />
-        {statsError && <div className="text-red-600">{statsError}</div>}
-
-        <div className="flex items-center gap-4">
-          <label className="flex items-center gap-2 text-sm">
-            <Checkbox
-              checked={chartOpts.messageTypes}
-              onCheckedChange={() =>
-                setChartOpts({ ...chartOpts, messageTypes: !chartOpts.messageTypes })
-              }
-            />
-            Message Types
-          </label>
-          <label className="flex items-center gap-2 text-sm">
-            <Checkbox
-              checked={chartOpts.patternStats}
-              onCheckedChange={() =>
-                setChartOpts({ ...chartOpts, patternStats: !chartOpts.patternStats })
-              }
-            />
-            Pattern Stats
-          </label>
-          <label className="flex items-center gap-2 text-sm">
-            <Checkbox
-              checked={chartOpts.sourceTypes}
-              onCheckedChange={() =>
-                setChartOpts({ ...chartOpts, sourceTypes: !chartOpts.sourceTypes })
-              }
-            />
-            Source Types
-          </label>
-        </div>
-
-        {/* Charts */}
-        <div className="grid gap-6 md:grid-cols-2">
-          {chartOpts.messageTypes && (
-            <div className="rounded-lg border bg-card p-4">
-              <h3 className="mb-2 text-lg font-bold">Message Types</h3>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={chartData}>
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="sar" stackId="a" fill="#8884d8" name="SAR" />
-                  <Bar dataKey="udh" stackId="a" fill="#82ca9d" name="UDH" />
-                  <Bar dataKey="payload" stackId="a" fill="#ffc658" name="Payload" />
-                  <Bar dataKey="simple" stackId="a" fill="#ff7f50" name="Simple" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          )}
-          {chartOpts.patternStats && (
-            <div className="rounded-lg border bg-card p-4">
-              <h3 className="mb-2 text-lg font-bold">Pattern Stats</h3>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={chartData}>
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="patternMatched" stackId="a" fill="#8884d8" name="Pattern Matched" />
-                  <Bar dataKey="autoCategorized" stackId="a" fill="#82ca9d" name="Auto Categorized" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          )}
-          {chartOpts.sourceTypes && (
-            <div className="rounded-lg border bg-card p-4">
-              <h3 className="mb-2 text-lg font-bold">Source Types</h3>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={chartData}>
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="alphaname" stackId="a" fill="#82ca9d" name="Alphaname" />
-                  <Bar dataKey="shortNumber" stackId="a" fill="#8884d8" name="Short Number" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          )}
-        </div>
+        {error && <div className="text-red-600 dark:text-red-400">{error}</div>}
       </div>
-
-      <DataTable
-        columns={columns}
-        data={data}
-        isLoading={loading}
-        onRowClick={handleRowClick}
-        searchPlaceholder="Search categories..."
-        filters={filters}
-      />
-      {error && <div className="text-red-600">{error}</div>}
     </div>
   )
 }
+
