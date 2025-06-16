@@ -52,6 +52,39 @@ const COLORS = [
   "#ffff00",
 ]
 
+const RADIAN = Math.PI / 180
+function renderCustomizedLabel({
+  cx,
+  cy,
+  midAngle,
+  outerRadius,
+  percent,
+  name,
+}: {
+  cx: number
+  cy: number
+  midAngle: number
+  outerRadius: number
+  percent: number
+  name: string
+}) {
+  const radius = outerRadius + 20
+  const x = cx + radius * Math.cos(-midAngle * RADIAN)
+  const y = cy + radius * Math.sin(-midAngle * RADIAN)
+
+  return (
+    <text
+      x={x}
+      y={y}
+      fill="#333"
+      textAnchor={x > cx ? "start" : "end"}
+      dominantBaseline="central"
+    >
+      {`${name} ${(percent * 100).toFixed(0)}%`}
+    </text>
+  )
+}
+
 const DATE_RANGES = [
   { label: "Last 7 days", value: "7d" },
   { label: "Last 30 days", value: "30d" },
@@ -331,7 +364,8 @@ export function StatisticsPanel({ data, isLoading = false, onCategoryClick }: St
                       cx="50%"
                       cy="50%"
                       outerRadius={100}
-                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                      labelLine={false}
+                      label={renderCustomizedLabel}
                       onClick={handleChartClick}
                       style={{ cursor: "pointer" }}
                     >
