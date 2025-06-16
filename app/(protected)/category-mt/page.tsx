@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useMemo } from "react"
 import { Plus } from "lucide-react"
 import { DataTable } from "@/components/common/data-table"
 import { PageHeader } from "@/components/common/page-header"
@@ -10,14 +10,17 @@ import { categoryMTAPI } from "@/lib/api/category-mt"
 import type { CategoryStatistic } from "@/lib/api/category-statistics"
 import { categoryStatisticsAPI } from "@/lib/api/category-statistics"
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
+  PieChart,
+  Pie,
+  Cell,
   Tooltip,
   Legend,
   ResponsiveContainer,
 } from "recharts"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button"
 
 // Данные теперь загружаются через API
 
@@ -84,12 +87,36 @@ export default function CategoryMTPage() {
   const [statsLoading, setStatsLoading] = useState(true)
   const [statsError, setStatsError] = useState<string | null>(null)
 
-  const chartData = stats.map((s) => ({
+  const [dateFrom, setDateFrom] = useState("")
+  const [dateTo, setDateTo] = useState("")
+
+  const filteredStats = useMemo(() => {
+    return stats.filter((s) => {
+      const date = s.last_updated.split(" ")[0]
+      if (dateFrom && date < dateFrom) return false
+      if (dateTo && date > dateTo) return false
+      return true
+    })
+  }, [stats, dateFrom, dateTo])
+
+  const messagesByCategory = filteredStats.map((s) => ({
     name: s.name,
-    total: parseInt(s.message_types.match(/Total:\s*(\d+)/)?.[1] || "0"),
-    alphaname: parseInt(s.source_types.match(/Alphaname:\s*(\d+)/)?.[1] || "0"),
-    shortNumber: parseInt(s.source_types.match(/Short Number:\s*(\d+)/)?.[1] || "0"),
+    value: parseInt(s.message_types.match(/Total:\s*(\d+)/)?.[1] || "0"),
   }))
+
+  const sourceTypesTotals = filteredStats.reduce(
+    (acc, s) => {
+      acc.alphaname += parseInt(s.source_types.match(/Alphaname:\s*(\d+)/)?.[1] || "0")
+      acc.shortNumber += parseInt(s.source_types.match(/Short Number:\s*(\d+)/)?.[1] || "0")
+      return acc
+    },
+    { alphaname: 0, shortNumber: 0 }
+  )
+
+  const sourceTypesData = [
+    { name: "Alphaname", value: sourceTypesTotals.alphaname },
+    { name: "Short Number", value: sourceTypesTotals.shortNumber },
+  ]
 
   useEffect(() => {
     setLoading(true)
@@ -134,44 +161,82 @@ export default function CategoryMTPage() {
       />
 
       <div className="space-y-4">
-        <h2 className="text-xl font-bold">Category Statistics</h2>
-        <DataTable
-          columns={statsColumns}
-          data={stats}
-          isLoading={statsLoading}
-          onRowClick={handleStatsRowClick}
-          searchPlaceholder="Search statistics..."
-          filters={statsFilters}
-        />
-        {statsError && <div className="text-red-600">{statsError}</div>}
-
-        {/* Charts */}
-        <div className="grid gap-6 md:grid-cols-2">
-          <div className="rounded-lg border bg-card p-4">
-            <h3 className="mb-2 text-lg font-bold">Messages by Category</h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={chartData}>
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="total" fill="#8884d8" name="Total" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="rounded-lg border bg-card p-4">
-            <h3 className="mb-2 text-lg font-bold">Source Types</h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={chartData}>
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="alphaname" stackId="a" fill="#82ca9d" name="Alphaname" />
-                <Bar dataKey="shortNumber" stackId="a" fill="#8884d8" name="Short Number" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Category Statistics</CardTitle>
+            <div className="mt-4 flex flex-wrap items-end gap-4">
+              <div className="flex items-center gap-2">
+                <Label htmlFor="date-from">From</Label>
+                <Input
+                  id="date-from"
+                  type="date"
+                  value={dateFrom}
+                  onChange={(e) => setDateFrom(e.target.value)}
+                  className="max-w-[160px]"
+                />
+              </div>
+              <div className="flex items-center gap-2">
+                <Label htmlFor="date-to">To</Label>
+                <Input
+                  id="date-to"
+                  type="date"
+                  value={dateTo}
+                  onChange={(e) => setDateTo(e.target.value)}
+                  className="max-w-[160px]"
+                />
+              </div>
+              <Button
+                variant="ghost"
+                onClick={() => {
+                  setDateFrom("")
+                  setDateTo("")
+                }}
+              >
+                Reset
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <DataTable
+              columns={statsColumns}
+              data={filteredStats}
+              isLoading={statsLoading}
+              onRowClick={handleStatsRowClick}
+              searchPlaceholder="Search statistics..."
+              filters={statsFilters}
+            />
+            {statsError && <div className="text-red-600">{statsError}</div>}
+            <div className="grid gap-6 md:grid-cols-2">
+              <div className="rounded-lg border bg-card p-4">
+                <h3 className="mb-2 text-lg font-bold">Messages by Category</h3>
+                <ResponsiveContainer width="100%" height={200}>
+                  <PieChart>
+                    <Pie data={messagesByCategory} dataKey="value" nameKey="name" outerRadius={80}>
+                      {messagesByCategory.map((entry, index) => (
+                        <Cell key={`mc-${index}`} fill={index % 2 === 0 ? '#8884d8' : '#82ca9d'} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="rounded-lg border bg-card p-4">
+                <h3 className="mb-2 text-lg font-bold">Source Types</h3>
+                <ResponsiveContainer width="100%" height={200}>
+                  <PieChart>
+                    <Pie data={sourceTypesData} dataKey="value" nameKey="name" outerRadius={80}>
+                      {sourceTypesData.map((entry, index) => (
+                        <Cell key={`st-${index}`} fill={index === 0 ? '#82ca9d' : '#8884d8'} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       <DataTable
