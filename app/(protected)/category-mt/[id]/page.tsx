@@ -35,163 +35,13 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-
-interface CategoryMT {
-  id: string
-  name: string
-  ip_address: string
-  cdr: string
-  sms_type_number: string
-  created: string
-  modified: string
-  created_by: string
-  updated_by: string
-}
-
-interface CategoryStatistic {
-  id: string
-  name: string
-  ctn: string
-  message_types: string
-  pattern_stats: string
-  source_types: string
-  last_updated: string
-}
+import type { CategoryMT } from "@/lib/api/category-mt"
+import { categoryMTAPI } from "@/lib/api/category-mt"
+import type { CategoryStatistic } from "@/lib/api/category-statistics"
+import { categoryStatisticsAPI } from "@/lib/api/category-statistics"
 
 interface CategoryDetails extends CategoryMT {
   statistics: CategoryStatistic
-}
-
-const categoryAPI = {
-  getById: async (id: string): Promise<CategoryDetails | null> => {
-    await new Promise((resolve) => setTimeout(resolve, 500))
-
-    const mockMTData = [
-      {
-        id: "1",
-        name: "Default_category",
-        ip_address: "192.168.1.100",
-        cdr: "enabled",
-        sms_type_number: "1",
-        created: "2024-01-01 10:00:00",
-        modified: "2024-01-15 14:30:00",
-        created_by: "admin",
-        updated_by: "admin",
-      },
-      {
-        id: "2",
-        name: "eGov",
-        ip_address: "192.168.1.101",
-        cdr: "enabled",
-        sms_type_number: "2",
-        created: "2024-01-02 11:00:00",
-        modified: "2024-01-14 16:20:00",
-        created_by: "admin",
-        updated_by: "operator",
-      },
-      {
-        id: "3",
-        name: "Reklama",
-        ip_address: "192.168.1.102",
-        cdr: "disabled",
-        sms_type_number: "3",
-        created: "2024-01-03 09:30:00",
-        modified: "2024-01-13 12:45:00",
-        created_by: "operator",
-        updated_by: "admin",
-      },
-      {
-        id: "4",
-        name: "Service",
-        ip_address: "192.168.1.103",
-        cdr: "enabled",
-        sms_type_number: "4",
-        created: "2024-01-04 12:00:00",
-        modified: "2024-01-12 10:15:00",
-        created_by: "admin",
-        updated_by: "admin",
-      },
-      {
-        id: "5",
-        name: "Transaction",
-        ip_address: "192.168.1.104",
-        cdr: "enabled",
-        sms_type_number: "5",
-        created: "2024-01-05 14:30:00",
-        modified: "2024-01-11 16:45:00",
-        created_by: "operator",
-        updated_by: "operator",
-      },
-    ]
-
-    const mockStatsData = [
-      {
-        id: "1",
-        name: "Default_category",
-        ctn: "1234",
-        message_types: "SMS: 1500, MMS: 200, Total: 1700",
-        pattern_stats: "Active: 15, Inactive: 3",
-        source_types: "Alphaname: 1200, Short Number: 500",
-        last_updated: "2024-01-15 10:30:00",
-      },
-      {
-        id: "2",
-        name: "eGov",
-        ctn: "5678",
-        message_types: "SMS: 2300, MMS: 150, Total: 2450",
-        pattern_stats: "Active: 22, Inactive: 1",
-        source_types: "Alphaname: 2000, Short Number: 450",
-        last_updated: "2024-01-15 11:45:00",
-      },
-      {
-        id: "3",
-        name: "Reklama",
-        ctn: "9999",
-        message_types: "SMS: 800, MMS: 300, Total: 1100",
-        pattern_stats: "Active: 8, Inactive: 5",
-        source_types: "Alphaname: 600, Short Number: 500",
-        last_updated: "2024-01-15 09:20:00",
-      },
-      {
-        id: "4",
-        name: "Service",
-        ctn: "4567",
-        message_types: "SMS: 1800, MMS: 100, Total: 1900",
-        pattern_stats: "Active: 18, Inactive: 2",
-        source_types: "Alphaname: 1500, Short Number: 400",
-        last_updated: "2024-01-15 12:15:00",
-      },
-      {
-        id: "5",
-        name: "Transaction",
-        ctn: "7890",
-        message_types: "SMS: 3200, MMS: 50, Total: 3250",
-        pattern_stats: "Active: 25, Inactive: 0",
-        source_types: "Alphaname: 2800, Short Number: 450",
-        last_updated: "2024-01-15 08:30:00",
-      },
-    ]
-
-    const mtData = mockMTData.find((item) => item.id === id)
-    const statsData = mockStatsData.find((item) => item.id === id)
-
-    if (!mtData || !statsData) return null
-
-    return {
-      ...mtData,
-      statistics: statsData,
-    }
-  },
-
-  update: async (id: string, updates: Partial<CategoryMT>): Promise<boolean> => {
-    await new Promise((resolve) => setTimeout(resolve, 500))
-    return true
-  },
-
-  delete: async (id: string): Promise<boolean> => {
-    await new Promise((resolve) => setTimeout(resolve, 500))
-    return true
-  },
 }
 
 export default function CategoryMTDetailPage() {
@@ -226,8 +76,11 @@ export default function CategoryMTDetailPage() {
             },
           })
         } else {
-          const data = await categoryAPI.getById(params.id as string)
-          setCategory(data)
+          const mtData = await categoryMTAPI.getById(params.id as string)
+          const statsData = await categoryStatisticsAPI.getById(
+            params.id as string
+          )
+          setCategory({ ...mtData, statistics: statsData })
         }
       } catch (error) {
         console.error("Failed to fetch category:", error)
@@ -245,9 +98,9 @@ export default function CategoryMTDetailPage() {
     setIsSaving(true)
     try {
       if (params.id === "new") {
-        console.log("Creating new category:", category)
+        await categoryMTAPI.create(category)
       } else {
-        await categoryAPI.update(category.id, category)
+        await categoryMTAPI.update(category.id, category)
       }
       router.push("/category-mt")
     } catch (error) {
@@ -261,7 +114,7 @@ export default function CategoryMTDetailPage() {
     if (!category || params.id === "new") return
 
     try {
-      await categoryAPI.delete(category.id)
+      await categoryMTAPI.delete(category.id)
       router.push("/category-mt")
     } catch (error) {
       console.error("Failed to delete category:", error)
