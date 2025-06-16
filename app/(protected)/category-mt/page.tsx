@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import { useEffect, useState, useMemo } from "react"
+import { useEffect, useState, useMemo } from "react"
 import { Plus } from "lucide-react"
 import { DataTable } from "@/components/common/data-table"
 import { LoadingSpinner } from "@/components/common/loading-spinner"
@@ -13,14 +14,17 @@ import { categoryMTAPI } from "@/lib/api/category-mt"
 import type { CategoryStatistic } from "@/lib/api/category-statistics"
 import { categoryStatisticsAPI } from "@/lib/api/category-statistics"
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
+  PieChart,
+  Pie,
+  Cell,
   Tooltip,
   Legend,
   ResponsiveContainer,
 } from "recharts"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button"
 
 // Данные теперь загружаются через API
 
