@@ -69,27 +69,34 @@ const parseSourceTypes = (item: CategoryStatistic): SourceTypeStat => {
 }
 
 export const messageTypesAPI = {
+
   list: async (from?: string, to?: string): Promise<MessageTypeStat[]> => {
     const list = await categoryStatisticsAPI.list(from, to)
+
     return list.map(parseMessageTypes)
   },
 }
 
 export const patternStatsAPI = {
+
   list: async (from?: string, to?: string): Promise<PatternStat[]> => {
     const list = await categoryStatisticsAPI.list(from, to)
+
     return list.map(parsePatternStats)
   },
 }
 
 export const sourceTypesAPI = {
+
   list: async (from?: string, to?: string): Promise<SourceTypeStat[]> => {
     const list = await categoryStatisticsAPI.list(from, to)
+
     return list.map(parseSourceTypes)
   },
 }
 
 export const trendsAPI = {
+
   list: async (from?: string, to?: string): Promise<TrendPoint[]> => {
     const start = from ? new Date(from) : new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
     const end = to ? new Date(to) : new Date()
@@ -108,5 +115,6 @@ export const trendsAPI = {
     }
 
     return Promise.resolve(points)
+
   },
 }

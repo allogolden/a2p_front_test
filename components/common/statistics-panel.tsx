@@ -170,12 +170,14 @@ export function StatisticsPanel({ data, isLoading = false, onCategoryClick }: St
     auto: Number.parseInt(item.pattern_stats.match(/Auto Categorized:\s*(\d+)/)?.[1] || "0"),
   }))
 
+
   useEffect(() => {
     const { from, to } = getRangeDates(dateRange)
     trendsAPI
       .list(from ? from.toISOString() : undefined, to ? to.toISOString() : undefined)
       .then(setTrendData)
   }, [dateRange])
+
 
 
   const handleChartClick = (data: any) => {
@@ -441,9 +443,11 @@ export function StatisticsPanel({ data, isLoading = false, onCategoryClick }: St
                   <YAxis />
                   <Tooltip />
                   <Legend />
+
                   <Line type="monotone" dataKey="messages" stroke="#8884d8" name="Messages" dot />
                   <Line type="monotone" dataKey="patterns" stroke="#22c55e" name="Pattern Matched" dot />
                   <Line type="monotone" dataKey="sources" stroke="#ff7300" name="Sources" dot />
+
                 </LineChart>
               </ResponsiveContainer>
             </CardContent>
