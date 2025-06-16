@@ -323,6 +323,7 @@ export function StatisticsPanel({ data, isLoading = false, onCategoryClick }: St
                 <CardTitle className="text-lg">Messages by Category</CardTitle>
               </CardHeader>
               <CardContent>
+<<<<<<< 3d32fu-codex/исправить-наложение-текста-на-странице-category-mt
                 <div className="flex items-center justify-center">
                   <div className="w-64 h-64">
                     <ResponsiveContainer width="100%" height="100%">
@@ -361,6 +362,39 @@ export function StatisticsPanel({ data, isLoading = false, onCategoryClick }: St
                     })}
                   </div>
                 </div>
+=======
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart margin={{ right: 160 }}>
+                    <Pie
+                      data={messagesByCategory}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="40%"
+                      cy="50%"
+                      outerRadius={100}
+                      onClick={handleChartClick}
+                      style={{ cursor: "pointer" }}
+                    >
+                      {messagesByCategory.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(value) => [value.toLocaleString(), "Messages"]} />
+                    <Legend
+                      layout="vertical"
+                      align="right"
+                      verticalAlign="middle"
+                      formatter={(value: string) => {
+                        const item = messagesByCategory.find((m) => m.name === value)
+                        if (!item) return value
+                        const total = messagesByCategory.reduce((sum, m) => sum + m.value, 0)
+                        const percent = total > 0 ? ((item.value / total) * 100).toFixed(0) : "0"
+                        return `${value} (${percent}%)`
+                      }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+>>>>>>> main
               </CardContent>
             </Card>
 
