@@ -52,38 +52,6 @@ const COLORS = [
   "#ffff00",
 ]
 
-const RADIAN = Math.PI / 180
-function renderCustomizedLabel({
-  cx,
-  cy,
-  midAngle,
-  outerRadius,
-  percent,
-  name,
-}: {
-  cx: number
-  cy: number
-  midAngle: number
-  outerRadius: number
-  percent: number
-  name: string
-}) {
-  const radius = outerRadius + 20
-  const x = cx + radius * Math.cos(-midAngle * RADIAN)
-  const y = cy + radius * Math.sin(-midAngle * RADIAN)
-
-  return (
-    <text
-      x={x}
-      y={y}
-      fill="#333"
-      textAnchor={x > cx ? "start" : "end"}
-      dominantBaseline="central"
-    >
-      {`${name} ${(percent * 100).toFixed(0)}%`}
-    </text>
-  )
-}
 
 const DATE_RANGES = [
   { label: "Last 7 days", value: "7d" },
@@ -356,16 +324,14 @@ export function StatisticsPanel({ data, isLoading = false, onCategoryClick }: St
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
-                  <PieChart>
+                  <PieChart margin={{ right: 160 }}>
                     <Pie
                       data={messagesByCategory}
                       dataKey="value"
                       nameKey="name"
-                      cx="50%"
+                      cx="40%"
                       cy="50%"
                       outerRadius={100}
-                      labelLine={false}
-                      label={renderCustomizedLabel}
                       onClick={handleChartClick}
                       style={{ cursor: "pointer" }}
                     >
@@ -374,7 +340,18 @@ export function StatisticsPanel({ data, isLoading = false, onCategoryClick }: St
                       ))}
                     </Pie>
                     <Tooltip formatter={(value) => [value.toLocaleString(), "Messages"]} />
-                    <Legend />
+                    <Legend
+                      layout="vertical"
+                      align="right"
+                      verticalAlign="middle"
+                      formatter={(value: string) => {
+                        const item = messagesByCategory.find((m) => m.name === value)
+                        if (!item) return value
+                        const total = messagesByCategory.reduce((sum, m) => sum + m.value, 0)
+                        const percent = total > 0 ? ((item.value / total) * 100).toFixed(0) : "0"
+                        return `${value} (${percent}%)`
+                      }}
+                    />
                   </PieChart>
                 </ResponsiveContainer>
               </CardContent>
