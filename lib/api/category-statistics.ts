@@ -18,7 +18,7 @@ const mockCategoryStats: CategoryStatistic[] = [
     message_types: "Total: 0 (SAR: 0, UDH: 0, Payload: 0, Simple: 0)",
     pattern_stats: "Pattern Matched: 0, Auto Categorized: 0",
     source_types: "Alphaname: 0, Short Number: 0",
-    last_updated: "2025-06-10 13:13:12",
+    last_updated: "2025-06-01 10:00:00",
   },
   {
     id: "2",
@@ -27,7 +27,7 @@ const mockCategoryStats: CategoryStatistic[] = [
     message_types: "Total: 110 (SAR: 0, UDH: 74, Payload: 0, Simple: 36)",
     pattern_stats: "Pattern Matched: 110, Auto Categorized: 0",
     source_types: "Alphaname: 110, Short Number: 0",
-    last_updated: "2025-06-10 13:13:12",
+    last_updated: "2025-06-02 10:00:00",
   },
   {
     id: "3",
@@ -36,7 +36,7 @@ const mockCategoryStats: CategoryStatistic[] = [
     message_types: "Total: 166 (SAR: 0, UDH: 112, Payload: 0, Simple: 54)",
     pattern_stats: "Pattern Matched: 166, Auto Categorized: 0",
     source_types: "Alphaname: 150, Short Number: 16",
-    last_updated: "2025-06-10 13:13:12",
+    last_updated: "2025-06-03 10:00:00",
   },
   {
     id: "4",
@@ -45,7 +45,7 @@ const mockCategoryStats: CategoryStatistic[] = [
     message_types: "Total: 60642 (SAR: 0, UDH: 4, Payload: 0, Simple: 60638)",
     pattern_stats: "Pattern Matched: 60642, Auto Categorized: 0",
     source_types: "Alphaname: 0, Short Number: 4340",
-    last_updated: "2025-04-18 10:47:19",
+    last_updated: "2025-06-04 10:00:00",
   },
   {
     id: "5",
@@ -54,7 +54,7 @@ const mockCategoryStats: CategoryStatistic[] = [
     message_types: "Total: 0 (SAR: 0, UDH: 0, Payload: 0, Simple: 0)",
     pattern_stats: "Pattern Matched: 0, Auto Categorized: 0",
     source_types: "Alphaname: 0, Short Number: 0",
-    last_updated: "2025-06-10 13:13:12",
+    last_updated: "2025-06-05 10:00:00",
   },
   {
     id: "6",
@@ -63,7 +63,7 @@ const mockCategoryStats: CategoryStatistic[] = [
     message_types: "Total: 41 (SAR: 0, UDH: 3, Payload: 0, Simple: 38)",
     pattern_stats: "Pattern Matched: 41, Auto Categorized: 0",
     source_types: "Alphaname: 26, Short Number: 12",
-    last_updated: "2025-06-10 13:13:12",
+    last_updated: "2025-06-06 10:00:00",
   },
   {
     id: "7",
@@ -72,12 +72,26 @@ const mockCategoryStats: CategoryStatistic[] = [
     message_types: "Total: 0 (SAR: 0, UDH: 0, Payload: 0, Simple: 0)",
     pattern_stats: "Pattern Matched: 0, Auto Categorized: 0",
     source_types: "Alphaname: 0, Short Number: 0",
-    last_updated: "2025-06-10 13:13:12",
+    last_updated: "2025-06-07 10:00:00",
   },
 ]
 
 export const categoryStatisticsAPI = {
-  list: async () => Promise.resolve(mockCategoryStats),
+  list: async (from?: string, to?: string) => {
+    let list = [...mockCategoryStats]
+
+    if (from) {
+      const fromDate = new Date(from)
+      list = list.filter((item) => new Date(item.last_updated) >= fromDate)
+    }
+
+    if (to) {
+      const toDate = new Date(to)
+      list = list.filter((item) => new Date(item.last_updated) <= toDate)
+    }
+
+    return Promise.resolve(list)
+  },
   getById: async (id: string) =>
     Promise.resolve(
       mockCategoryStats.find((c) => c.id === id) || ({} as CategoryStatistic)

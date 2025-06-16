@@ -69,44 +69,52 @@ const parseSourceTypes = (item: CategoryStatistic): SourceTypeStat => {
 }
 
 export const messageTypesAPI = {
-  list: async (): Promise<MessageTypeStat[]> => {
-    const list = await categoryStatisticsAPI.list()
+
+  list: async (from?: string, to?: string): Promise<MessageTypeStat[]> => {
+    const list = await categoryStatisticsAPI.list(from, to)
+
     return list.map(parseMessageTypes)
   },
 }
 
 export const patternStatsAPI = {
-  list: async (): Promise<PatternStat[]> => {
-    const list = await categoryStatisticsAPI.list()
+
+  list: async (from?: string, to?: string): Promise<PatternStat[]> => {
+    const list = await categoryStatisticsAPI.list(from, to)
+
     return list.map(parsePatternStats)
   },
 }
 
 export const sourceTypesAPI = {
-  list: async (): Promise<SourceTypeStat[]> => {
-    const list = await categoryStatisticsAPI.list()
+
+  list: async (from?: string, to?: string): Promise<SourceTypeStat[]> => {
+    const list = await categoryStatisticsAPI.list(from, to)
+
     return list.map(parseSourceTypes)
   },
 }
 
 export const trendsAPI = {
-  list: async (): Promise<TrendPoint[]> => {
-    const list = await categoryStatisticsAPI.list()
-    const grouped: Record<string, TrendPoint> = {}
-    list.forEach((item) => {
-      const date = item.last_updated.split(" ")[0]
-      const messages = parseInt(item.message_types.match(/Total:\s*(\d+)/)?.[1] || "0")
-      const patterns = parseInt(item.pattern_stats.match(/Pattern Matched:\s*(\d+)/)?.[1] || "0")
-      const sources =
-        parseInt(item.source_types.match(/Alphaname:\s*(\d+)/)?.[1] || "0") +
-        parseInt(item.source_types.match(/Short Number:\s*(\d+)/)?.[1] || "0")
-      if (!grouped[date]) {
-        grouped[date] = { date, messages: 0, patterns: 0, sources: 0 }
-      }
-      grouped[date].messages += messages
-      grouped[date].patterns += patterns
-      grouped[date].sources += sources
-    })
-    return Object.values(grouped).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+
+  list: async (from?: string, to?: string): Promise<TrendPoint[]> => {
+    const start = from ? new Date(from) : new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+    const end = to ? new Date(to) : new Date()
+
+    const points: TrendPoint[] = []
+    for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+      const messages = Math.floor(Math.random() * 400) + 50
+      const patterns = Math.floor(messages * 0.8)
+      const sources = Math.floor(messages * 0.5)
+      points.push({
+        date: d.toISOString().split('T')[0],
+        messages,
+        patterns,
+        sources,
+      })
+    }
+
+    return Promise.resolve(points)
+
   },
 }

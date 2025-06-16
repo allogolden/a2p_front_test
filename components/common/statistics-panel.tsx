@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { Calendar, TrendingUp, TrendingDown, Activity, Users, MessageSquare, BarChart3 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -21,6 +21,7 @@ import {
   Line,
   LineChart,
 } from "recharts"
+import { trendsAPI, type TrendPoint } from "@/lib/api/category-charts"
 
 interface CategoryStatistic {
   id: string
@@ -60,39 +61,47 @@ const DATE_RANGES = [
   { label: "All time", value: "all" },
 ]
 
+function getRangeDates(range: string): { from: Date | null; to: Date | null } {
+  if (range === "all") return { from: null, to: null }
+
+  const to = new Date()
+  const from = new Date()
+
+  switch (range) {
+    case "7d":
+      from.setDate(to.getDate() - 7)
+      break
+    case "30d":
+      from.setDate(to.getDate() - 30)
+      break
+    case "3m":
+      from.setMonth(to.getMonth() - 3)
+      break
+    case "6m":
+      from.setMonth(to.getMonth() - 6)
+      break
+    case "1y":
+      from.setFullYear(to.getFullYear() - 1)
+      break
+    default:
+      return { from: null, to: null }
+  }
+
+  return { from, to }
+}
+
 export function StatisticsPanel({ data, isLoading = false, onCategoryClick }: StatisticsPanelProps) {
   const [dateRange, setDateRange] = useState("30d")
+  const [trendData, setTrendData] = useState<TrendPoint[]>([])
 
   // Filter data based on date range
   const filteredData = useMemo(() => {
-    if (dateRange === "all") return data
-
-    const now = new Date()
-    const cutoffDate = new Date()
-
-    switch (dateRange) {
-      case "7d":
-        cutoffDate.setDate(now.getDate() - 7)
-        break
-      case "30d":
-        cutoffDate.setDate(now.getDate() - 30)
-        break
-      case "3m":
-        cutoffDate.setMonth(now.getMonth() - 3)
-        break
-      case "6m":
-        cutoffDate.setMonth(now.getMonth() - 6)
-        break
-      case "1y":
-        cutoffDate.setFullYear(now.getFullYear() - 1)
-        break
-      default:
-        return data
-    }
+    const { from } = getRangeDates(dateRange)
+    if (!from) return data
 
     return data.filter((item) => {
       const itemDate = new Date(item.last_updated)
-      return itemDate >= cutoffDate
+      return itemDate >= from
     })
   }, [data, dateRange])
 
@@ -161,28 +170,15 @@ export function StatisticsPanel({ data, isLoading = false, onCategoryClick }: St
     auto: Number.parseInt(item.pattern_stats.match(/Auto Categorized:\s*(\d+)/)?.[1] || "0"),
   }))
 
-  const trendData = useMemo(() => {
-    const grouped: Record<string, { date: string; messages: number; patterns: number; sources: number }> = {}
 
-    filteredData.forEach((item) => {
-      const date = item.last_updated.split(" ")[0]
-      const messages = Number.parseInt(item.message_types.match(/Total:\s*(\d+)/)?.[1] || "0")
-      const patterns = Number.parseInt(item.pattern_stats.match(/Pattern Matched:\s*(\d+)/)?.[1] || "0")
-      const sources =
-        Number.parseInt(item.source_types.match(/Alphaname:\s*(\d+)/)?.[1] || "0") +
-        Number.parseInt(item.source_types.match(/Short Number:\s*(\d+)/)?.[1] || "0")
+  useEffect(() => {
+    const { from, to } = getRangeDates(dateRange)
+    trendsAPI
+      .list(from ? from.toISOString() : undefined, to ? to.toISOString() : undefined)
+      .then(setTrendData)
+  }, [dateRange])
 
-      if (!grouped[date]) {
-        grouped[date] = { date, messages: 0, patterns: 0, sources: 0 }
-      }
 
-      grouped[date].messages += messages
-      grouped[date].patterns += patterns
-      grouped[date].sources += sources
-    })
-
-    return Object.values(grouped).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-  }, [filteredData])
 
   const handleChartClick = (data: any) => {
     if (data && data.id && onCategoryClick) {
@@ -447,9 +443,11 @@ export function StatisticsPanel({ data, isLoading = false, onCategoryClick }: St
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Line type="monotone" dataKey="messages" stroke="#8884d8" name="Messages" />
-                  <Line type="monotone" dataKey="patterns" stroke="#22c55e" name="Pattern Matched" />
-                  <Line type="monotone" dataKey="sources" stroke="#ff7300" name="Sources" />
+
+                  <Line type="monotone" dataKey="messages" stroke="#8884d8" name="Messages" dot />
+                  <Line type="monotone" dataKey="patterns" stroke="#22c55e" name="Pattern Matched" dot />
+                  <Line type="monotone" dataKey="sources" stroke="#ff7300" name="Sources" dot />
+
                 </LineChart>
               </ResponsiveContainer>
             </CardContent>
