@@ -1,7 +1,3 @@
 {
-  "/(protected)/cdr-settings/[id]/page": "app/(protected)/cdr-settings/[id]/page.js",
-  "/(protected)/cdr-settings/page": "app/(protected)/cdr-settings/page.js",
-  "/(protected)/ctns/page": "app/(protected)/ctns/page.js",
-  "/(protected)/dashboard/page": "app/(protected)/dashboard/page.js",
-  "/(protected)/ctns/[id]/page": "app/(protected)/ctns/[id]/page.js"
+  "/(protected)/category-mt/page": "app/(protected)/category-mt/page.js"
 }
