@@ -323,6 +323,46 @@ export function StatisticsPanel({ data, isLoading = false, onCategoryClick }: St
                 <CardTitle className="text-lg">Messages by Category</CardTitle>
               </CardHeader>
               <CardContent>
+<<<<<<< 3d32fu-codex/исправить-наложение-текста-на-странице-category-mt
+                <div className="flex items-center justify-center">
+                  <div className="w-64 h-64">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={messagesByCategory}
+                          dataKey="value"
+                          nameKey="name"
+                          cx="50%"
+                          cy="50%"
+                          outerRadius={100}
+                          onClick={handleChartClick}
+                          style={{ cursor: "pointer" }}
+                        >
+                          {messagesByCategory.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                          ))}
+                        </Pie>
+                        <Tooltip formatter={(value) => [value.toLocaleString(), "Messages"]} />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+                  <div className="ml-4 space-y-1 text-sm">
+                    {messagesByCategory.map((entry, index) => {
+                      const total = messagesByCategory.reduce((sum, m) => sum + m.value, 0)
+                      const percent = total > 0 ? ((entry.value / total) * 100).toFixed(0) : "0"
+                      return (
+                        <div key={entry.name} className="flex items-center space-x-2">
+                          <span
+                            className="block w-3 h-3 rounded-sm"
+                            style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                          />
+                          <span>{`${entry.name} (${percent}%)`}</span>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+=======
                 <ResponsiveContainer width="100%" height={300}>
                   <PieChart margin={{ right: 160 }}>
                     <Pie
@@ -354,6 +394,7 @@ export function StatisticsPanel({ data, isLoading = false, onCategoryClick }: St
                     />
                   </PieChart>
                 </ResponsiveContainer>
+>>>>>>> main
               </CardContent>
             </Card>
 
