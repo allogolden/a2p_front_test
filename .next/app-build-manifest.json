@@ -11,11 +11,6 @@
       "static/chunks/main-app.js",
       "static/chunks/app/(protected)/layout.js"
     ],
-    "/(protected)/category-statistics/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(protected)/category-statistics/page.js"
-    ],
     "/(protected)/category-mt/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",

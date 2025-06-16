@@ -1,4 +1,3 @@
 {
-  "/(protected)/category-statistics/page": "app/(protected)/category-statistics/page.js",
   "/(protected)/category-mt/page": "app/(protected)/category-mt/page.js"
 }
