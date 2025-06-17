@@ -1,3 +1,6 @@
+
+// import { fetchProtected } from "@/lib/utils"
+
 export type CategorySmsReport = {
   id: string
   category: string
@@ -47,3 +50,31 @@ export const categorySmsReportsAPI = {
   update: async (_id: string, _data: Partial<CategorySmsReport>) => Promise.resolve({ status: 200 }),
   delete: async (_id: string) => Promise.resolve({ status: 200 }),
 }
+
+
+/*
+export const categorySmsReportsAPI = {
+  list: (from?: string, to?: string) =>
+    fetchProtected(
+      `/admin/reports/sms/by-category/?${from ? `from=${from}&` : ""}${
+        to ? `to=${to}` : ""
+      }`
+    ),
+  getById: (id: string) =>
+    fetchProtected(`/admin/reports/sms/by-category/${id}/`),
+  create: (data: Partial<CategorySmsReport>) =>
+    fetchProtected(`/admin/reports/sms/by-category/`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+  update: (id: string, data: Partial<CategorySmsReport>) =>
+    fetchProtected(`/admin/reports/sms/by-category/${id}/`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    }),
+  delete: (id: string) =>
+    fetchProtected(`/admin/reports/sms/by-category/${id}/`, {
+      method: "DELETE",
+    }),
+}
+*/

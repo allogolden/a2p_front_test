@@ -1,3 +1,7 @@
+
+// import { fetchProtected } from "@/lib/utils"
+
+
 export type ShortNumberSmsReport = {
   id: string
   short_number: string
@@ -53,3 +57,31 @@ export const shortNumberSmsReportsAPI = {
   update: async (_id: string, _data: Partial<ShortNumberSmsReport>) => Promise.resolve({ status: 200 }),
   delete: async (_id: string) => Promise.resolve({ status: 200 }),
 }
+
+
+/*
+export const shortNumberSmsReportsAPI = {
+  list: (from?: string, to?: string) =>
+    fetchProtected(
+      `/admin/reports/sms/by-short-number/?${from ? `from=${from}&` : ""}${
+        to ? `to=${to}` : ""
+      }`
+    ),
+  getById: (id: string) =>
+    fetchProtected(`/admin/reports/sms/by-short-number/${id}/`),
+  create: (data: Partial<ShortNumberSmsReport>) =>
+    fetchProtected(`/admin/reports/sms/by-short-number/`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+  update: (id: string, data: Partial<ShortNumberSmsReport>) =>
+    fetchProtected(`/admin/reports/sms/by-short-number/${id}/`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    }),
+  delete: (id: string) =>
+    fetchProtected(`/admin/reports/sms/by-short-number/${id}/`, {
+      method: "DELETE",
+    }),
+}
+*/
