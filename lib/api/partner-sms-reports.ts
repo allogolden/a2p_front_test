@@ -1,3 +1,4 @@
+
 // import { fetchProtected } from "@/lib/utils"
 
 export type PartnerSmsReport = {
@@ -60,6 +61,7 @@ export const partnerSmsReportsAPI = {
   update: async (_id: string, _data: Partial<PartnerSmsReport>) => Promise.resolve({ status: 200 }),
   delete: async (_id: string) => Promise.resolve({ status: 200 }),
 }
+
 
 /*
 export const partnerSmsReportsAPI = {
