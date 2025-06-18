@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import type { LucideIcon } from "lucide-react"
 
 interface ActionButtonProps {
-  onClick: () => void
+  onClick?: () => void
   icon?: LucideIcon
   children: React.ReactNode
   variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link"
@@ -16,7 +16,7 @@ interface ActionButtonProps {
 }
 
 export function ActionButton({
-  onClick,
+  onClick = () => {},
   icon: Icon,
   children,
   variant = "default",

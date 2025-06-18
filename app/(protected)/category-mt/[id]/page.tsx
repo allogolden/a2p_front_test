@@ -486,11 +486,19 @@ export default function CategoryMTDetailPage() {
                     </div>
                     <div>
                       <p className="text-sm font-medium text-muted-foreground">Created</p>
-                      <p className="font-medium">{new Date(category.created).toLocaleDateString()}</p>
+                      <p className="font-medium">
+                        {category.created
+                          ? new Date(category.created).toLocaleDateString()
+                          : ""}
+                      </p>
                     </div>
                     <div>
                       <p className="text-sm font-medium text-muted-foreground">Modified</p>
-                      <p className="font-medium">{new Date(category.modified).toLocaleDateString()}</p>
+                      <p className="font-medium">
+                        {category.modified
+                          ? new Date(category.modified).toLocaleDateString()
+                          : ""}
+                      </p>
                     </div>
                     <div>
                       <p className="text-sm font-medium text-muted-foreground">Stats Updated</p>

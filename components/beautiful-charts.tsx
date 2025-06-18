@@ -130,8 +130,9 @@ export function BeautifulCharts({ data, title, type, height = 400 }: BeautifulCh
           },
           color: "#374151",
           generateLabels: (chart: any) => {
-            const original = ChartJS.defaults.plugins.legend.labels.generateLabels
-            const labels = original.call(this :, chart)
+            const original =
+              ChartJS.defaults.plugins.legend.labels.generateLabels
+            const labels = (original as any).call(chart.legend, chart)
 
             labels.forEach((label: any, index: number) => {
               label.fillStyle = SOLID_COLORS[index % SOLID_COLORS.length]
@@ -335,7 +336,7 @@ export function BeautifulCharts({ data, title, type, height = 400 }: BeautifulCh
           label: "Delivered",
           data: data.map((item) => item.delivered || 0),
           borderColor: "#43e97b",
-          backgroundColor: "rgba(67, 233, 123, 0.1)",
+          backgroundColor: "rgba(67, 233, 123, 0.1)" as any,
           borderWidth: 3,
           pointBackgroundColor: "#43e97b",
           pointBorderColor: "#FFFFFF",
@@ -355,7 +356,7 @@ export function BeautifulCharts({ data, title, type, height = 400 }: BeautifulCh
           label: "Failed",
           data: data.map((item) => item.failed || 0),
           borderColor: "#f093fb",
-          backgroundColor: "rgba(240, 147, 251, 0.1)",
+          backgroundColor: "rgba(240, 147, 251, 0.1)" as any,
           borderWidth: 3,
           pointBackgroundColor: "#f093fb",
           pointBorderColor: "#FFFFFF",
@@ -379,18 +380,18 @@ export function BeautifulCharts({ data, title, type, height = 400 }: BeautifulCh
     return { labels: [], datasets: [] }
   }
 
-  const chartData = prepareChartData()
+  const chartData: any = prepareChartData()
 
   const renderChart = () => {
     switch (type) {
       case "pie":
-        return <Pie data={chartData} options={chartOptions} />
+        return <Pie data={chartData} options={chartOptions as any} />
       case "doughnut":
-        return <Doughnut data={chartData} options={chartOptions} />
+        return <Doughnut data={chartData} options={chartOptions as any} />
       case "bar":
-        return <Bar data={chartData} options={chartOptions} />
+        return <Bar data={chartData} options={chartOptions as any} />
       case "line":
-        return <Line data={chartData} options={chartOptions} />
+        return <Line data={chartData} options={chartOptions as any} />
       default:
         return <div>Unsupported chart type</div>
     }
