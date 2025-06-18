@@ -1,4 +1,5 @@
 "use client"
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -130,7 +131,7 @@ export function BeautifulCharts({ data, title, type, height = 400 }: BeautifulCh
           color: "#374151",
           generateLabels: (chart: any) => {
             const original = ChartJS.defaults.plugins.legend.labels.generateLabels
-            const labels = original.call(this, chart)
+            const labels = original.call(this :, chart)
 
             labels.forEach((label: any, index: number) => {
               label.fillStyle = SOLID_COLORS[index % SOLID_COLORS.length]
