@@ -298,7 +298,7 @@ export function InteractiveChart({
         )
 
       default:
-        return null
+        return <></>
     }
   }
 
