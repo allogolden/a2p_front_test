@@ -342,18 +342,45 @@ export default function CategoryMTDetailPage() {
                 </div>
               </div>
 
-              {params.id !== "new" && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>Created By</Label>
-                    <Input value={category.created_by} disabled />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Updated By</Label>
-                    <Input value={category.updated_by} disabled />
-                  </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="created">Created</Label>
+                  <Input
+                    id="created"
+                    type="date"
+                    value={category.created}
+                    onChange={(e) => setCategory({ ...category, created: e.target.value })}
+                  />
                 </div>
-              )}
+                <div className="space-y-2">
+                  <Label htmlFor="modified">Modified</Label>
+                  <Input
+                    id="modified"
+                    type="date"
+                    value={category.modified}
+                    onChange={(e) => setCategory({ ...category, modified: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="created_by">Created By</Label>
+                  <Input
+                    id="created_by"
+                    value={category.created_by}
+                    onChange={(e) => setCategory({ ...category, created_by: e.target.value })}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="updated_by">Updated By</Label>
+                  <Input
+                    id="updated_by"
+                    value={category.updated_by}
+                    onChange={(e) => setCategory({ ...category, updated_by: e.target.value })}
+                  />
+                </div>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
