@@ -114,6 +114,15 @@ export default function SpamDetailPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
+            <Label htmlFor="id">ID</Label>
+            <Input
+              id="id"
+              value={item.id}
+              onChange={(e) => setItem({ ...item!, id: e.target.value })}
+              disabled={params.id !== "new"}
+            />
+          </div>
+          <div className="space-y-2">
             <Label htmlFor="content">Content</Label>
             <Input
               id="content"
