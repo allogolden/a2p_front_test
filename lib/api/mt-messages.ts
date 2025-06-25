@@ -44,6 +44,7 @@ export const mtMessagesAPI = {
   create: async (_data: Partial<MTMessages>) => Promise.resolve({ status: 200 }),
   // update: (id: string, data: Partial<MTMessages>) => fetchProtected(`/admin/main/mtmessagesmodel/${id}/`, { method: "PUT", body: JSON.stringify(data) }),
   update: async (_id: string, _data: Partial<MTMessages>) => Promise.resolve({ status: 200 }),
+  delete: async (_id: string) => Promise.resolve({ status: 200 }),
 }
 
 /*

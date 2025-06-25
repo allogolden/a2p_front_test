@@ -38,6 +38,7 @@ export const regexPatternsAPI = {
   create: async (_data: Partial<RegexPattern>) => Promise.resolve({ status: 200 }),
   // update: (id: string, data: Partial<RegexPattern>) => fetchProtected(`/admin/main/regexpatternmodel/${id}/`, { method: "PUT", body: JSON.stringify(data) }),
   update: async (_id: string, _data: Partial<RegexPattern>) => Promise.resolve({ status: 200 }),
+  delete: async (_id: string) => Promise.resolve({ status: 200 }),
 }
 
 /*

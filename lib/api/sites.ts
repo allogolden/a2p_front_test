@@ -22,6 +22,7 @@ export const sitesAPI = {
   create: async (_data: Partial<Site>) => Promise.resolve({ status: 200 }),
   // update: (id: string, data: Partial<Site>) => fetchProtected(`/admin/main/sitemodel/${id}/`, { method: "PUT", body: JSON.stringify(data) }),
   update: async (_id: string, _data: Partial<Site>) => Promise.resolve({ status: 200 }),
+  delete: async (_id: string) => Promise.resolve({ status: 200 }),
 }
 
 /*

@@ -77,6 +77,7 @@ export const alphanamesAPI = {
   getCtnList: async (): Promise<ApiResponse<string[]>> => {
     return { data: mockAlphanames.map((a) => a.ctn), success: true }
   },
+  delete: async (_id: string) => Promise.resolve({ status: 200 }),
 }
 
 /*

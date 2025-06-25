@@ -75,6 +75,7 @@ export const messageTypesAPI = {
 
     return list.map(parseMessageTypes)
   },
+  delete: async (_id: string) => Promise.resolve({ status: 200 }),
 }
 
 export const patternStatsAPI = {

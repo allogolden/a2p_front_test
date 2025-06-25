@@ -2,7 +2,7 @@
 
 import { useRouter, useParams } from "next/navigation"
 import { useEffect, useState } from "react"
-import { ArrowLeft, Save } from "lucide-react"
+import {ArrowLeft, Save, Trash2 } from "lucide-react"
 import {
   Card,
   CardContent,
@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ActionButton } from "@/components/common/action-button"
+import { DeleteDialog } from "@/components/common/delete-dialog"
 import { LoadingSpinner } from "@/components/common/loading-spinner"
 import type { Partner } from "@/types"
 import { partnersAPI } from "@/lib/api/partners"
@@ -67,7 +68,19 @@ export default function PartnerDetailPage() {
     }
   }
 
-  const handleBack = () => router.push("/partners")
+  
+  const handleDelete = async () => {
+    if (!item || params.id === "new") return;
+    try {
+      await partnersAPI.delete(item.id);
+      router.push("/partners");
+    } catch (e) {
+      setError("Failed to delete");
+    }
+  }
+
+
+const handleBack = () => router.push("/partners")
 
   if (loading) {
     return (
@@ -116,6 +129,7 @@ export default function PartnerDetailPage() {
           </h1>
         </div>
         <div className="flex gap-2">
+          {params.id !== "new" && <DeleteDialog onConfirm={handleDelete} />}
           <ActionButton onClick={handleSave} icon={Save} disabled={saving}>
             {saving ? "Saving..." : "Save"}
           </ActionButton>

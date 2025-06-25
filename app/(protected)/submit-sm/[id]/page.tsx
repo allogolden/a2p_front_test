@@ -2,11 +2,12 @@
 
 import { useRouter, useParams } from "next/navigation"
 import { useEffect, useState } from "react"
-import { ArrowLeft, Save } from "lucide-react"
+import {ArrowLeft, Save, Trash2 } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ActionButton } from "@/components/common/action-button"
+import { DeleteDialog } from "@/components/common/delete-dialog"
 import { LoadingSpinner } from "@/components/common/loading-spinner"
 import type { SubmitSm } from "@/lib/api/submit-sm"
 import { submitSmAPI } from "@/lib/api/submit-sm"
@@ -58,7 +59,19 @@ export default function SubmitSmDetailPage() {
     }
   }
 
-  const handleBack = () => router.push("/submit-sm")
+  
+  const handleDelete = async () => {
+    if (!item || params.id === "new") return;
+    try {
+      await submitSmAPI.delete(item.id);
+      router.push("/submit-sm");
+    } catch (e) {
+      setError("Failed to delete");
+    }
+  }
+
+
+const handleBack = () => router.push("/submit-sm")
 
   if (loading) {
     return (
@@ -107,6 +120,7 @@ export default function SubmitSmDetailPage() {
           </h1>
         </div>
         <div className="flex gap-2">
+          {params.id !== "new" && <DeleteDialog onConfirm={handleDelete} />}
           <ActionButton onClick={handleSave} icon={Save} disabled={saving}>
             {saving ? "Saving..." : "Save"}
           </ActionButton>

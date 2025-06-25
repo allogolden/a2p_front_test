@@ -39,6 +39,7 @@ export const partnersStatisticsAPI = {
     Promise.resolve({ status: 200 }),
   update: async (_id: string, _data: Partial<PartnerStatistics>) =>
     Promise.resolve({ status: 200 }),
+  delete: async (_id: string) => Promise.resolve({ status: 200 }),
 }
 
 /*

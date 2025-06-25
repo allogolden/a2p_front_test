@@ -2,7 +2,7 @@
 
 import { useRouter, useParams } from "next/navigation"
 import { useEffect, useState } from "react"
-import { ArrowLeft, Save } from "lucide-react"
+import {ArrowLeft, Save, Trash2 } from "lucide-react"
 import {
   Card,
   CardContent,
@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ActionButton } from "@/components/common/action-button"
+import { DeleteDialog } from "@/components/common/delete-dialog"
 import { LoadingSpinner } from "@/components/common/loading-spinner"
 import type { DeliverSmP2A } from "@/lib/api/deliver-sm-p2a"
 import { deliverSmP2AAPI } from "@/lib/api/deliver-sm-p2a"
@@ -62,7 +63,19 @@ export default function DeliverSmP2ADetailPage() {
     }
   }
 
-  const handleBack = () => router.push("/deliver-sm-p2a")
+  
+  const handleDelete = async () => {
+    if (!item || params.id === "new") return;
+    try {
+      await deliverSmP2AAPI.delete(item.id);
+      router.push("/deliver-sm-p2a");
+    } catch (e) {
+      setError("Failed to delete");
+    }
+  }
+
+
+const handleBack = () => router.push("/deliver-sm-p2a")
 
   if (loading) {
     return (
@@ -111,6 +124,7 @@ export default function DeliverSmP2ADetailPage() {
           </h1>
         </div>
         <div className="flex gap-2">
+          {params.id !== "new" && <DeleteDialog onConfirm={handleDelete} />}
           <ActionButton onClick={handleSave} icon={Save} disabled={saving}>
             {saving ? "Saving..." : "Save"}
           </ActionButton>

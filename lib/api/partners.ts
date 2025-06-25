@@ -34,6 +34,7 @@ export const partnersAPI = {
   create: async (_data: Partial<Partner>) => Promise.resolve({ status: 200 }),
   update: async (_id: string, _data: Partial<Partner>) =>
     Promise.resolve({ status: 200 }),
+  delete: async (_id: string) => Promise.resolve({ status: 200 }),
 }
 
 /*
