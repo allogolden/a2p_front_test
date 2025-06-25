@@ -9,19 +9,28 @@ import type { Spam } from "@/lib/api/spams"
 import { spamsAPI } from "@/lib/api/spams"
 
 const columns = [
-  { key: "id", label: "ID" },
-  { key: "content", label: "CONTENT", render: (value: string) => value.substring(0, 50) + "..." },
-  { key: "source", label: "SOURCE" },
+  { key: "regex", label: "REGEX" },
+  { key: "name", label: "NAME" },
   {
-    key: "detected_at",
-    label: "DETECTED AT",
-    render: (value: string) => new Date(value).toLocaleString(),
+    key: "active",
+    label: "ACTIVE",
+    render: (v: boolean) => (v ? "Yes" : "No"),
   },
-  { key: "status", label: "STATUS" },
+  { key: "description", label: "DESCRIPTION" },
+  {
+    key: "created",
+    label: "CREATED",
+    render: (v: string) => new Date(v).toLocaleString(),
+  },
+  {
+    key: "modified",
+    label: "MODIFIED",
+    render: (v: string) => new Date(v).toLocaleString(),
+  },
 ]
 
 const filters = {
-  status: ["blocked", "quarantined", "reviewed"],
+  active: ["Yes", "No"],
 }
 
 export default function SpamsPage() {
@@ -50,7 +59,7 @@ export default function SpamsPage() {
     <div className="space-y-6">
       <PageHeader
         title="Spams"
-        description="Detected spam messages and content"
+        description="Spam regex patterns"
         action={{ label: "Add Spam", onClick: handleAdd, icon: Plus }}
       />
 
@@ -59,7 +68,7 @@ export default function SpamsPage() {
         data={data}
         isLoading={loading}
         onRowClick={handleRowClick}
-        searchPlaceholder="Search spam content..."
+        searchPlaceholder="Search spam patterns..."
         filters={filters}
       />
       {error && <div className="text-red-600">{error}</div>}
