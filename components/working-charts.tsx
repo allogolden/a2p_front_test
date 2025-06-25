@@ -22,12 +22,12 @@ export function WorkingChart({ data, title, type }: WorkingChartProps) {
 
   if (!data || data.length === 0) {
     return (
-      <Card className="bg-white shadow-lg">
+      <Card className="bg-card shadow-lg">
         <CardHeader>
           <CardTitle>{title}</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="h-80 flex items-center justify-center text-gray-500">
+          <div className="h-80 flex items-center justify-center text-muted-foreground">
             <p>No data available</p>
           </div>
         </CardContent>
@@ -36,7 +36,7 @@ export function WorkingChart({ data, title, type }: WorkingChartProps) {
   }
 
   return (
-    <Card className="bg-white shadow-lg">
+    <Card className="bg-card shadow-lg">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
       </CardHeader>
