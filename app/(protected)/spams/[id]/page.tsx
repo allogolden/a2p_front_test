@@ -2,12 +2,23 @@
 
 import { useRouter, useParams } from "next/navigation"
 import { useEffect, useState } from "react"
-import { ArrowLeft, Save } from "lucide-react"
+import { ArrowLeft, Save, Trash2 } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ActionButton } from "@/components/common/action-button"
 import { LoadingSpinner } from "@/components/common/loading-spinner"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import type { Spam } from "@/lib/api/spams"
 import { spamsAPI } from "@/lib/api/spams"
 
@@ -18,11 +29,20 @@ export default function SpamDetailPage() {
   const [item, setItem] = useState<Spam | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [deleting, setDeleting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     if (params.id === "new") {
-      setItem({ id: "", content: "", source: "", detected_at: "", status: "" })
+      setItem({
+        id: "",
+        regex: "",
+        name: "",
+        active: false,
+        description: "",
+        created: "",
+        modified: "",
+      })
       setLoading(false)
       return
     }
@@ -47,6 +67,19 @@ export default function SpamDetailPage() {
       setError("Failed to save")
     } finally {
       setSaving(false)
+    }
+  }
+
+  const handleDelete = async () => {
+    if (!item || params.id === "new") return
+    setDeleting(true)
+    try {
+      await spamsAPI.delete(item.id)
+      router.push("/spams")
+    } catch (e) {
+      setError("Failed to delete")
+    } finally {
+      setDeleting(false)
     }
   }
 
@@ -95,10 +128,33 @@ export default function SpamDetailPage() {
         </ActionButton>
         <div className="flex-1">
           <h1 className="text-3xl font-bold">
-            {params.id === "new" ? "Create Spam" : "Edit Spam"}
+            {params.id === "new" ? "Create Spam Pattern" : "Edit Spam Pattern"}
           </h1>
         </div>
         <div className="flex gap-2">
+          {params.id !== "new" && (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <ActionButton variant="destructive" icon={Trash2}>
+                  Delete
+                </ActionButton>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete the spam pattern.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleDelete} className="bg-red-600 hover:bg-red-700">
+                    {deleting ? "Deleting..." : "Delete"}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
           <ActionButton onClick={handleSave} icon={Save} disabled={saving}>
             {saving ? "Saving..." : "Save"}
           </ActionButton>
@@ -109,49 +165,40 @@ export default function SpamDetailPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Spam Details</CardTitle>
+          <CardTitle>Spam Pattern Details</CardTitle>
           <CardDescription>ID: {item.id || "new"}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="id">ID</Label>
+            <Label htmlFor="regex">Regex</Label>
             <Input
-              id="id"
-              value={item.id}
-              onChange={(e) => setItem({ ...item!, id: e.target.value })}
-              disabled={params.id !== "new"}
+              id="regex"
+              value={item.regex}
+              onChange={(e) => setItem({ ...item!, regex: e.target.value })}
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="content">Content</Label>
+            <Label htmlFor="name">Name</Label>
             <Input
-              id="content"
-              value={item.content}
-              onChange={(e) => setItem({ ...item!, content: e.target.value })}
+              id="name"
+              value={item.name}
+              onChange={(e) => setItem({ ...item!, name: e.target.value })}
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="source">Source</Label>
+            <Label htmlFor="active">Active</Label>
             <Input
-              id="source"
-              value={item.source}
-              onChange={(e) => setItem({ ...item!, source: e.target.value })}
+              id="active"
+              value={String(item.active)}
+              onChange={(e) => setItem({ ...item!, active: e.target.value })}
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="detected_at">Detected At</Label>
+            <Label htmlFor="description">Description</Label>
             <Input
-              id="detected_at"
-              value={item.detected_at}
-              onChange={(e) => setItem({ ...item!, detected_at: e.target.value })}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="status">Status</Label>
-            <Input
-              id="status"
-              value={item.status}
-              onChange={(e) => setItem({ ...item!, status: e.target.value })}
+              id="description"
+              value={item.description}
+              onChange={(e) => setItem({ ...item!, description: e.target.value })}
             />
           </div>
         </CardContent>
