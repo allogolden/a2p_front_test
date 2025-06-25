@@ -5,7 +5,7 @@ import { Plus } from "lucide-react"
 import { useEffect, useState } from "react"
 import { DataTable } from "@/components/common/data-table"
 import { PageHeader } from "@/components/common/page-header"
-import type { CTN } from "@/lib/api/ctns"
+import type { CTN } from "@/types"
 import { ctnAPI } from "@/lib/api/ctns"
 
 

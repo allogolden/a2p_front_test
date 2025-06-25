@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
 import { DataTable } from "@/components/common/data-table";
 import { PageHeader } from "@/components/common/page-header";
-import type { SHNPattern } from "@/lib/api/shn-patterns";
+import type { SHNPattern } from "@/types";
 import { shnPatternsAPI } from "@/lib/api/shn-patterns";
 
 const columns = [
