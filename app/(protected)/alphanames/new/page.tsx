@@ -199,8 +199,8 @@ export default function AlphanameDetailPage() {
                   <SelectValue placeholder="Выберите Alpha Name" />
                 </SelectTrigger>
                 <SelectContent>
-                  {alphaNameOptions.map(opt => (
-                    <SelectItem value={opt} key={opt}>{opt}</SelectItem>
+                  {alphaNameOptions.map((opt, index) => (
+                    <SelectItem value={opt} key={`${opt}-${index}`}>{opt}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -215,8 +215,8 @@ export default function AlphanameDetailPage() {
                   <SelectValue placeholder="Выберите CTN" />
                 </SelectTrigger>
                 <SelectContent>
-                  {ctnOptions.map(opt => (
-                    <SelectItem value={opt} key={opt}>{opt}</SelectItem>
+                  {ctnOptions.map((opt, index) => (
+                    <SelectItem value={opt} key={`${opt}-${index}`}>{opt}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
