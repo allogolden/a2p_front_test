@@ -2,19 +2,23 @@
 
 export type Spam = {
   id: string
-  content: string
-  source: string
-  detected_at: string
-  status: string
+  regex: string
+  name: string
+  active: boolean | string
+  description: string
+  created: string
+  modified: string
 }
 
 const mockSpams: Spam[] = [
   {
     id: "1",
-    content: "spam message",
-    source: "user",
-    detected_at: "2024-01-01",
-    status: "new",
+    regex: "^spam$",
+    name: "Spam pattern",
+    active: true,
+    description: "Mock spam regex",
+    created: "2024-01-01",
+    modified: "2024-01-02",
   },
 ]
 
@@ -26,6 +30,9 @@ export const spamsAPI = {
   create: async (_data: Partial<Spam>) => Promise.resolve({ status: 200 }),
   // update: (id: string, data: Partial<Spam>) => fetchProtected(`/admin/main/spammodel/${id}/`, { method: "PUT", body: JSON.stringify(data) }),
   update: async (_id: string, _data: Partial<Spam>) => Promise.resolve({ status: 200 }),
+
+  // delete: (id: string) => fetchProtected(`/admin/main/spammodel/${id}/`, { method: "DELETE" }),
+
   delete: async (_id: string) => Promise.resolve({ status: 200 }),
 }
 
