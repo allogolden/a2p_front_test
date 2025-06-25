@@ -56,8 +56,8 @@ const COLORS = ["#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6", "#06B6D4"
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white/95 backdrop-blur-sm p-3 rounded-lg shadow-lg border border-gray-200/50">
-        <p className="font-medium text-gray-900">{label}</p>
+      <div className="bg-card p-3 rounded-lg shadow-lg border">
+        <p className="font-medium">{label}</p>
         {payload.map((entry: any, index: number) => (
           <p key={index} className="text-sm" style={{ color: entry.color }}>
             {entry.name}: {typeof entry.value === "number" ? entry.value.toLocaleString() : entry.value}
@@ -73,11 +73,11 @@ export function RefinedPieChart({ data, title }: RefinedPieChartProps) {
   if (!data || data.length === 0) {
     return (
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-        <div className="h-80 flex items-center justify-center text-gray-500">
+        <h3 className="text-lg font-semibold">{title}</h3>
+        <div className="h-80 flex items-center justify-center text-muted-foreground">
           <div className="text-center">
-            <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
-              <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
+            <div className="w-16 h-16 mx-auto mb-4 bg-muted rounded-full flex items-center justify-center">
+              <div className="w-8 h-8 bg-muted-foreground rounded-full"></div>
             </div>
             <p>No data available</p>
           </div>
@@ -88,7 +88,7 @@ export function RefinedPieChart({ data, title }: RefinedPieChartProps) {
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+      <h3 className="text-lg font-semibold ">{title}</h3>
       <div className="h-80">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
@@ -120,11 +120,11 @@ export function RefinedBarChart({ data, title }: RefinedBarChartProps) {
   if (!data || data.length === 0) {
     return (
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-        <div className="h-80 flex items-center justify-center text-gray-500">
+        <h3 className="text-lg font-semibold ">{title}</h3>
+        <div className="h-80 flex items-center justify-center text-muted-foreground">
           <div className="text-center">
-            <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-lg flex items-center justify-center">
-              <div className="w-8 h-2 bg-gray-300 rounded"></div>
+            <div className="w-16 h-16 mx-auto mb-4 bg-muted rounded-lg flex items-center justify-center">
+              <div className="w-8 h-2 bg-muted-foreground rounded"></div>
             </div>
             <p>No data available</p>
           </div>
@@ -135,7 +135,7 @@ export function RefinedBarChart({ data, title }: RefinedBarChartProps) {
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+      <h3 className="text-lg font-semibold ">{title}</h3>
       <div className="h-80">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 60 }}>
@@ -169,11 +169,11 @@ export function RefinedLineChart({ data, title }: RefinedLineChartProps) {
   if (!data || data.length === 0) {
     return (
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-        <div className="h-80 flex items-center justify-center text-gray-500">
+        <h3 className="text-lg font-semibold ">{title}</h3>
+        <div className="h-80 flex items-center justify-center text-muted-foreground">
           <div className="text-center">
-            <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-lg flex items-center justify-center">
-              <div className="w-8 h-1 bg-gray-300 rounded"></div>
+            <div className="w-16 h-16 mx-auto mb-4 bg-muted rounded-lg flex items-center justify-center">
+              <div className="w-8 h-1 bg-muted-foreground rounded"></div>
             </div>
             <p>No data available</p>
           </div>
@@ -184,7 +184,7 @@ export function RefinedLineChart({ data, title }: RefinedLineChartProps) {
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+      <h3 className="text-lg font-semibold ">{title}</h3>
       <div className="h-80">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
@@ -235,11 +235,11 @@ export function RefinedAreaChart({ data, title }: RefinedAreaChartProps) {
   if (!data || data.length === 0) {
     return (
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-        <div className="h-80 flex items-center justify-center text-gray-500">
+        <h3 className="text-lg font-semibold ">{title}</h3>
+        <div className="h-80 flex items-center justify-center text-muted-foreground">
           <div className="text-center">
-            <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-lg flex items-center justify-center">
-              <div className="w-8 h-4 bg-gray-300 rounded"></div>
+            <div className="w-16 h-16 mx-auto mb-4 bg-muted rounded-lg flex items-center justify-center">
+              <div className="w-8 h-4 bg-muted-foreground rounded"></div>
             </div>
             <p>No data available</p>
           </div>
@@ -250,7 +250,7 @@ export function RefinedAreaChart({ data, title }: RefinedAreaChartProps) {
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+      <h3 className="text-lg font-semibold ">{title}</h3>
       <div className="h-80">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>

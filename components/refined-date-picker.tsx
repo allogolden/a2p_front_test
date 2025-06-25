@@ -59,47 +59,47 @@ export function RefinedDatePicker({ from, to, onDateChange }: RefinedDatePickerP
   return (
     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
       <div className="flex flex-col gap-2 w-full sm:w-auto">
-        <label className="text-sm font-medium text-gray-700">From</label>
+        <label className="text-sm font-medium">From</label>
         <div className="flex gap-2">
           <Input
             type="date"
             value={fromInput}
             onChange={(e) => handleFromInputChange(e.target.value)}
-            className="w-40 bg-white/60 border-gray-200/50 hover:bg-white/80"
+            className="w-40"
             placeholder="YYYY-MM-DD"
           />
           <Popover open={fromOpen} onOpenChange={setFromOpen}>
             <PopoverTrigger asChild>
-              <Button variant="outline" size="icon" className="bg-white/60 border-gray-200/50 hover:bg-white/80">
-                <CalendarIcon className="h-4 w-4 text-gray-500" />
+              <Button variant="outline" size="icon">
+                <CalendarIcon className="h-4 w-4" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0 bg-white/95 backdrop-blur-sm" align="start">
+            <PopoverContent className="w-auto p-0" align="start">
               <Calendar mode="single" selected={from} onSelect={handleFromCalendarSelect} initialFocus />
             </PopoverContent>
           </Popover>
         </div>
       </div>
 
-      <div className="text-gray-400 hidden sm:block mt-6">to</div>
+      <div className="text-muted-foreground hidden sm:block mt-6">to</div>
 
       <div className="flex flex-col gap-2 w-full sm:w-auto">
-        <label className="text-sm font-medium text-gray-700">To</label>
+        <label className="text-sm font-medium">To</label>
         <div className="flex gap-2">
           <Input
             type="date"
             value={toInput}
             onChange={(e) => handleToInputChange(e.target.value)}
-            className="w-40 bg-white/60 border-gray-200/50 hover:bg-white/80"
+            className="w-40"
             placeholder="YYYY-MM-DD"
           />
           <Popover open={toOpen} onOpenChange={setToOpen}>
             <PopoverTrigger asChild>
-              <Button variant="outline" size="icon" className="bg-white/60 border-gray-200/50 hover:bg-white/80">
-                <CalendarIcon className="h-4 w-4 text-gray-500" />
+              <Button variant="outline" size="icon">
+                <CalendarIcon className="h-4 w-4" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0 bg-white/95 backdrop-blur-sm" align="start">
+            <PopoverContent className="w-auto p-0" align="start">
               <Calendar mode="single" selected={to} onSelect={handleToCalendarSelect} initialFocus />
             </PopoverContent>
           </Popover>

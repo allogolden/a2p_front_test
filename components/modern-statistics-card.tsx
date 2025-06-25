@@ -59,17 +59,17 @@ export function ModernStatisticsCard({
 
   if (loading) {
     return (
-      <Card className="bg-white/80 backdrop-blur-sm border-gray-200/50 shadow-lg hover:shadow-xl transition-all duration-300">
+      <Card className="bg-card/80 backdrop-blur-sm border border-border shadow-lg hover:shadow-xl transition-all duration-300">
         <CardContent className="p-6">
           <div className="animate-pulse">
             <div className="flex items-start justify-between mb-4">
               <div className="space-y-2">
-                <div className="h-4 bg-gray-200 rounded w-24"></div>
-                <div className="h-8 bg-gray-200 rounded w-32"></div>
+                <div className="h-4 bg-muted rounded w-24"></div>
+                <div className="h-8 bg-muted rounded w-32"></div>
               </div>
-              <div className="w-12 h-12 bg-gray-200 rounded-xl"></div>
+              <div className="w-12 h-12 bg-muted rounded-xl"></div>
             </div>
-            <div className="h-4 bg-gray-200 rounded w-20"></div>
+            <div className="h-4 bg-muted rounded w-20"></div>
           </div>
         </CardContent>
       </Card>
@@ -79,15 +79,15 @@ export function ModernStatisticsCard({
   return (
     <Card
       className={cn(
-        "bg-white/80 backdrop-blur-sm border-gray-200/50 shadow-lg hover:shadow-xl transition-all duration-300 group hover:scale-[1.02]",
+        "bg-card/80 backdrop-blur-sm border border-border shadow-lg hover:shadow-xl transition-all duration-300 group hover:scale-[1.02]",
         colors.bg,
       )}
     >
       <CardContent className="p-6">
         <div className="flex items-start justify-between mb-4">
           <div className="space-y-2">
-            <p className="text-sm font-medium text-gray-600">{title}</p>
-            <p className="text-3xl font-bold text-gray-900 group-hover:text-gray-800 transition-colors">
+            <p className="text-sm font-medium text-muted-foreground">{title}</p>
+            <p className="text-3xl font-bold group-hover:text-foreground transition-colors">
               {typeof value === "number" ? value.toLocaleString() : value}
             </p>
           </div>
@@ -102,7 +102,7 @@ export function ModernStatisticsCard({
         </div>
 
         <div className="flex items-center justify-between">
-          {subtitle && <p className="text-sm text-gray-500 flex-1">{subtitle}</p>}
+          {subtitle && <p className="text-sm text-muted-foreground flex-1">{subtitle}</p>}
           {trendValue && (
             <Badge
               variant="secondary"

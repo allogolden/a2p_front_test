@@ -100,7 +100,7 @@ export function EnhancedDatePicker({ from, to, onDateChange, className }: Enhanc
             variant="outline"
             size="sm"
             onClick={() => handlePresetClick(preset)}
-            className="text-xs bg-white/60 border-gray-200/50 hover:bg-blue-50 hover:border-blue-200 transition-colors"
+            className="text-xs"
           >
             {preset.label}
           </Button>
@@ -109,7 +109,7 @@ export function EnhancedDatePicker({ from, to, onDateChange, className }: Enhanc
           variant="outline"
           size="sm"
           onClick={handleReset}
-          className="text-xs bg-white/60 border-gray-200/50 hover:bg-red-50 hover:border-red-200 transition-colors"
+          className="text-xs"
         >
           <RotateCcw className="w-3 h-3 mr-1" />
           Reset
@@ -120,23 +120,22 @@ export function EnhancedDatePicker({ from, to, onDateChange, className }: Enhanc
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* From Date */}
         <div className="space-y-2">
-          <Label className="text-sm font-medium text-gray-700">From Date</Label>
+          <Label className="text-sm font-medium">From Date</Label>
           <div className="flex gap-2">
             <div className="flex-1">
               <Input
                 type="date"
                 value={fromInput}
                 onChange={(e) => handleFromInputChange(e.target.value)}
-                className="bg-white/80 border-gray-200/50 hover:bg-white focus:bg-white transition-colors"
               />
             </div>
             <Popover open={fromOpen} onOpenChange={setFromOpen}>
               <PopoverTrigger asChild>
-                <Button variant="outline" size="icon" className="bg-white/80 border-gray-200/50 hover:bg-white">
-                  <CalendarIcon className="h-4 w-4 text-gray-500" />
+                <Button variant="outline" size="icon">
+                  <CalendarIcon className="h-4 w-4" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-0 bg-white/95 backdrop-blur-sm shadow-xl" align="start">
+              <PopoverContent className="w-auto p-0" align="start">
                 <Calendar mode="single" selected={from} onSelect={handleFromCalendarSelect} initialFocus />
               </PopoverContent>
             </Popover>
@@ -145,23 +144,22 @@ export function EnhancedDatePicker({ from, to, onDateChange, className }: Enhanc
 
         {/* To Date */}
         <div className="space-y-2">
-          <Label className="text-sm font-medium text-gray-700">To Date</Label>
+          <Label className="text-sm font-medium">To Date</Label>
           <div className="flex gap-2">
             <div className="flex-1">
               <Input
                 type="date"
                 value={toInput}
                 onChange={(e) => handleToInputChange(e.target.value)}
-                className="bg-white/80 border-gray-200/50 hover:bg-white focus:bg-white transition-colors"
               />
             </div>
             <Popover open={toOpen} onOpenChange={setToOpen}>
               <PopoverTrigger asChild>
-                <Button variant="outline" size="icon" className="bg-white/80 border-gray-200/50 hover:bg-white">
-                  <CalendarIcon className="h-4 w-4 text-gray-500" />
+                <Button variant="outline" size="icon">
+                  <CalendarIcon className="h-4 w-4" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-0 bg-white/95 backdrop-blur-sm shadow-xl" align="start">
+              <PopoverContent className="w-auto p-0" align="start">
                 <Calendar mode="single" selected={to} onSelect={handleToCalendarSelect} initialFocus />
               </PopoverContent>
             </Popover>
@@ -171,8 +169,8 @@ export function EnhancedDatePicker({ from, to, onDateChange, className }: Enhanc
 
       {/* Selected Range Display */}
       {from && to && (
-        <div className="p-3 bg-blue-50/50 border border-blue-200/50 rounded-lg">
-          <div className="flex items-center gap-2 text-sm text-blue-700">
+        <div className="p-3 bg-muted border rounded-lg">
+          <div className="flex items-center gap-2 text-sm">
             <CalendarIcon className="w-4 h-4" />
             <span className="font-medium">Selected Range:</span>
             <span>
