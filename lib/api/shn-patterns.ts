@@ -1,20 +1,6 @@
 // import { fetchProtected } from "@/lib/utils"
 
-export type SHNPattern = {
-  id: string
-  system_id: string
-  short_number: string
-  category: string
-  name: string
-  pattern: string
-  active: boolean | string
-  ip_address: string
-  description: string
-  created: string
-  modified: string
-  created_by: string
-  updated_by: string
-}
+import type { SHNPattern } from "@/types"
 
 const mockSHNPatterns: SHNPattern[] = [
   {

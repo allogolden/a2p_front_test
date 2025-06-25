@@ -12,24 +12,61 @@ export interface User {
 export interface ANPattern {
   id: string
   system_id: string
+  ctn: string
   alpha_name: string
   category: string
-  status: "active" | "inactive"
+  name: string
+  pattern: string
+  active: boolean | string
+  ip_address: string
   description: string
-  created_at: string
-  updated_at: string
+  created?: string
+  modified?: string
+  created_by?: string
+  updated_by?: string
+}
+
+export interface CTN {
+  id: string
+  system_id: string
+  category: string
+  ctn: string
+  ip_address: string
+  active: boolean | string
+  description: string
+  created?: string
+  modified?: string
+  created_by?: string
+  updated_by?: string
 }
 
 export interface Partner {
   id: string
+  system_id: string
+  username: string
+  active: boolean | string
+  ip_address: string
+  description: string
+  created?: string
+  modified?: string
+  created_by?: string
+  updated_by?: string
+}
+
+export interface SHNPattern {
+  id: string
+  system_id: string
+  short_number: string
+  category: string
   name: string
-  type: string
-  status: "active" | "inactive"
-  country: string
-  contact_email: string
-  contact_phone: string
-  created_at: string
-  updated_at: string
+  pattern: string
+  active: boolean | string
+  ip_address: string
+  description: string
+  created?: string
+  modified?: string
+  created_by?: string
+  updated_by?: string
 }
 
 export interface Message {

@@ -5,7 +5,7 @@ import { Plus } from "lucide-react"
 import { DataTable } from "@/components/common/data-table"
 import { PageHeader } from "@/components/common/page-header"
 import { useAPI } from "@/hooks/use-api"
-import type { Partner } from "@/lib/api/partners"
+import type { Partner } from "@/types"
 import { partnersAPI } from "@/lib/api/partners"
 
 const columns = [

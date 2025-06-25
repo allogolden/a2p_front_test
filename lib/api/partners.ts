@@ -1,18 +1,5 @@
 // import { fetchProtected } from "@/lib/utils"
-import type { ApiResponse, PaginatedResponse } from "@/types"
-
-export type Partner = {
-  id: string
-  system_id: string
-  username: string
-  active: boolean | string
-  ip_address: string
-  description: string
-  created: string
-  modified: string
-  created_by: string
-  updated_by: string
-}
+import type { ApiResponse, PaginatedResponse, Partner } from "@/types"
 
 const mockPartners: Partner[] = [
   {

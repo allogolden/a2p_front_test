@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ActionButton } from "@/components/common/action-button"
 import { LoadingSpinner } from "@/components/common/loading-spinner"
-import type { Partner } from "@/lib/api/partners"
+import type { Partner } from "@/types"
 import { partnersAPI } from "@/lib/api/partners"
 
 export default function PartnerDetailPage() {
@@ -169,6 +169,44 @@ export default function PartnerDetailPage() {
               value={item.description}
               onChange={(e) => setItem({ ...item!, description: e.target.value })}
             />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="created">Created</Label>
+              <Input
+                id="created"
+                value={item.created}
+                onChange={(e) => setItem({ ...item!, created: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="modified">Modified</Label>
+              <Input
+                id="modified"
+                value={item.modified}
+                onChange={(e) => setItem({ ...item!, modified: e.target.value })}
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="created_by">Created By</Label>
+              <Input
+                id="created_by"
+                value={item.created_by}
+                onChange={(e) => setItem({ ...item!, created_by: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="updated_by">Updated By</Label>
+              <Input
+                id="updated_by"
+                value={item.updated_by}
+                onChange={(e) => setItem({ ...item!, updated_by: e.target.value })}
+              />
+            </div>
           </div>
         </CardContent>
       </Card>

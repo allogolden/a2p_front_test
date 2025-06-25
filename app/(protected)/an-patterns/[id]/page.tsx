@@ -51,12 +51,18 @@ export default function ANPatternDetailPage() {
       setPattern({
         id: "",
         system_id: "",
+        ctn: "",
         alpha_name: "",
         category: "",
-        status: "active",
+        name: "",
+        pattern: "",
+        active: false,
+        ip_address: "",
         description: "",
-        created_at: "",
-        updated_at: "",
+        created: "",
+        modified: "",
+        created_by: "",
+        updated_by: "",
       })
       setIsLoading(false)
     }
@@ -192,6 +198,17 @@ export default function ANPatternDetailPage() {
               />
             </div>
             <div className="space-y-2">
+              <Label htmlFor="ctn">CTN</Label>
+              <Input
+                id="ctn"
+                value={pattern.ctn}
+                onChange={(e) => setPattern({ ...pattern, ctn: e.target.value })}
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
               <Label htmlFor="alpha_name">Alpha Name</Label>
               <Input
                 id="alpha_name"
@@ -199,9 +216,25 @@ export default function ANPatternDetailPage() {
                 onChange={(e) => setPattern({ ...pattern, alpha_name: e.target.value })}
               />
             </div>
+            <div className="space-y-2">
+              <Label htmlFor="name">Name</Label>
+              <Input
+                id="name"
+                value={pattern.name}
+                onChange={(e) => setPattern({ ...pattern, name: e.target.value })}
+              />
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="pattern">Pattern</Label>
+              <Input
+                id="pattern"
+                value={pattern.pattern}
+                onChange={(e) => setPattern({ ...pattern, pattern: e.target.value })}
+              />
+            </div>
             <div className="space-y-2">
               <Label htmlFor="category">Category</Label>
               <Select value={pattern.category} onValueChange={(value) => setPattern({ ...pattern, category: value })}>
@@ -217,20 +250,24 @@ export default function ANPatternDetailPage() {
                 </SelectContent>
               </Select>
             </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="status">Status</Label>
-              <Select
-                value={pattern.status}
-                onValueChange={(value) => setPattern({ ...pattern, status: value as "active" | "inactive" })}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="active">Active</SelectItem>
-                  <SelectItem value="inactive">Inactive</SelectItem>
-                </SelectContent>
-              </Select>
+              <Label htmlFor="ip_address">IP Address</Label>
+              <Input
+                id="ip_address"
+                value={pattern.ip_address}
+                onChange={(e) => setPattern({ ...pattern, ip_address: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="active">Active</Label>
+              <Input
+                id="active"
+                value={String(pattern.active)}
+                onChange={(e) => setPattern({ ...pattern, active: e.target.value })}
+              />
             </div>
           </div>
 
@@ -242,6 +279,44 @@ export default function ANPatternDetailPage() {
               onChange={(e) => setPattern({ ...pattern, description: e.target.value })}
               rows={3}
             />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="created">Created</Label>
+              <Input
+                id="created"
+                value={pattern.created}
+                onChange={(e) => setPattern({ ...pattern, created: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="modified">Modified</Label>
+              <Input
+                id="modified"
+                value={pattern.modified}
+                onChange={(e) => setPattern({ ...pattern, modified: e.target.value })}
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="created_by">Created By</Label>
+              <Input
+                id="created_by"
+                value={pattern.created_by}
+                onChange={(e) => setPattern({ ...pattern, created_by: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="updated_by">Updated By</Label>
+              <Input
+                id="updated_by"
+                value={pattern.updated_by}
+                onChange={(e) => setPattern({ ...pattern, updated_by: e.target.value })}
+              />
+            </div>
           </div>
         </CardContent>
       </Card>
