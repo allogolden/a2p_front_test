@@ -26,6 +26,7 @@ export const spamsAPI = {
   create: async (_data: Partial<Spam>) => Promise.resolve({ status: 200 }),
   // update: (id: string, data: Partial<Spam>) => fetchProtected(`/admin/main/spammodel/${id}/`, { method: "PUT", body: JSON.stringify(data) }),
   update: async (_id: string, _data: Partial<Spam>) => Promise.resolve({ status: 200 }),
+  delete: async (_id: string) => Promise.resolve({ status: 200 }),
 }
 
 /*

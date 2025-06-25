@@ -2,7 +2,7 @@
 
 import { useRouter, useParams } from "next/navigation"
 import { useEffect, useState } from "react"
-import { ArrowLeft, Save } from "lucide-react"
+import {ArrowLeft, Save, Trash2 } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { ActionButton } from "@/components/common/action-button"
+import { DeleteDialog } from "@/components/common/delete-dialog"
 import { LoadingSpinner } from "@/components/common/loading-spinner"
 import { alphanamesAPI } from "@/lib/api/alphanames"
 import type { Alphaname } from "@/lib/api/alphanames"
@@ -101,7 +102,19 @@ export default function AlphanameDetailPage() {
     }
   }
 
-  const handleBack = () => {
+  
+  const handleDelete = async () => {
+    if (!item || params.id === "new") return;
+    try {
+      await alphanamesAPI.delete(item.id);
+      router.push("/alphanames");
+    } catch (e) {
+      setError("Failed to delete");
+    }
+  }
+
+
+const handleBack = () => {
     router.push("/alphanames")
   }
 
@@ -172,6 +185,7 @@ export default function AlphanameDetailPage() {
           </p>
         </div>
         <div className="flex gap-2">
+          {params.id !== "new" && <DeleteDialog onConfirm={handleDelete} />}
           <ActionButton onClick={handleSave} icon={Save} disabled={isSaving}>
             {isSaving ? "Сохранение..." : "Сохранить"}
           </ActionButton>

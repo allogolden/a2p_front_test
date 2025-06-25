@@ -21,6 +21,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ActionButton } from "@/components/common/action-button"
+import { DeleteDialog } from "@/components/common/delete-dialog"
 import { LoadingSpinner } from "@/components/common/loading-spinner"
 import { Separator } from "@/components/ui/separator"
 import { Progress } from "@/components/ui/progress"
@@ -199,29 +200,7 @@ export default function CategoryMTDetailPage() {
           )}
         </div>
         <div className="flex gap-2">
-          {params.id !== "new" && (
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <ActionButton variant="destructive" icon={Trash2}>
-                  Delete
-                </ActionButton>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete the category and all its statistics.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={handleDelete} className="bg-red-600 hover:bg-red-700">
-                    Delete
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          )}
+          {params.id !== "new" && <DeleteDialog onConfirm={handleDelete} />}
           <ActionButton onClick={handleSave} icon={Save} disabled={isSaving}>
             {isSaving ? "Saving..." : "Save Changes"}
           </ActionButton>

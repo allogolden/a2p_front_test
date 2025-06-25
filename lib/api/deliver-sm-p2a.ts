@@ -28,6 +28,7 @@ export const deliverSmP2AAPI = {
   create: async (_data: Partial<DeliverSmP2A>) => Promise.resolve({ status: 200 }),
   // update: (id: string, data: Partial<DeliverSmP2A>) => fetchProtected(`/admin/main/deliversmp2amodel/${id}/`, { method: "PUT", body: JSON.stringify(data) }),
   update: async (_id: string, _data: Partial<DeliverSmP2A>) => Promise.resolve({ status: 200 }),
+  delete: async (_id: string) => Promise.resolve({ status: 200 }),
 }
 
 /*

@@ -30,6 +30,7 @@ export const shnPatternsAPI = {
   create: async (_data: Partial<SHNPattern>) => Promise.resolve({ status: 200 }),
   // update: (id: string, data: Partial<SHNPattern>) => fetchProtected(`/admin/main/shnpatternmodel/${id}/`, { method: "PUT", body: JSON.stringify(data) }),
   update: async (_id: string, _data: Partial<SHNPattern>) => Promise.resolve({ status: 200 }),
+  delete: async (_id: string) => Promise.resolve({ status: 200 }),
 }
 
 /*

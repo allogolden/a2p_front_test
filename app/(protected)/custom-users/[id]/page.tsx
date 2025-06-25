@@ -2,7 +2,7 @@
 
 import { useRouter, useParams } from "next/navigation"
 import { useEffect, useState } from "react"
-import { ArrowLeft, Save } from "lucide-react"
+import {ArrowLeft, Save, Trash2 } from "lucide-react"
 import {
   Card,
   CardContent,
@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ActionButton } from "@/components/common/action-button"
+import { DeleteDialog } from "@/components/common/delete-dialog"
 import { LoadingSpinner } from "@/components/common/loading-spinner"
 import type { CustomUser } from "@/lib/api/custom-users"
 import { customUsersAPI } from "@/lib/api/custom-users"
@@ -62,7 +63,19 @@ export default function CustomUserDetailPage() {
     }
   }
 
-  const handleBack = () => router.push("/custom-users")
+  
+  const handleDelete = async () => {
+    if (!item || params.id === "new") return;
+    try {
+      await customUsersAPI.delete(item.id);
+      router.push("/custom-users");
+    } catch (e) {
+      setError("Failed to delete");
+    }
+  }
+
+
+const handleBack = () => router.push("/custom-users")
 
   if (loading) {
     return (
@@ -111,6 +124,7 @@ export default function CustomUserDetailPage() {
           </h1>
         </div>
         <div className="flex gap-2">
+          {params.id !== "new" && <DeleteDialog onConfirm={handleDelete} />}
           <ActionButton onClick={handleSave} icon={Save} disabled={saving}>
             {saving ? "Saving..." : "Save"}
           </ActionButton>

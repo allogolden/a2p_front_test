@@ -2,7 +2,7 @@
 
 import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ArrowLeft, Save } from "lucide-react";
+import {ArrowLeft, Save, Trash2 } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ActionButton } from "@/components/common/action-button";
+import { DeleteDialog } from "@/components/common/delete-dialog"
 import { LoadingSpinner } from "@/components/common/loading-spinner";
 import type { ShortNumber } from "@/lib/api/short-numbers";
 import { shortNumbersAPI } from "@/lib/api/short-numbers";
@@ -70,7 +71,19 @@ export default function ShortNumberDetailPage() {
     }
   };
 
-  const handleBack = () => router.push("/short-numbers");
+  
+  const handleDelete = async () => {
+    if (!item || params.id === "new") return;
+    try {
+      await shortNumbersAPI.delete(item.id);
+      router.push("/short-numbers");
+    } catch (e) {
+      setError("Failed to delete");
+    }
+  }
+
+
+const handleBack = () => router.push("/short-numbers");
 
   if (loading) {
     return (
@@ -119,6 +132,7 @@ export default function ShortNumberDetailPage() {
           </h1>
         </div>
         <div className="flex gap-2">
+          {params.id !== "new" && <DeleteDialog onConfirm={handleDelete} />}
           <ActionButton onClick={handleSave} icon={Save} disabled={saving}>
             {saving ? "Saving..." : "Save"}
           </ActionButton>

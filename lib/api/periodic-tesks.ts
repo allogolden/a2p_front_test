@@ -34,6 +34,7 @@ export const periodicTasksAPI = {
   create: async (_data: Partial<PeriodicTask>) => Promise.resolve({ status: 200 }),
   // update: (id: string, data: Partial<PeriodicTask>) => fetchProtected(`/admin/main/periodictaskmodel/${id}/`, { method: "PUT", body: JSON.stringify(data) }),
   update: async (_id: string, _data: Partial<PeriodicTask>) => Promise.resolve({ status: 200 }),
+  delete: async (_id: string) => Promise.resolve({ status: 200 }),
 }
 
 /*

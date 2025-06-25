@@ -30,6 +30,7 @@ export const submitSmAPI = {
   create: async (_data: Partial<SubmitSm>) => Promise.resolve({ status: 200 }),
   // update: (id: string, data: Partial<SubmitSm>) => fetchProtected(`/admin/main/submitsmmodel/${id}/`, { method: "PUT", body: JSON.stringify(data) }),
   update: async (_id: string, _data: Partial<SubmitSm>) => Promise.resolve({ status: 200 }),
+  delete: async (_id: string) => Promise.resolve({ status: 200 }),
 }
 
 /*

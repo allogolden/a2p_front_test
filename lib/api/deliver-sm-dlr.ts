@@ -28,6 +28,8 @@ export const deliverSmDLRAPI = {
   create: async (_data: Partial<DeliverSmDLR>) => Promise.resolve({ status: 200 }),
   // update: (id: string, data: Partial<DeliverSmDLR>) => fetchProtected(`/admin/main/deliversmdlirmodel/${id}/`, { method: "PUT", body: JSON.stringify(data) }),
   update: async (_id: string, _data: Partial<DeliverSmDLR>) => Promise.resolve({ status: 200 }),
+  delete: async (_id: string) => Promise.resolve({ status: 200 }),
+  delete: async (_id: string) => Promise.resolve({ status: 200 }),
 }
 
 /*

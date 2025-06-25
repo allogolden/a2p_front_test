@@ -32,6 +32,7 @@ export const moInterceptorLogsAPI = {
     ),
   create: async (_data: Partial<MOInterceptorLog>) => Promise.resolve({ status: 200 }),
   update: async (_id: string, _data: Partial<MOInterceptorLog>) => Promise.resolve({ status: 200 }),
+  delete: async (_id: string) => Promise.resolve({ status: 200 }),
 }
 
 /*

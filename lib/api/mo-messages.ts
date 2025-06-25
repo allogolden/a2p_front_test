@@ -44,6 +44,7 @@ export const moMessagesAPI = {
   create: async (_data: Partial<MOMessages>) => Promise.resolve({ status: 200 }),
   // update: (id: string, data: Partial<MOMessages>) => fetchProtected(`/admin/main/momessagesmodel/${id}/`, { method: "PUT", body: JSON.stringify(data) }),
   update: async (_id: string, _data: Partial<MOMessages>) => Promise.resolve({ status: 200 }),
+  delete: async (_id: string) => Promise.resolve({ status: 200 }),
 }
 
 /*

@@ -3,6 +3,7 @@
 import { useRouter, useParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { ArrowLeft, Save, Trash2 } from "lucide-react"
+import { DeleteDialog } from "@/components/common/delete-dialog"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -150,31 +151,7 @@ export default function ANPatternDetailPage() {
           </p>
         </div>
         <div className="flex gap-2">
-          {params.id !== "new" && (
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <ActionButton variant="destructive" icon={Trash2} onClick={function (): void {
-                  throw new Error("Function not implemented.")
-                } } >
-                  Delete
-                </ActionButton>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete the pattern.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={handleDelete} className="bg-red-600 hover:bg-red-700">
-                    Delete
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          )}
+          {params.id !== "new" && <DeleteDialog onConfirm={handleDelete} />}
           <ActionButton onClick={handleSave} icon={Save} disabled={isSaving}>
             {isSaving ? "Saving..." : "Save Changes"}
           </ActionButton>
