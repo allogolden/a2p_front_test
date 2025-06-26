@@ -321,26 +321,6 @@ export default function CategoryMTDetailPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="created">Created</Label>
-                  <Input
-                    id="created"
-                    type="date"
-                    value={category.created}
-                    onChange={(e) => setCategory({ ...category, created: e.target.value })}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="modified">Modified</Label>
-                  <Input
-                    id="modified"
-                    type="date"
-                    value={category.modified}
-                    onChange={(e) => setCategory({ ...category, modified: e.target.value })}
-                  />
-                </div>
-              </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
