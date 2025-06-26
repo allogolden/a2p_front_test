@@ -169,16 +169,6 @@ const handleBack = () => router.push("/deliver-sm-dlr")
               }
             />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="created_at">Created at</Label>
-            <Input
-              id="created_at"
-              value={item.created_at}
-              onChange={(e) =>
-                setItem({ ...item, created_at: e.target.value })
-              }
-            />
-          </div>
         </CardContent>
       </Card>
     </div>

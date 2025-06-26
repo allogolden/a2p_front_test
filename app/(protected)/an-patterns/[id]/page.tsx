@@ -258,24 +258,6 @@ export default function ANPatternDetailPage() {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="created">Created</Label>
-              <Input
-                id="created"
-                value={pattern.created}
-                onChange={(e) => setPattern({ ...pattern, created: e.target.value })}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="modified">Modified</Label>
-              <Input
-                id="modified"
-                value={pattern.modified}
-                onChange={(e) => setPattern({ ...pattern, modified: e.target.value })}
-              />
-            </div>
-          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">

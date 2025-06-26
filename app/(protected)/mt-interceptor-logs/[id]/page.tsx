@@ -215,22 +215,6 @@ const handleBack = () => router.push("/mt-interceptor-logs")
               onChange={(e) => setItem({ ...item, category_id: e.target.value })}
             />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="created">Created</Label>
-            <Input
-              id="created"
-              value={item.created}
-              onChange={(e) => setItem({ ...item, created: e.target.value })}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="modified">Modified</Label>
-            <Input
-              id="modified"
-              value={item.modified}
-              onChange={(e) => setItem({ ...item, modified: e.target.value })}
-            />
-          </div>
         </CardContent>
       </Card>
     </div>
