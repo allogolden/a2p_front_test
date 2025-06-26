@@ -212,22 +212,6 @@ const handleBack = () => router.push("/short-numbers");
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="created">Created</Label>
-            <Input
-              id="created"
-              value={item.created}
-              onChange={(e) => setItem({ ...item, created: e.target.value })}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="modified">Modified</Label>
-            <Input
-              id="modified"
-              value={item.modified}
-              onChange={(e) => setItem({ ...item, modified: e.target.value })}
-            />
-          </div>
-          <div className="space-y-2">
             <Label htmlFor="created_by">Created By</Label>
             <Input
               id="created_by"
