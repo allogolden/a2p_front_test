@@ -6,6 +6,7 @@ const Table = React.forwardRef<
   HTMLTableElement,
   React.HTMLAttributes<HTMLTableElement>
 >(({ className, ...props }, ref) => (
+<<<<<<< 67fza6-codex/добавить-фиксированную-ширину-таблицы
   <table
     ref={ref}
     className={cn(
@@ -14,6 +15,15 @@ const Table = React.forwardRef<
     )}
     {...props}
   />
+=======
+  <div className="relative w-full overflow-x-auto">
+    <table
+      ref={ref}
+      className={cn("w-full table-fixed caption-bottom text-sm", className)}
+      {...props}
+    />
+  </div>
+>>>>>>> main
 ))
 Table.displayName = "Table"
 
