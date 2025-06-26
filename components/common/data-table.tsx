@@ -88,7 +88,7 @@ export function DataTable({
       </div>
 
       {/* Table */}
-      <div className="rounded-lg border bg-card">
+      <div className="w-full rounded-lg border bg-card overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-muted">
