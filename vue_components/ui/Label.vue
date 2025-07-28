@@ -1,0 +1,13 @@
+<script lang="ts" setup>
+import { useAttrs } from 'vue'
+import { cn } from '@/lib/utils'
+
+const props = defineProps<{ class?: string }>()
+const attrs = useAttrs()
+</script>
+
+<template>
+  <label v-bind="attrs" :class="cn('text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70', props.class)">
+    <slot />
+  </label>
+</template>

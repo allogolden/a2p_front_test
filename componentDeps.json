@@ -1,0 +1,191 @@
+{
+  "components/app-sidebar.tsx": [
+    "@/components/nav-main",
+    "@/components/nav-user",
+    "@/components/team-switcher",
+    "@/components/ui/sidebar"
+  ],
+  "components/auth/protected-route.tsx": [
+    "@/components/common/loading-spinner"
+  ],
+  "components/beautiful-charts.tsx": [
+    "@/components/ui/card",
+    "@/components/ui/button"
+  ],
+  "components/common/action-button.tsx": [
+    "@/components/ui/button"
+  ],
+  "components/common/data-table.tsx": [
+    "@/components/ui/checkbox",
+    "@/components/ui/table",
+    "./search-input",
+    "./action-button",
+    "./status-badge",
+    "./loading-spinner",
+    "./filters-dropdown"
+  ],
+  "components/common/delete-dialog.tsx": [
+    "@/components/common/action-button",
+    "@/components/ui/alert-dialog"
+  ],
+  "components/common/filters-dropdown.tsx": [
+    "@/components/ui/button",
+    "@/components/ui/dropdown-menu",
+    "@/components/ui/checkbox",
+    "@/components/ui/label",
+    "@/components/ui/badge"
+  ],
+  "components/common/loading-spinner.tsx": [],
+  "components/common/page-header.tsx": [
+    "./action-button"
+  ],
+  "components/common/search-input.tsx": [
+    "@/components/ui/input"
+  ],
+  "components/common/status-badge.tsx": [
+    "@/components/ui/badge"
+  ],
+  "components/dashboard-stats.tsx": [
+    "@/components/ui/card",
+    "@/components/ui/badge",
+    "@/components/ui/progress"
+  ],
+  "components/enhanced-date-picker.tsx": [
+    "@/components/ui/calendar",
+    "@/components/ui/button",
+    "@/components/ui/input",
+    "@/components/ui/label",
+    "@/components/ui/popover"
+  ],
+  "components/modern-statistics-card.tsx": [
+    "@/components/ui/card",
+    "@/components/ui/badge"
+  ],
+  "components/nav-main.tsx": [
+    "@/components/ui/collapsible",
+    "@/components/ui/sidebar"
+  ],
+  "components/nav-user.tsx": [
+    "@/components/ui/avatar",
+    "@/components/ui/dropdown-menu",
+    "@/components/ui/sidebar"
+  ],
+  "components/page-breadcrumb.tsx": [
+    "@/components/ui/breadcrumb"
+  ],
+  "components/team-switcher.tsx": [
+    "@/components/ui/dropdown-menu",
+    "@/components/ui/sidebar"
+  ],
+  "components/theme-provider.tsx": [],
+  "components/theme-toggle.tsx": [
+    "@/components/ui/button"
+  ],
+  "components/ui/accordion.tsx": [],
+  "components/ui/alert-dialog.tsx": [
+    "@/components/ui/button"
+  ],
+  "components/ui/alert.tsx": [],
+  "components/ui/aspect-ratio.tsx": [],
+  "components/ui/avatar.tsx": [],
+  "components/ui/badge.tsx": [],
+  "components/ui/breadcrumb.tsx": [],
+  "components/ui/button.tsx": [],
+  "components/ui/calendar.tsx": [
+    "@/components/ui/button"
+  ],
+  "components/ui/card.tsx": [],
+  "components/ui/carousel.tsx": [
+    "@/components/ui/button"
+  ],
+  "components/ui/chart-message-type.tsx": [],
+  "components/ui/chart-messages-by-category-pie.tsx": [],
+  "components/ui/chart-messages-volume-bar.tsx": [],
+  "components/ui/chart-pattern-stats.tsx": [],
+  "components/ui/chart-source-types.tsx": [],
+  "components/ui/chart-trends.tsx": [],
+  "components/ui/chart.tsx": [],
+  "components/ui/checkbox.tsx": [],
+  "components/ui/collapsible.tsx": [],
+  "components/ui/command.tsx": [
+    "@/components/ui/dialog"
+  ],
+  "components/ui/context-menu.tsx": [],
+  "components/ui/date-range-selector.tsx": [
+    "@/components/ui/select"
+  ],
+  "components/ui/dialog.tsx": [],
+  "components/ui/dropdown-menu.tsx": [],
+  "components/ui/feature-card.tsx": [
+    "@/components/ui/card"
+  ],
+  "components/ui/form.tsx": [
+    "@/components/ui/label"
+  ],
+  "components/ui/hover-card.tsx": [],
+  "components/ui/input.tsx": [],
+  "components/ui/label.tsx": [],
+  "components/ui/menubar.tsx": [],
+  "components/ui/navigation-menu.tsx": [],
+  "components/ui/page-header.tsx": [],
+  "components/ui/popover.tsx": [],
+  "components/ui/progress.tsx": [],
+  "components/ui/radio-group.tsx": [],
+  "components/ui/resizable.tsx": [],
+  "components/ui/scroll-area.tsx": [],
+  "components/ui/select.tsx": [],
+  "components/ui/separator.tsx": [],
+  "components/ui/sheet.tsx": [],
+  "components/ui/sidebar.tsx": [
+    "@/components/ui/button",
+    "@/components/ui/input",
+    "@/components/ui/separator",
+    "@/components/ui/sheet",
+    "@/components/ui/skeleton",
+    "@/components/ui/tooltip"
+  ],
+  "components/ui/skeleton.tsx": [],
+  "components/ui/slider.tsx": [],
+  "components/ui/statistics-panel.tsx": [
+    "@/components/ui/card",
+    "@/components/ui/badge",
+    "@/components/ui/tabs",
+    "@/components/ui/date-range-selector",
+    "@/components/ui/stats-card",
+    "@/components/ui/chart-messages-by-category-pie",
+    "@/components/ui/chart-messages-volume-bar",
+    "@/components/ui/chart-message-type",
+    "@/components/ui/chart-pattern-stats",
+    "@/components/ui/chart-source-types",
+    "@/components/ui/chart-trends"
+  ],
+  "components/ui/stats-card.tsx": [
+    "@/components/ui/card"
+  ],
+  "components/ui/switch.tsx": [],
+  "components/ui/table.tsx": [],
+  "components/ui/tabs.tsx": [],
+  "components/ui/textarea.tsx": [],
+  "components/ui/toast.tsx": [],
+  "components/ui/toggle-group.tsx": [
+    "@/components/ui/toggle"
+  ],
+  "components/ui/toggle.tsx": [],
+  "components/ui/tooltip.tsx": [],
+  "ported": [
+    "components/ui/button.tsx",
+    "components/ui/badge.tsx",
+    "components/ui/alert.tsx",
+    "components/theme-toggle.tsx",
+    "components/ui/input.tsx",
+    "components/ui/label.tsx",
+    "components/ui/card.tsx",
+    "components/ui/textarea.tsx",
+    "components/ui/checkbox.tsx",
+    "components/ui/switch.tsx",
+    "components/ui/avatar.tsx",
+    "components/ui/separator.tsx",
+    "components/ui/skeleton.tsx",
+    "components/ui/progress.tsx"
+  ]
+}
